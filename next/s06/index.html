@@ -1,0 +1,758 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FLOx Itinerary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>/* FLOx shared base: tokens + functional styling for fx-* blocks. Designs override the variables and add their own layout. */
+:root{
+  --charcoal:#0d1c1d; --white:#fff; --teal:#94c2c7; --teal-deep:#3f6a6f; --lamp:#f3c98b; --alert:#f0a39a;
+  --bg:var(--charcoal); --ink:#fff; --mute:rgba(255,255,255,.66); --card:#132829; --card2:#1b3436; --line:rgba(148,194,199,.26);
+  --accent:var(--teal); --accent-ink:var(--charcoal); --field:#0d1c1d; --radius:16px; --r-sm:10px;
+  --font:'Space Grotesk',ui-sans-serif,system-ui,sans-serif; --data:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+  --col:480px; color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--font);-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2,h3,h4{margin:0;font-weight:500;letter-spacing:-.02em;text-wrap:balance}
+p{margin:0}
+.fx-i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.fx-mute{color:var(--mute)}
+.fx-data{font-family:var(--data)}
+.fx-sub{display:block;font:500 12px/1.3 var(--data);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.fx-proto{font:500 11px/1.3 var(--data);letter-spacing:.1em;text-transform:uppercase;text-align:center;padding:8px 16px;background:var(--teal);color:var(--charcoal)}
+.fx-demo-btn{min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--lamp);background:transparent;color:var(--lamp);font:500 14px/1 var(--font)}
+
+/* buttons + fields */
+.fx-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;min-height:52px;padding:0 18px;border-radius:var(--r-sm);border:0;background:var(--ink);color:var(--bg);font:600 16px/1 var(--font)}
+a.fx-btn{text-decoration:none}
+.fx-btn[disabled]{opacity:.4;cursor:not-allowed}
+.fx-btn.fx-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.fx-btn-sm{display:inline-flex;width:auto;min-height:44px;padding:0 16px;font-size:14px;border-radius:999px;background:var(--accent);color:var(--accent-ink)}
+.fx-btn-sm .fx-i{width:16px;height:16px}
+.fx-field{width:100%;min-width:0;min-height:48px;padding:10px 12px;border-radius:var(--r-sm);border:1px solid var(--line);background:var(--field);color:var(--ink);font-size:16px}
+.fx-field::placeholder{color:var(--mute)}
+.fx-x{display:grid;place-items:center;min-width:44px;min-height:44px;border:0;background:transparent;color:var(--mute)}
+.fx-round{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:transparent}
+.fx-add{min-height:44px;border:0;background:none;color:var(--accent);font:500 15px/1 var(--font);text-align:left;padding:0}
+.fx-add[disabled]{opacity:.35;cursor:not-allowed}
+.fx-err{color:var(--alert);font-size:14px}
+.fx-note{padding:12px 14px;border-radius:var(--r-sm);background:color-mix(in srgb,var(--accent) 14%,transparent);font-size:15px}
+.fx-card{display:grid;gap:10px;padding:16px;border-radius:var(--radius);background:var(--card);border:1px solid var(--line)}
+
+/* verify blocks */
+.fx-ids{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.fx-idt{display:grid;gap:8px;padding:10px;border-radius:14px;background:var(--card2);border:1px dashed var(--line)}
+.fx-idt.fx-selfie{grid-column:1/-1;grid-template-columns:96px 1fr;align-items:center}
+.fx-idt.fx-ok{border-style:solid;border-color:var(--accent)}
+.fx-frame{position:relative;aspect-ratio:1.586;border-radius:9px;overflow:hidden;display:grid;place-items:center;background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--accent) 10%,transparent) 0 8px,transparent 8px 16px);color:var(--accent)}
+.fx-selfie .fx-frame{aspect-ratio:1;border-radius:50%}
+.fx-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.fx-frame .fx-i{width:32px;height:32px}
+.fx-busy .fx-frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--accent) 50%,transparent),transparent);animation:fxscan 1s linear infinite}
+@keyframes fxscan{from{transform:translateY(-100%)}to{transform:translateY(100%)}}
+.fx-idt-t{display:grid;gap:6px;justify-items:start}
+.fx-idt-t b{font-weight:500;font-size:15px}
+.fx-idt-t small{font-size:14px;color:var(--mute)}
+.fx-ota{display:flex;gap:12px;align-items:center;padding:14px;border-radius:14px;background:color-mix(in srgb,var(--accent) 14%,transparent)}
+.fx-ota .fx-i{width:28px;height:28px;color:var(--accent)}
+.fx-princ{display:grid;gap:8px}
+.fx-pr{border-radius:12px;background:var(--card2);overflow:hidden}
+.fx-pr button{display:grid;grid-template-columns:22px 1fr 18px;gap:10px;align-items:center;width:100%;min-height:52px;padding:10px 14px;border:0;background:none;text-align:left;font-weight:500}
+.fx-tick{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line);color:transparent}
+.fx-tick .fx-i{width:12px;height:12px}
+.fx-seen .fx-tick{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.fx-chev{color:var(--mute);transition:transform .3s}
+.fx-open .fx-chev{transform:rotate(90deg)}
+.fx-pr p{display:none;padding:0 14px 14px 46px;font-size:15px;color:var(--mute)}
+.fx-open p{display:block}
+.fx-charter{border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.fx-charter-h{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;background:var(--card2)}
+.fx-charter-t{background:#fff;color:#374748;font-size:14px;line-height:1.6;padding:12px 14px;max-height:13rem;overflow:auto;display:grid;gap:8px}
+.fx-charter-t.fx-full{max-height:30rem}
+.fx-charter-t .fx-mute{color:#4b6365}
+.fx-meta{font:400 13px/1.6 var(--data);color:#4b6365;border-bottom:1px dashed #c6d8da;padding-bottom:8px}
+.fx-guests{display:grid;gap:12px}
+.fx-deck{display:grid;gap:10px;padding:14px;border-radius:14px;background:var(--card2)}
+.fx-seats{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.fx-seat{width:24px;height:24px;border-radius:7px;border:1.5px solid var(--line)}
+.fx-seat.fx-vis{border-radius:50%}
+.fx-seat.fx-on{background:var(--accent);border-color:var(--accent)}
+.fx-seat.fx-vis.fx-on{background:var(--lamp);border-color:var(--lamp)}
+.fx-sep{width:1px;height:22px;background:var(--line);margin:0 4px}
+.fx-legend{display:flex;justify-content:space-between;gap:8px;font:400 13px/1.4 var(--data);color:var(--mute)}
+.fx-stepper{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:15px}
+.fx-stepper>div{display:flex;align-items:center;gap:8px}
+.fx-stepper output{min-width:24px;text-align:center;font:600 18px/1 var(--data)}
+.fx-people{display:grid;gap:8px}
+.fx-person{display:grid;grid-template-columns:1fr 1fr 44px;gap:6px}
+.fx-person.fx-me{grid-template-columns:1fr;padding:12px;border-radius:var(--r-sm);background:var(--card2);font-size:15px}
+.fx-sign{display:grid;gap:12px}
+.fx-sigline{position:relative;height:60px;border-bottom:1px solid var(--line);display:flex;align-items:flex-end;padding:0 4px 6px}
+.fx-sigline span{font:italic 500 28px/1 var(--font);color:var(--lamp)}
+.fx-sigline small{position:absolute;right:4px;bottom:-22px;font:400 12px/1 var(--data);color:var(--mute);letter-spacing:.1em}
+.fx-check{display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:start;font-size:15px;color:var(--mute);cursor:pointer;margin-top:6px}
+.fx-check input{width:22px;height:22px;margin:1px 0 0;accent-color:var(--accent)}
+.fx-cover{display:grid;gap:12px}
+.fx-opts{display:grid;gap:10px}
+.fx-opt{display:grid;grid-template-columns:22px 1fr auto;gap:12px;align-items:start;padding:14px;border-radius:14px;border:1.5px solid var(--line);background:var(--card2);cursor:pointer}
+.fx-opt input{margin:3px 0 0;width:20px;height:20px;accent-color:var(--accent)}
+.fx-opt b{display:block;font-weight:500}
+.fx-opt span{font-size:14px;color:var(--mute)}
+.fx-opt em{font:600 16px/1.2 var(--data);font-style:normal}
+.fx-opt.fx-sel{border-color:var(--accent)}
+.fx-opt.fx-off{opacity:.4;cursor:not-allowed}
+.fx-consent{font-size:14px;color:var(--mute);line-height:1.6}
+.fx-stripe{display:grid;gap:8px;padding:14px;border-radius:14px;background:#fff;color:var(--charcoal)}
+.fx-f{min-height:44px;border-radius:8px;border:1px solid #d5dfe0;background:#f7fafa;display:flex;align-items:center;padding:0 12px;font:400 14px/1 var(--data);color:#6b7f80}
+.fx-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fx-stripe small{font-size:14px;color:#4b6365}
+.fx-reject{display:grid;gap:10px;padding:18px;border-radius:var(--radius);background:color-mix(in srgb,var(--alert) 14%,var(--bg));border:1px solid color-mix(in srgb,var(--alert) 50%,transparent)}
+.fx-quote{padding:10px 12px;border-left:2px solid var(--alert);font-size:15px}
+.fx-rows{display:grid;gap:10px}
+.fx-rowck{display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:center;font-size:15px}
+.fx-rowck i{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--accent-ink)}
+.fx-rowck i .fx-i{width:14px;height:14px}
+.fx-rowck.fx-wait i{background:transparent;border:1.5px dashed var(--lamp)}
+
+/* pass blocks */
+.fx-locked{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.fx-locked>div{min-width:0}
+.fx-when{flex:none;max-width:52%;font:600 13px/1.3 var(--data);color:#7a4e12;background:#fbecd2;border-radius:999px;padding:8px 12px;text-align:center}
+.fx-kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font:400 15px/1.5 var(--data)}
+.fx-kv dt{color:var(--mute)}.fx-kv dd{margin:0;font-weight:600;overflow-wrap:anywhere}
+.fx-steps{display:grid;gap:10px}
+.fx-media{aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:var(--card2)}
+.fx-media img{width:100%;height:100%;object-fit:cover}
+.fx-nav{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.fx-dots{display:flex;gap:6px}.fx-dots i{width:7px;height:7px;border-radius:50%;background:var(--line)}.fx-dots i.fx-on{background:var(--accent)}
+.fx-co{display:grid;gap:4px;padding:10px 0;border-bottom:1px solid var(--line)}
+.fx-ups{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}
+.fx-up{flex:0 0 62%;scroll-snap-align:start;display:grid;gap:8px;align-content:start;padding:14px;border-radius:var(--radius);background:var(--card);border:1px solid var(--line)}
+.fx-ic{color:var(--accent)}.fx-ic .fx-i{width:26px;height:26px}
+.fx-price{font:600 14px/1 var(--data);color:var(--accent)}
+.fx-status{justify-self:start;font:600 12px/1 var(--data);letter-spacing:.08em;text-transform:uppercase;padding:7px 9px;border-radius:999px;background:#fbecd2;color:#7a4e12}
+.fx-wx{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;text-align:center}
+.fx-wx div{display:grid;gap:4px;justify-items:center;padding:10px 4px;border-radius:12px;background:var(--card);font:400 13px/1.2 var(--data)}
+.fx-wx b{font:600 16px/1 var(--font)}
+.fx-wx .fx-i{color:var(--accent)}
+.fx-link{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:12px 14px;border-radius:14px;background:var(--card);border:1px solid var(--line);color:var(--ink);text-align:left}
+.fx-link>div{flex:1}.fx-link b{font-weight:500}
+.fx-link>.fx-i:first-child{color:var(--accent)}
+.fx-thread{display:grid;gap:8px;max-height:280px;overflow:auto}
+.fx-msg{max-width:84%;padding:10px 12px;border-radius:14px;font-size:15px}
+.fx-msg.fx-crew{background:var(--card2);justify-self:start;border-bottom-left-radius:4px}
+.fx-msg.fx-me{background:var(--accent);color:var(--accent-ink);justify-self:end;border-bottom-right-radius:4px}
+.fx-msg small{display:block;font:400 12px/1.4 var(--data);opacity:.7;margin-top:3px}
+.fx-send{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px}
+.fx-aboard ul{margin:4px 0 10px;padding-left:18px}
+.fx-aboard small{font:600 12px/1 var(--data);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.fx-post{display:grid;gap:12px}
+
+/* sheet */
+.fx-sheet-wrap{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center}
+.fx-sheet{width:min(var(--col),100%);max-height:86svh;overflow:auto;background:var(--bg);color:var(--ink);border-radius:var(--radius) var(--radius) 0 0;padding:20px 16px calc(24px + env(safe-area-inset-bottom,0px));display:grid;gap:14px;animation:fxup .3s cubic-bezier(.2,.8,.2,1);font-family:var(--font);box-shadow:0 -12px 40px rgba(0,0,0,.25);border-top:1px solid var(--line)}
+@keyframes fxup{from{transform:translateY(30%);opacity:0}}
+.fx-sheet-h{display:flex;justify-content:space-between;align-items:center}
+.fx-demo{display:grid;gap:14px}
+.fx-demo fieldset{border:0;margin:0;padding:0;display:grid;gap:8px}
+.fx-demo legend{font:500 12px/1 var(--data);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.fx-seg{display:flex;flex-wrap:wrap;gap:6px}
+.fx-seg button{min-height:44px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:transparent;font-size:14px}
+.fx-seg button.fx-on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.fx-demo select,.fx-sheet select{min-height:44px;padding:0 10px;border-radius:var(--r-sm);border:1px solid var(--line);background:var(--field);color:var(--ink);font-size:15px}
+.fx-tiers{display:grid;gap:8px}
+.fx-tier{display:flex;justify-content:space-between;gap:10px;min-height:52px;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--card2);text-align:left}
+.fx-tier.fx-sel{border-color:var(--accent)}
+
+@media (prefers-reduced-motion:reduce){ *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important} }
+
+/* inline digital guidebook (inherits each design's tokens) */
+.fx-gb{display:grid;gap:8px;scroll-margin-top:80px}
+.fx-gb-h{display:flex;gap:12px;align-items:center;padding:4px 0 6px}
+.fx-gb-h>.fx-i{width:26px;height:26px;color:var(--accent)}
+.fx-gb-h b{font-weight:500;font-size:17px}
+.fx-gbi{border-radius:var(--r-sm);background:var(--card2);border:1px solid var(--line);overflow:hidden}
+.fx-gbi>button{display:grid;grid-template-columns:22px 1fr 18px;gap:12px;align-items:center;width:100%;min-height:52px;padding:10px 14px;border:0;background:none;color:var(--ink);text-align:left;font-weight:500}
+.fx-gbi>button>.fx-i:first-child{color:var(--accent)}
+.fx-gbb{padding:0 14px 14px 48px;font-size:15px;line-height:1.55;color:var(--ink);animation:fxgb .25s ease}
+@keyframes fxgb{from{opacity:0;transform:translateY(-4px)}}
+.fx-gb-list{margin:0;padding-left:18px;display:grid;gap:4px}
+.fx-gb-note{font-size:14px}
+/* live guidebook (real guides from Bridge) */
+.fx-gb-signin{font-size:14px;margin:0}.fx-gb-signin a{color:var(--accent);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.fx-gb-group{margin:10px 0 2px}
+.fx-gbb .fx-gb-text p{margin:0 0 8px}.fx-gbb .fx-gb-text ul,.fx-gbb .fx-gb-text ol{margin:0 0 8px;padding-left:18px}.fx-gbb a{color:var(--accent);overflow-wrap:anywhere}
+.fx-gb-hd{margin:10px 0 4px}
+.fx-gb-place{display:grid;gap:2px;padding:10px 0;border-top:1px solid var(--line)}.fx-gb-place:first-child{border-top:0}
+.fx-gb-place small{font-size:13px;opacity:.75}.fx-gb-place p{margin:2px 0 0;font-size:14px}.fx-gb-mi{font-size:12.5px;color:var(--accent)}
+/* Guide photos (2026-10-08). Defaults only — each design lays them out its own way on top. */
+.fx-gb-fig{margin:10px 0}.fx-gb-img{display:block;width:100%;height:auto;max-height:420px;object-fit:cover;border-radius:12px;background:var(--card)}
+.fx-gb-fig figcaption{font:400 13px/1.4 var(--data);color:var(--mute);margin-top:6px}
+.fx-gb-place.fx-has-img{grid-template-columns:76px 1fr;gap:12px;align-items:start}
+.fx-gb-pimg{width:76px;height:76px;object-fit:cover;border-radius:10px;background:var(--card)}
+.fx-gb-place>div{display:grid;gap:2px;min-width:0}
+.fx-gbi>button.fx-has-cover{grid-template-columns:44px 1fr 18px}.fx-gbi .fx-gb-thumb{width:44px;height:44px;object-fit:cover;border-radius:8px}
+/* Ask FLO (sample chat, not wired to FLO yet) */
+.fx-flo{display:grid;gap:8px}.fx-flo .fx-thread{max-height:none}
+.fx-flo-av{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font:700 11px/1 var(--data);letter-spacing:.04em;flex:none}
+.fx-flo-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}.fx-flo-chips::-webkit-scrollbar{display:none}
+.fx-flo-chips button{flex:none;min-height:44px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);font:500 14px/1 var(--font)}
+.fx-flo-note{margin:0;padding:8px 10px;border-radius:8px;border:1px dashed var(--line);font:500 12px/1.4 var(--data);letter-spacing:.04em;color:var(--mute)}
+.fx-typing{display:inline-flex;gap:4px}.fx-typing i{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.5;animation:fxty 1s infinite}.fx-typing i:nth-child(2){animation-delay:.15s}.fx-typing i:nth-child(3){animation-delay:.3s}
+@keyframes fxty{50%{opacity:1;transform:translateY(-2px)}}
+
+/* Layout: the whole stay as one time-ordered line. A "Now" marker sits where you are; items light up as they unlock; tap any stop to open it. */
+.app{max-width:var(--col);margin:0 auto;padding-bottom:110px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:12px 16px}
+.top img{height:14px}
+.hd{position:relative;margin:0 12px;border-radius:20px;overflow:hidden}
+.hd img{width:100%;height:190px;object-fit:cover}
+.hd::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(13,28,29,.92))}
+.hd .t{position:absolute;left:16px;right:16px;bottom:14px;z-index:1;display:grid;gap:4px}
+.hd h1{font-size:30px;line-height:1.05}
+.hd p{font:500 14px/1.3 var(--data);color:var(--teal)}
+.line{position:relative;margin:22px 16px 0 16px;padding-left:84px}
+.line::before{content:"";position:absolute;left:69px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--teal) var(--fill,0%),var(--line) var(--fill,0%))}
+.day{position:relative;margin:22px 0 8px -84px;font:600 13px/1 var(--data);letter-spacing:.16em;text-transform:uppercase;color:var(--lamp)}
+.stop{position:relative;margin-bottom:10px;scroll-margin-top:90px}
+.stop .when{position:absolute;left:-84px;top:16px;width:58px;text-align:right;font:600 13px/1.2 var(--data);color:var(--mute)}
+.stop .dot{position:absolute;left:-21px;top:14px;width:14px;height:14px;border-radius:50%;border:2px solid var(--line);background:var(--bg)}
+.stop.done .dot{background:var(--teal);border-color:var(--teal)}
+.stop.now .dot{border-color:var(--lamp);box-shadow:0 0 0 6px rgba(243,201,139,.18)}
+.stop>button{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;min-height:52px;padding:10px 14px;border-radius:14px;border:1px solid var(--line);background:var(--card);text-align:left}
+.stop.now>button{border-color:var(--lamp)}
+.stop.lock>button{opacity:.6}
+.stop b{font-weight:500}
+.stop small{display:block;font-size:14px;color:var(--mute)}
+.tag{flex:none;font:600 12px/1 var(--data);letter-spacing:.08em;text-transform:uppercase;padding:7px 9px;border-radius:999px;background:var(--card2);color:var(--teal)}
+.now .tag{background:var(--lamp);color:#0d1c1d}
+.body{display:none;padding:12px 4px 6px;gap:12px}
+.stop.open .body{display:grid;animation:fd .3s ease}@keyframes fd{from{opacity:0;transform:translateY(-4px)}}
+.nowmark{position:relative;margin:4px 0 14px -84px;display:flex;align-items:center;gap:8px;font:600 13px/1 var(--data);letter-spacing:.14em;color:var(--lamp)}
+.nowmark::after{content:"";flex:1;height:1px;background:var(--lamp);opacity:.6}
+.float{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:30;display:flex;gap:8px}
+.float button{min-height:48px;padding:0 18px;border-radius:999px;border:0;background:var(--lamp);color:#0d1c1d;font:600 15px/1 var(--font);box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.float button.alt{background:#fff}
+.float button[hidden]{display:none}
+.float{width:max-content}.float button{white-space:nowrap;padding:0 16px}
+/* The trip kit (pass stage): four more stops after the stay line, on a dashed spine with numbered dots instead of
+   times. An opened kit stop widens across the time column so the chat and the guides get the full phone width. */
+.kit{margin:34px 16px 0;scroll-margin-top:12px}
+.kit[hidden]{display:none}
+.kstops{position:relative;padding-left:84px}
+.kstops::before{content:"";position:absolute;left:69px;top:8px;bottom:8px;width:2px;background:repeating-linear-gradient(var(--teal) 0 6px,transparent 6px 12px)}
+.khd{margin:0 0 18px;padding:16px;border-radius:18px;background:var(--card2);border:1px solid var(--line);display:grid;gap:8px}
+.khd .k{font:600 13px/1 var(--data);letter-spacing:.16em;text-transform:uppercase;color:var(--lamp)}
+.khd h2{font-size:24px;line-height:1.1}
+.kjump{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.kjump button{min-height:44px;padding:0 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:500 14px/1.1 var(--font);text-align:left;display:flex;align-items:center;gap:8px}
+.kjump button i{flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--teal);color:var(--teal);font:600 11px/1 var(--data);font-style:normal}
+.stop .dot.num{left:-25px;top:13px;width:22px;height:22px;display:grid;place-items:center;border-color:var(--teal);color:var(--teal);font:600 11px/1 var(--data)}
+.kitstop.open .dot.num{background:var(--teal);color:#0d1c1d}
+.kitstop .when{width:50px;color:var(--teal)}
+.kitstop.open>button{border-color:var(--teal)}
+.kitstop .body{margin:8px 0 6px -84px;position:relative;z-index:1;padding:14px;border-radius:16px;background:var(--card);border:1px solid var(--line)}
+.jump{justify-self:start;min-height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--teal);background:none;color:var(--teal);font:500 14px/1 var(--font)}
+.seg{border-radius:14px;overflow:hidden;background:#fff;color:#0d1c1d}
+.seg .shd{display:flex;justify-content:space-between;gap:8px;padding:12px 14px 4px;font:600 12px/1.2 var(--data);letter-spacing:.12em;text-transform:uppercase;color:#3f6a6f}
+.seg .legs{position:relative;padding:4px 0}
+.seg .legs::before{content:"";position:absolute;left:24px;top:24px;bottom:24px;width:2px;background:#b9cfd1}
+.seg .leg{position:relative;display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:center;padding:8px 14px}
+.seg .leg i{justify-self:center;width:12px;height:12px;border-radius:50%;border:2px solid #3f6a6f;background:#fff}
+.seg .leg+.leg i{background:#3f6a6f}
+.seg .leg small{display:block;font:600 12px/1.2 var(--data);letter-spacing:.12em;text-transform:uppercase;color:#4b6365}
+.seg .leg span{font-size:15px}
+.seg .leg b{font:500 24px/1 var(--font)}
+.seg .sft{display:flex;justify-content:space-between;gap:8px;padding:10px 14px;background:#eef4f4;font:600 13px/1.2 var(--data);color:#3f6a6f}
+.kflo{display:grid;gap:10px}
+.kflo .flohd{display:flex;gap:10px;align-items:center}.kflo .flohd .fx-flo-av{width:36px;height:36px;font-size:12px}
+.kflo .flohd small{display:block;font:400 13px/1.3 var(--data);color:var(--teal)}
+.kflo .fx-thread{max-height:none}
+.kflo .fx-msg.fx-crew{background:var(--bg);border:1px solid var(--line)}
+.kflo .fx-msg.fx-me{background:var(--lamp);color:#0d1c1d}
+.kflo .fx-flo-chips button{min-height:44px}
+.kflo .fx-send{margin-top:0;scroll-margin-bottom:96px}
+.gbday{display:flex;justify-content:space-between;align-items:baseline;margin-top:4px;font:600 13px/1 var(--data);letter-spacing:.14em;text-transform:uppercase;color:var(--lamp)}
+.gbday small{letter-spacing:0;text-transform:none;font-weight:400;color:var(--mute)}
+.gbline{position:relative;list-style:none;margin:0;padding:0 0 0 20px;display:grid;gap:8px}
+.gbline::before{content:"";position:absolute;left:5px;top:12px;bottom:12px;width:2px;background:repeating-linear-gradient(var(--line) 0 4px,transparent 4px 8px)}
+.gbs{position:relative;scroll-margin-top:90px}
+.gbs::before{content:"";position:absolute;left:-19px;top:30px;width:10px;height:10px;border-radius:50%;background:var(--bg);border:2px solid var(--teal)}
+.gbs.on::before{background:var(--teal)}
+.gbs>button{display:grid;grid-template-columns:64px 1fr 18px;gap:12px;align-items:center;width:100%;min-height:72px;padding:6px 10px 6px 6px;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);text-align:left}
+.gbs.on>button{border-color:var(--teal)}
+.gbs>button img,.gbs>button .ic{width:64px;height:64px;border-radius:10px;object-fit:cover;background:var(--card2)}
+.gbs>button .ic{display:grid;place-items:center;color:var(--teal)}
+.gbs b{display:block;font-weight:500;line-height:1.25}
+.gbs small{display:block;font:400 13px/1.3 var(--data);color:var(--mute)}
+.gbs.on>button>.fx-i:last-child{transform:rotate(90deg)}
+.gbopen{display:grid;gap:12px;padding:12px 0 4px;animation:fd .3s ease}
+.gbcover{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:12px;background:var(--card2)}
+.gbbody{font-size:16px;line-height:1.55;overflow-wrap:anywhere}
+.gbbody .fx-gb-text p{margin:0 0 10px}.gbbody ul,.gbbody ol{margin:0 0 10px;padding-left:20px}.gbbody a{color:var(--teal)}
+.gbbody .fx-gb-fig{margin:12px 0}.gbbody .fx-gb-img{max-height:60svh}
+.gbbody .fx-gb-place.fx-has-img{grid-template-columns:84px 1fr}.gbbody .fx-gb-pimg{width:84px;height:96px}
+</style></head><body>
+<div class="app"><div class="fx-proto"><a href="../../">&lsaquo; All 11 designs</a>&nbsp;· staging copy · sample guest · nothing is saved</div><style>.fx-proto,.proto{padding-block:0!important}.fx-proto a,.proto a{display:inline-flex;align-items:center;min-height:44px;color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px}</style>
+ <div class="top"><img src="img/wordmark.svg" alt="FLOHOM"><button type="button" class="fx-demo-btn" data-fx="demo">Demo controls</button></div>
+ <header class="hd"><img id="hdimg" src="img/ext14-l.webp" alt="FLOHOM 1"><div class="t"><p id="hdk"></p><h1 id="hdh"></h1></div></header>
+ <main class="line" id="line"></main>
+ <section class="kit" id="kit" aria-label="Your trip kit" hidden></section>
+</div>
+<div class="float"><button type="button" id="toNow">Jump to now</button><button type="button" class="alt" id="toKit" hidden>Trip kit</button><button type="button" class="alt" id="toTop">Top</button></div>
+<script>/* FLOx live guidebook (2026-10-08): the REAL Digital Guidebook for the FLOHOM being viewed, fetched
+   live from Bridge for signed-in Bridge owners. Everyone else keeps the sample guidebook.
+   Nothing real is stored in this file or on the public site: it only holds public listing names.
+   Bridge route: GET https://app.flohom.com/api/admin/flox-designs/guidebook?property=N (owner-only,
+   CORS to exactly https://designs.flohom.com, Wi-Fi + codes locked even for owners, text + vetted photo URLs).
+   The HTML is sanitized again here with DOMPurify (pinned + SRI) before it touches the page.
+   Shared: build_ten.py inlines it ahead of core.js; the film page loads ../live-guide.js. */
+(function(){
+'use strict';
+const API='https://app.flohom.com/api/admin/flox-designs/guidebook?property=';
+const SIGNIN='https://app.flohom.com/admin/login';
+const PURIFY={src:'https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.4.16/purify.min.js',
+  sri:'sha512-flQmhkXNRQ3iUfvtdCobtpMjCb6kE+zLnTiAulAQJ3WykVfy84JvCMOo6vhwWXHTXjR25h9Zj+LyGFRWKjRoag=='};
+/* Public listing names (flohom.com), so the picker works signed out too. Bridge's answer wins when signed in. */
+const HOMES={1:'Bay Escape',2:'Modern Charm',3:'Bung-a-flo',4:'FLOTOMAC',5:'Amanzi',6:'Closing Tide',7:'Harbor Hideaway',8:'Victoria Mae',
+  9:'Baldamore Oasis',10:'Rudee Retreat',11:'Rudee Awakening',12:'Azirae So-Lay',13:'Port Noir',14:'Soteria',15:'Palmera',16:"Isaac's Way",17:'Selah Sailor'};
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+
+function startN(){ let n=1; try{ n=parseInt(new URLSearchParams(location.search).get('flohom')||'1',10); }catch(e){} return HOMES[n]?n:1; }
+const st={n:startN(), status:{}, data:{}};
+const subs=[]; const notify=()=>subs.forEach(f=>{ try{ f(st.n); }catch(e){ console.error(e); } });
+
+/* Facts the designs show for the chosen FLOHOM. Live values when Bridge answered, public names otherwise. */
+function home(n=st.n){ const d=st.data[n]&&st.data[n].property; const nick=(d&&d.nickname)||HOMES[n];
+  return { number:n, name:`FLOHOM ${n}`, nick, bookUrl:(d&&d.bookUrl)||`https://flohom.com/property/flohom-${pad(n)}`,
+    reviewUrl:`https://flohom.link/FLOHOM-${n}-Review`, city:(d&&d.city)||null }; }
+
+let purifyP=null;
+function purify(){ if(window.DOMPurify) return Promise.resolve(window.DOMPurify);
+  return purifyP||(purifyP=new Promise((ok,no)=>{ const s=document.createElement('script'); s.src=PURIFY.src; s.integrity=PURIFY.sri; s.crossOrigin='anonymous';
+    s.referrerPolicy='no-referrer'; s.onload=()=>window.DOMPurify?ok(window.DOMPurify):no(new Error('DOMPurify missing')); s.onerror=()=>{ purifyP=null; no(new Error('DOMPurify blocked')); }; document.head.appendChild(s); })); }
+
+/* Ask Bridge once per FLOHOM. 200 → real guides; 401 / 403 / network / CORS block → sample stays. */
+function ensure(n=st.n){ if(st.status[n]) return; st.status[n]='loading';
+  Promise.all([purify(), fetch(API+n,{credentials:'include',cache:'no-store',headers:{Accept:'application/json'}})])
+    .then(async([P,r])=>{ if(!r.ok){ st.status[n]=r.status===401||r.status===403?'signedout':'error'; return; }
+      const j=await r.json(); st.data[n]=prepare(j,P); st.status[n]='ok'; })
+    .catch(()=>{ st.status[n]='error'; })
+    .finally(notify); }
+
+const ALLOWED={ALLOWED_TAGS:['p','br','b','strong','i','em','u','ul','ol','li','a'],ALLOWED_ATTR:['href','rel','target'],ALLOWED_URI_REGEXP:/^https:\/\//i};
+/* Photos (2026-10-08, Pray GO B): Bridge already vets them (https, approved hosts, never from a guide holding a
+   code or Wi-Fi detail). Checked again here: same host list, https only, escaped, lazy, no referrer. The whole guide
+   body then goes through DOMPurify once more with <img src=https> as the only addition to the text whitelist. */
+const IMG_OK=/^https:\/\/(resources-prod-attachmentsbucket-cxcbr2w0gb7i\.s3\.amazonaws\.com|lh3\.googleusercontent\.com|d3ciwvs59ifrt8\.cloudfront\.net|img1\.wsimg\.com|app\.flohom\.com\/seed-images)\//;
+const okImg=s=>typeof s==='string'&&IMG_OK.test(s)&&!/["'<>\s]/.test(s)?s:null;
+const imgTag=(src,alt,cls)=>okImg(src)?`<img class="${cls}" src="${esc(src)}" alt="${esc(alt||'')}" loading="lazy" decoding="async" referrerpolicy="no-referrer">`:'';
+const BODY={ALLOWED_TAGS:[...ALLOWED.ALLOWED_TAGS,'div','small','span','img','figure','figcaption'],
+  ALLOWED_ATTR:['href','rel','target','class','src','alt','loading','decoding','referrerpolicy'],ALLOWED_URI_REGEXP:/^https:\/\//i};
+function prepare(j,P){
+  /* Each block keeps its own shape (designs that lay photos out their own way read g.blocks) and a ready-made HTML form. */
+  const shape=b=>{
+    if(b&&b.kind==='text'){ const html=P.sanitize(String(b.html||''),ALLOWED); return html.trim()?{kind:'text',html}:null; }
+    if(b&&b.kind==='header') return {kind:'header',text:String(b.text||'')};
+    if(b&&b.kind==='place') return {kind:'place',name:String(b.name||''),miles:typeof b.miles==='number'?b.miles:null,address:b.address?String(b.address):null,description:b.description?String(b.description):null,image:okImg(b.image)};
+    if(b&&b.kind==='image'&&okImg(b.src)) return {kind:'image',src:b.src,caption:b.caption?String(b.caption):null};
+    return null; };
+  const html=b=>b.kind==='text'?`<div class="fx-gb-text">${b.html}</div>`
+    :b.kind==='header'?`<p class="fx-gb-hd"><b>${esc(b.text)}</b></p>`
+    :b.kind==='image'?`<figure class="fx-gb-fig">${imgTag(b.src,b.caption,'fx-gb-img')}${b.caption?`<figcaption>${esc(b.caption)}</figcaption>`:''}</figure>`
+    :`<div class="fx-gb-place${b.image?' fx-has-img':''}">${b.image?imgTag(b.image,b.name,'fx-gb-pimg'):''}<div><b>${esc(b.name)}</b>${b.miles!=null?`<span class="fx-gb-mi">${esc(b.miles)} mi away</span>`:''}${b.address?`<small>${esc(b.address)}</small>`:''}${b.description?`<p>${esc(b.description)}</p>`:''}</div></div>`;
+  const guide=g=>{ const blocks=(g.blocks||[]).map(shape).filter(Boolean);
+    return {title:String(g.title||''), cover:okImg(g.cover), blocks, body:P.sanitize(blocks.map(html).join(''),BODY),
+      photos:blocks.reduce((a,b)=>a+(b.kind==='image'||b.image?1:0),0)}; };
+  const p=j.property||{};
+  return { property:{nickname:p.nickname?String(p.nickname):null, city:p.city?String(p.city):null,
+      bookUrl:typeof p.bookUrl==='string'&&/^https:\/\/flohom\.com\//.test(p.bookUrl)?p.bookUrl:null},
+    groups:[{key:'o',label:'Your FLOHOM',guides:(j.operational||[]).map(guide)},
+            {key:'v',label:`${p.city?String(p.city)+' ':''}Voyager Guide`,guides:(j.voyager||[]).map(guide)}].filter(g=>g.guides.length) }; }
+
+function setHome(n){ n=parseInt(n,10); if(!HOMES[n]||n===st.n) return; st.n=n;
+  try{ const u=new URL(location.href); u.searchParams.set('flohom',n); history.replaceState(null,'',u); }catch(e){}
+  notify(); }
+
+/* One state for the designs: 'loading' | 'ok' | 'signedout' | 'error'. */
+function view(n=st.n){ ensure(n); return { status:st.status[n], data:st.data[n]||null }; }
+const signinLine=n=>`Sign in to Bridge to see FLOHOM ${n}'s real guidebook. <a href="${SIGNIN}" target="_blank" rel="noopener">Sign in</a>`;
+
+window.FXLive={ get n(){ return st.n; }, HOMES, home, view, setHome, signinLine, esc, on:f=>subs.push(f) };
+})();
+
+/* FLOx shared core (2026-10-08): every rule of the live FLOx Pass, render-agnostic.
+   Designs call FX.on(render), read FX.S / FX.pass() / FX.unlock(), and drop FX.ui.* blocks into their own layout.
+   Clicks/inputs are handled here by delegation on [data-fx*] attributes, so every design behaves identically. */
+(function(){
+'use strict';
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ---------- property facts (FLOHOM 1 record, sample guest) ---------- */
+const P={ name:'FLOHOM 1', nick:'Bay Escape', slip:'C12', marina:'Inner Harbor Marina', address:'400 Key Highway, Baltimore, MD 21230',
+  sleeps:4, total:10, waiver:48.15, deposit:500, hull:'on file', phone:'(667) 270-8226', email:'reservations@flohom.com',
+  release:{wifi:8, codes:2, checkin:8, checkout:24}, conf:'FLX-0001-4471', oneNightExempt:false, bookUrl:'https://flohom.com/property/flohom-01', reviewUrl:'https://flohom.link/FLOHOM-1-Review', allUrl:'https://flohom.com/listings' };
+/* FLOHOM picker + live guidebook (live-guide.js): name, nickname, Book and review links follow the chosen FLOHOM. */
+function applyHome(){ if(!window.FXLive) return; const h=FXLive.home(); P.name=h.name; P.nick=h.nick; P.bookUrl=h.bookUrl; P.reviewUrl=h.reviewUrl; }
+applyHome();
+const S={ stage:'verify', status:'pending', channel:'direct', nights:2,
+  photos:{front:null,back:null,selfie:null}, busy:{}, signed:null, cover:null, reject:null,
+  now:'2026-10-08T10:00:00-04:00', ups:{}, ov:2, people:[], signName:'', agree:false, quiet:false,
+  coverChoice:'waiver', paying:false, payBusy:false, stepIdx:0, openPr:{}, seenPr:{}, charterFull:false,
+  openGb:null, thread:[{me:0,t:'Hi Jordan! Your FLOx Pass is ready. Anything we can set up before you arrive?',at:'Crew · Thu 8 Oct'}], msgDraft:'',
+  /* Ask FLO: a SAMPLE conversation. Not connected to the real FLO yet (design preview). */
+  flo:[{me:0,t:"Hi Jordan, I'm FLO, your FLOHOM concierge. Ask me anything about your stay or the neighborhood."},
+       {me:1,t:'Is there coffee we can walk to in the morning?'},
+       {me:0,t:'Yes, there are a few cafés a short walk along the waterfront. Your Voyager Guide lists the crew’s favorites with photos and distances.'}],
+  floDraft:'', floBusy:false };
+const ANCHOR=()=>new Date('2026-10-16T15:00:00-04:00');               // 3 PM ET on the check-in date
+const CHECKOUT=()=>new Date(new Date('2026-10-16T10:00:00-04:00').getTime()+S.nights*864e5);
+const tz={timeZone:'America/New_York'};
+const fmtDay=d=>d.toLocaleDateString('en-US',{...tz,weekday:'short',day:'numeric',month:'short'}).replace(',','');
+const fmtTime=d=>d.toLocaleTimeString('en-US',{...tz,hour:'numeric',minute:'2-digit'});
+const now=()=>new Date(S.now);
+const ota=()=>S.channel==='airbnb'||S.channel==='vrbo';
+const otaName=()=>S.channel==='airbnb'?'Airbnb':'VRBO';
+const idDone=()=>ota()||!!(S.photos.front&&S.photos.back&&S.photos.selfie);
+const allDone=()=>idDone()&&!!S.signed&&!!S.cover;
+const shortName=n=>{ const p=String(n).trim().split(/\s+/); return p.length>1?p[0][0]+'. '+p[p.length-1]:n; };
+const money=v=>'$'+(v%1?v.toFixed(2):v);
+
+const PRINCIPLES=[
+ ['Respect the Space','Stick to your listed guest count. Only registered occupants are permitted overnight. Our vessels are designed for comfort at capacity; extra or unregistered guests compromise safety and the experience.'],
+ ['Marina Quiet Hours: 10 PM to 7 AM',"We're a guest at the marina too, docked alongside full-time residents. From 10 PM to 7 AM: keep music and speakers off, keep voices down on deck, and no gatherings beyond your registered group. A first heads-up is just a friendly reminder; it only becomes a fee if it's documented."],
+ ['No Smoking Aboard','Our FLOHOMs are smoke-free environments, inside and on open decks. This includes e-cigarettes and vaping.'],
+ ['Treat Her Well',"She's a FLOHOM, not a hotel. Treat the furnishings and amenities with care. Your Peace-of-Mind Cover handles small accidents."],
+ ['Depart on Time','Our cleaning team needs time to prepare for the next guest. Please vacate by check-out time. Need a little extra? Ask about late check-out.']];
+const TERMS=['Occupancy shall not exceed the maximum listed. Unauthorized guests are prohibited and may result in termination without refund.','Smoking (including e-cigarettes) is prohibited. Cleaning fee of $250+ for violations.','No parties, events, or gatherings exceeding guest count. Violations result in eviction.','Pets are prohibited. Unauthorized pets incur a cleaning fee.','Quiet hours: 10 PM to 7 AM. A documented violation may result in a $150 to $250 fee charged to the card on file. Severe or repeated violations may result in eviction without refund for remaining nights.','Guests are responsible for damage beyond normal wear and tear.','Peace-of-Mind Cover covers minor accidental damage. Major or intentional damage is charged separately.','FLOHOM is not liable for personal injury, property loss, or force majeure events.','Guests agree to follow the vessel rules in the guidebook.','Late check-outs without approval incur additional charges.'];
+const REASONS={
+  unclear_photo:{label:'Photo unclear',guest:'The photos of your ID were too blurry, dark, or cropped for us to read.',reupload:true},
+  id_mismatch:{label:"Doesn't match booking",guest:"The name on the ID didn't match the name on this reservation, or the selfie didn't match the ID.",reupload:true},
+  expired_id:{label:'ID expired',guest:'The ID you uploaded has expired. Please use a current government-issued ID.',reupload:true},
+  underage:{label:'Under minimum age',guest:'The primary guest must be at least 25 to check in.',reupload:false},
+  other:{label:'Other (see note)',guest:"We weren't able to approve the documents you submitted.",reupload:true}};
+const UPS=[
+ {id:1,name:'Early Check-In',from:'from $50',noNotice:true,desc:"Get a head start on your FLOHOM experience. We'll do our best to accommodate an early arrival.",tiers:[['1:00 PM arrival',50]]},
+ {id:2,name:'Late Check-Out',from:'from $50',noNotice:true,desc:"Relax after a late night or pack at a leisurely pace. We'll do our best to accommodate.",tiers:[['12:00 PM departure',50]]},
+ {id:3,name:'Romance Packages',from:'from $50',desc:"Craft an enchanting romantic getaway with FLOHOM's curated romance packages.",tiers:[['Flowers For My Partner: a dozen roses',50],['Keeping It Simple: candles and rose petals',62]]},
+ {id:4,name:'Birthday Packages',from:'from $300',desc:"Celebrate your special day with FLOHOM's curated birthday packages.",tiers:[['Cupcakes: 6 cupcakes, champagne, balloons, decorations',300],['Chocolate Covered Strawberries',325]],bday:true},
+ {id:5,name:'Taste of Baltimore Basket',from:'$125',desc:'A curated basket of Baltimore favorites: local snacks, treats and drinks to welcome you.',tiers:[['Basket',125]]},
+ {id:6,name:'Tip the Cleaners',from:'any amount',noNotice:true,desc:'Show appreciation for the team that prepared your FLOHOM. 100% goes to your turnover crew.',tiers:[['$20',20],['$40',40],['$60',60]]}];
+const STATUS_INFO={Requested:'Our crew is checking availability. You are not charged until we approve.',Paid:'Approved and charged to your saved card.',Approved:'Approved. A payment link is on its way.',Confirmed:'All set.',Declined:"We couldn't fit this one in. You were not charged.",Refunded:'Refunded to your card.'};
+const STEPS_IN=[['Arrive at Inner Harbor Marina','Head to 400 Key Highway. Street and garage parking details are in your guidebook.','ext14-l'],['Slip location','FLOHOM 1 is at Slip C12. Walk the pier toward the water and look for the FLOHOM sign by the door.','deck-day-l'],['Key access','codes',null]];
+const STEPS_OUT=[['FLOHOM check-out','Load the dishwasher, take out the trash, switch off the fire pit and lock up by 10:00 AM.'],['Marina check-out','Return the marina gate card to the lockbox and close the pier gate behind you.']];
+
+/* ---------- icons (stroke SVG, no emoji) ---------- */
+const I=d=>`<svg class="fx-i" viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
+const ICON={ id:I('<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="8.5" cy="12" r="2"/><path d="M13 10.5h5M13 13.5h3.5"/>'),
+  face:I('<circle cx="12" cy="9" r="4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/>'), shield:I('<path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>'),
+  check:I('<path d="M5 12.5l4.5 4.5L19 7.5"/>'), lock:I('<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>'),
+  wifi:I('<path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r=".8"/>'),
+  door:I('<rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="15" cy="12" r="1"/>'), ticket:I('<path d="M4 6h16v4a2 2 0 0 0 0 4v4H4v-4a2 2 0 0 0 0-4z"/><path d="M14 6v12" stroke-dasharray="2 2"/>'),
+  chat:I('<path d="M4 5h16v11H9l-5 4z"/>'), sparkle:I('<path d="M12 3l1.8 4.6L18.5 9l-4.7 1.4L12 15l-1.8-4.6L5.5 9l4.7-1.4z"/>'),
+  book:I('<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/>'), sun:I('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'),
+  cloud:I('<path d="M7 18h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.3 3.3 0 0 0 7 18z"/>'), rain:I('<path d="M7 15h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.3 3.3 0 0 0 7 15zM8 18l-1 2M12 18l-1 2M16 18l-1 2"/>'),
+  phone:I('<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>'), receipt:I('<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>'),
+  left:I('<path d="M15 5l-7 7 7 7"/>'), right:I('<path d="M9 5l7 7-7 7"/>'), out:I('<path d="M10 4H5v16h5M15 8l4 4-4 4M19 12H9"/>'), anchor:I('<circle cx="12" cy="5" r="2"/><path d="M12 7v14M5 13a7 7 0 0 0 14 0M8 11h8"/>'),
+  up:{1:I('<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/>'),2:I('<path d="M3 18h18M6 18a6 6 0 0 1 12 0M12 6v3M4.5 10.5l2 1.5M19.5 10.5l-2 1.5"/>'),3:I('<path d="M12 20s-7-4.3-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.7 12 20 12 20z"/>'),4:I('<path d="M4 21h16M5 21v-7h14v7M12 14V9M12 6.5c.8-.8.8-1.7 0-2.5-.8.8-.8 1.7 0 2.5z"/>'),5:I('<path d="M4 10h16l-2 10H6zM8 10l4-6 4 6"/>'),6:I('<path d="M12 3l1.8 4.6L18.5 9l-4.7 1.4L12 15l-1.8-4.6L5.5 9l4.7-1.4z"/>')} };
+
+/* ---------- events ---------- */
+const subs=[]; let last='';
+function emit(why){ last=why||'state'; subs.forEach(f=>f(last)); bindLive(); }
+function on(f){ subs.push(f); }
+function go(stage, why){ S.stage=stage; if(!reduce) window.scrollTo(0,0); else window.scrollTo(0,0); emit(why||'stage'); }
+
+/* ---------- unlocks (relative to 3 PM ET check-in anchor) ---------- */
+function unlockAt(h){ return new Date(ANCHOR().getTime()-h*3600e3); }
+function untilText(at){ const ms=at-now(); if(ms<=0) return ''; if(ms<24*3600e3){ const h=Math.floor(ms/3600e3), m=Math.round((ms%3600e3)/60e3); return `Available in ${h}h ${m}m`; } return `Available ${fmtDay(at)}, ${fmtTime(at)}`; }
+function unlock(key){ const at=unlockAt(P.release[key]); return {key, at, open:now()>=at, label:untilText(at), when:`${fmtDay(at)}, ${fmtTime(at)}`, hours:P.release[key]}; }
+
+/* ---------- people / capacity ---------- */
+function caps(){ const d=Math.max(1,S.ov); return {comp:Math.max(0,Math.min(P.sleeps,d)-1), vis:Math.max(0,P.total-Math.min(P.sleeps,d))}; }
+function trimPeople(){ const c=caps(); let o=0,v=0; S.people=S.people.filter(p=>p.kind==='overnight'?(++o<=c.comp):(++v<=c.vis)); }
+
+/* ---------- actions ---------- */
+function validateFile(f){
+  if(/heic|heif/i.test(f.type)||/\.hei[cf]$/i.test(f.name)) return "iPhone HEIC photos aren't supported yet. Please take the photo again or choose a JPG or PNG.";
+  if(!/^image\/(jpeg|png|webp)$/.test(f.type)) return 'Please use a JPG, PNG or WebP photo.';
+  if(f.size>10*1024*1024) return 'That photo is over 10 MB. Please choose a smaller one.';
+  return null; }
+let errs={};
+function setErr(k,m){ errs[k]=m||''; $$(`[data-err="${k}"]`).forEach(e=>{ e.textContent=errs[k]; e.hidden=!errs[k]; }); }
+function photo(k,f){ const e=validateFile(f); setErr('ids',e); if(e) return; S.busy[k]=true; emit('upload');
+  const rd=new FileReader(); rd.onload=()=>setTimeout(()=>{ S.photos[k]=rd.result; S.busy[k]=false; emit('photo'); maybeSubmit(); },900); rd.readAsDataURL(f); }
+function samplePhoto(kind){ const c=document.createElement('canvas'); c.width=320; c.height=kind==='selfie'?320:202; const x=c.getContext('2d');
+  const g=x.createLinearGradient(0,0,c.width,c.height); g.addColorStop(0,'#3f6a6f'); g.addColorStop(1,'#94c2c7'); x.fillStyle=g; x.fillRect(0,0,c.width,c.height); x.fillStyle='rgba(255,255,255,.85)';
+  if(kind==='selfie'){ x.beginPath(); x.arc(160,130,58,0,7); x.fill(); x.beginPath(); x.ellipse(160,300,110,90,0,0,7); x.fill(); }
+  else if(kind==='front'){ x.fillRect(20,40,80,100); x.fillRect(120,50,170,14); x.fillRect(120,80,120,10); x.fillRect(120,100,140,10); x.font='600 16px monospace'; x.fillText('SAMPLE ID',120,170); }
+  else { for(let i=0;i<22;i++) x.fillRect(20+i*13,120,i%3?6:9,50); x.fillRect(20,30,280,10); x.fillRect(20,52,200,10); }
+  return c.toDataURL('image/jpeg',.8); }
+function sign(){ const name=S.signName.trim();
+  if(name.length<2){ setErr('sign','Please type your full legal name.'); return false; }
+  if(!S.agree||!S.quiet){ setErr('sign','Please tick both boxes to sign.'); return false; }
+  setErr('sign',''); const named=S.people.filter(p=>p.name.trim());
+  S.signed={name,count:S.ov,overnight:named.filter(p=>p.kind==='overnight').map(p=>p.name.trim()),visitors:named.filter(p=>p.kind==='visitor').map(p=>p.name.trim())};
+  emit('signed'); return true; }
+function oneNight(){ return S.nights===1&&!P.oneNightExempt; }
+function coverChoice(){ return oneNight()?'deposit':S.coverChoice; }
+function consentText(){ const c=coverChoice(); return `By continuing, you authorize FLOHOM LLC to securely save your payment card and ${c==='waiver'?`charge ${money(P.waiver)} now as a non-refundable damage waiver.`:'charge your card only if property damage occurs during your stay.'} Your card may also be used to process any add-on services you request and we approve during your stay. Payments are processed securely by Stripe. FLOHOM never stores your card number.`; }
+function pay(){ if(S.payBusy) return; S.payBusy=true; emit('paying'); setTimeout(()=>{ const c=coverChoice(); S.cover={type:c,amount:c==='waiver'?P.waiver:P.deposit}; S.payBusy=false; S.paying=false; emit('covered'); maybeSubmit(); },1100); }
+let submitting=false;
+function maybeSubmit(){ if(!submitting&&allDone()&&S.status==='pending'&&S.stage==='verify'){ submitting=true; setTimeout(()=>{ submitting=false; if(S.stage==='verify') go('review','submitted'); },700); } }
+function approve(){ S.status='verified'; emit('approved'); setTimeout(()=>go('pass','approved'), reduce?0:(FX.approveDelay||1800)); }
+function decline(code){ S.status='rejected'; S.reject=code; if(REASONS[code].reupload&&!ota()) S.photos={front:null,back:null,selfie:null}; go('verify','declined'); }
+function fillSamples(){
+  if(!ota()&&!(S.photos.front&&S.photos.back&&S.photos.selfie)) S.photos={front:samplePhoto('front'),back:samplePhoto('back'),selfie:samplePhoto('selfie')};
+  if(!S.signed){ S.signName='Jordan Sample'; S.agree=S.quiet=true; S.signed={name:'Jordan Sample',count:2,overnight:['Alex Sample'],visitors:['Sam Visitor']}; }
+  if(!S.cover) S.cover=oneNight()?{type:'deposit',amount:P.deposit}:{type:'waiver',amount:P.waiver}; }
+function resetVerify(){ Object.assign(S,{status:'pending',reject:null,photos:{front:null,back:null,selfie:null},signed:null,cover:null,ov:2,people:[],signName:'',agree:false,quiet:false,paying:false,openPr:{},seenPr:{}}); }
+
+/* ---------- derived data ---------- */
+function pass(){ const s=S.signed||{name:'Jordan Sample',count:2,overnight:['Alex Sample'],visitors:['Sam Visitor']}; const early=S.ups[1], late=S.ups[2];
+  return { checkIn:{time:early==='Paid'?'1:00 PM':'3:00 PM', day:fmtDay(ANCHOR()), note:early==='Paid'?'Early check-in':early==='Requested'?'Early check-in pending':''},
+    checkOut:{time:late==='Paid'?'12:00 PM':'10:00 AM', day:fmtDay(CHECKOUT()), note:late==='Paid'?'Late check-out':late==='Requested'?'Late check-out pending':''},
+    lead:shortName(s.name), leadFull:s.name, guests:s.count, nights:S.nights, visitors:s.visitors.length, aboard:s.count+s.visitors.length,
+    overnight:[s.name,...s.overnight], unnamed:Math.max(0,s.count-1-s.overnight.length), visitorNames:s.visitors, conf:P.conf }; }
+function visibleUps(){ const days=(ANCHOR()-now())/864e5; return UPS.filter(u=>u.noNotice||days>=7); }
+function heroFacts(){ return [`${fmtDay(ANCHOR())} to ${fmtDay(CHECKOUT())}`,`${S.nights} night${S.nights>1?'s':''}`,`Slip ${P.slip}`]; }
+
+/* ---------- UI blocks (designs style the fx-* classes) ---------- */
+const ui={};
+ui.ids=()=>{ if(ota()) return `<div class="fx-ota">${ICON.shield}<div><b>Identity verified</b><p class="fx-mute">Verified through ${otaName()}</p></div></div>`;
+  const slots=[['front','Front of ID','environment',ICON.id],['back','Back of ID','environment',ICON.id],['selfie','Selfie','user',ICON.face]];
+  return `<p class="fx-mute">Please provide clear photos of your government-issued ID (driver's license or passport) and a selfie.</p><div class="fx-ids">${slots.map(([k,l,cap,ic])=>{ const ph=S.photos[k];
+    return `<div class="fx-idt ${k==='selfie'?'fx-selfie':''} ${ph?'fx-ok':''} ${S.busy[k]?'fx-busy':''}"><div class="fx-frame">${ph?`<img src="${ph}" alt="">`:ic}</div><div class="fx-idt-t"><b>${l}</b><small>${S.busy[k]?'Uploading...':ph?'Uploaded':'Take a photo or attach a file'}</small><label class="fx-btn fx-btn-sm">${ph?'Retake':'Add'}<input type="file" accept="image/jpeg,image/png,image/webp" capture="${cap}" data-fx-photo="${k}" hidden></label></div></div>`; }).join('')}</div><p class="fx-err" data-err="ids" ${errs.ids?'':'hidden'}>${esc(errs.ids)}</p>`; };
+ui.principles=()=>`<div class="fx-princ">${PRINCIPLES.map(([t,d],i)=>`<div class="fx-pr ${S.openPr[i]?'fx-open':''} ${S.seenPr[i]?'fx-seen':''}"><button type="button" data-fx="pr" data-i="${i}" aria-expanded="${!!S.openPr[i]}"><span class="fx-tick">${ICON.check}</span><span>${esc(t)}</span><span class="fx-chev">${ICON.right}</span></button><p>${esc(d)}</p></div>`).join('')}</div>`;
+ui.charter=()=>`<div class="fx-charter"><div class="fx-charter-h"><div><b>Vessel Charter Agreement</b><p class="fx-mute">The agreement you're signing, for this FLOHOM and these dates.</p></div><button type="button" class="fx-btn fx-btn-sm fx-ghost" data-fx="charter">${S.charterFull?'Collapse':'Expand'}</button></div><div class="fx-charter-t ${S.charterFull?'fx-full':''}"><p class="fx-meta">Guest: ${esc(S.signName||'Jordan Sample')} · Vessel: ${P.name} “${P.nick}” · Hull ${P.hull}<br>Charter dates: ${fmtDay(ANCHOR())} to ${fmtDay(CHECKOUT())} · Berth: ${P.address}<br>Sleeps ${P.sleeps} overnight · ${P.total} aboard at once</p>${TERMS.map((t,i)=>`<p>${i+1}. ${esc(t)}</p>`).join('')}<p class="fx-mute">The full charter text from the live system renders here.</p></div></div>`;
+ui.guests=()=>{ trimPeople(); const c=caps(); const nO=S.people.filter(p=>p.kind==='overnight').length, nV=S.people.filter(p=>p.kind==='visitor').length;
+  const row=(p,i)=>`<div class="fx-person"><input class="fx-field" placeholder="Full name" value="${esc(p.name)}" data-fx-person="${i}" data-f="name" aria-label="Full name"><input class="fx-field" placeholder="Phone (optional)" value="${esc(p.phone)}" data-fx-person="${i}" data-f="phone" inputmode="tel" aria-label="Phone (optional)"><button type="button" class="fx-x" data-fx="rm" data-i="${i}" aria-label="Remove">${I('<path d="M6 6l12 12M18 6L6 18"/>')}</button></div>`;
+  let seats=''; for(let i=0;i<P.sleeps;i++) seats+=`<span class="fx-seat fx-bed ${i<S.ov?'fx-on':''}"></span>`; seats+='<span class="fx-sep"></span>'; for(let i=0;i<P.total-Math.min(P.sleeps,S.ov);i++) seats+=`<span class="fx-seat fx-vis ${i<nV?'fx-on':''}"></span>`;
+  return `<div class="fx-guests"><p class="fx-note">${P.name} sleeps up to <b>${P.sleeps} guests overnight</b>, plus up to <b>${P.total-P.sleeps} daytime visitors</b> (departing by 10 PM): <b>${P.total} people on board at once</b>. These limits are set by the marina.</p>
+   <div class="fx-deck"><div class="fx-seats">${seats}</div><div class="fx-legend"><span>Overnight berth</span><span>Day visitor</span><span>${S.ov+nV} of ${P.total} aboard</span></div></div>
+   <div class="fx-stepper"><span>Total guests staying overnight</span><div><button type="button" class="fx-round" data-fx="ov-" aria-label="Fewer overnight guests">${I('<path d="M5 12h14"/>')}</button><output>${S.ov}</output><button type="button" class="fx-round" data-fx="ov+" aria-label="More overnight guests">${I('<path d="M12 5v14M5 12h14"/>')}</button></div></div>
+   <div class="fx-people"><div class="fx-person fx-me">${esc(S.signName||'Jordan Sample')} (you)</div>${S.people.map((p,i)=>p.kind==='overnight'?row(p,i):'').join('')}</div>
+   <button type="button" class="fx-add" data-fx="add-ov" ${nO>=c.comp?'disabled':''}>+ Add someone staying overnight</button>
+   <p class="fx-sub">Day visitors, leaving by 10 PM</p><div class="fx-people">${S.people.map((p,i)=>p.kind==='visitor'?row(p,i):'').join('')||'<p class="fx-mute">No day visitors added.</p>'}</div>
+   <button type="button" class="fx-add" data-fx="add-vis" ${nV>=c.vis?'disabled':''}>+ Add a day visitor</button></div>`; };
+ui.sign=()=>`<div class="fx-sign"><label class="fx-sub" for="fxSig">Type your full legal name</label><input class="fx-field" id="fxSig" autocomplete="name" placeholder="Jordan Sample" value="${esc(S.signName)}" data-fx-input="signName"><div class="fx-sigline" aria-hidden="true"><span data-fx-sigpreview>${esc(S.signName)}</span><small>SIGNATURE</small></div>
+  <label class="fx-check"><input type="checkbox" data-fx-check="agree" ${S.agree?'checked':''}><span>I agree to the FLOHOM Philosophy and have read the Vessel Charter Agreement above</span></label>
+  <label class="fx-check"><input type="checkbox" data-fx-check="quiet" ${S.quiet?'checked':''}><span>I acknowledge FLOHOM's marina quiet hours (10 PM to 7 AM). I understand a documented violation may result in a $150 to $250 fee charged to the card on file, and that a severe or repeated violation may end my stay early without refund for remaining nights.</span></label>
+  <p class="fx-err" data-err="sign" ${errs.sign?'':'hidden'}>${esc(errs.sign)}</p><button type="button" class="fx-btn" data-fx="sign">Accept and sign</button></div>`;
+ui.cover=()=>{ const one=oneNight(), c=coverChoice(), amt=c==='waiver'?money(P.waiver):money(P.deposit);
+  if(S.paying) return `<div class="fx-cover"><div class="fx-stripe" aria-label="Payment form placeholder"><div class="fx-f">Card number</div><div class="fx-row"><div class="fx-f">MM / YY</div><div class="fx-f">CVC</div></div><small>Stripe's secure card form loads here. In this prototype no card is collected or charged.</small></div>
+    <button type="button" class="fx-btn" data-fx="pay" ${S.payBusy?'disabled':''}>${S.payBusy?'Processing...':c==='waiver'?`Pay ${amt}`:'Save card'}</button><button type="button" class="fx-btn fx-ghost" data-fx="pay-back">Back to options</button></div>`;
+  return `<div class="fx-cover">${one?'<p class="fx-note">For one-night stays, we ask for a refundable Security Deposit instead of a damage waiver.</p>':''}<div class="fx-opts">
+    <label class="fx-opt ${c==='waiver'?'fx-sel':''} ${one?'fx-off':''}"><input type="radio" name="fxcover" value="waiver" data-fx-cover ${c==='waiver'?'checked':''} ${one?'disabled':''}><div><b>Damage Waiver</b><span>Non-refundable. Covers accidental damage (broken glass, scuffed surfaces).</span></div><em>${money(P.waiver)}</em></label>
+    <label class="fx-opt ${c==='deposit'?'fx-sel':''}"><input type="radio" name="fxcover" value="deposit" data-fx-cover ${c==='deposit'?'checked':''}><div><b>Security Deposit</b><span>Fully refundable if no damage. Your card is saved and charged only if damage occurs. Released within 14 days after check-out.</span></div><em>${money(P.deposit)}</em></label></div>
+    <p class="fx-consent">${consentText()}</p><button type="button" class="fx-btn" data-fx="to-pay">Continue to payment: ${amt}</button></div>`; };
+ui.summary=k=>{ if(k==='A') return ota()?`Verified through ${otaName()}`:'Front, back and selfie uploaded';
+  if(k==='B') return S.signed?`Signed by ${S.signed.name}. ${S.signed.count} overnight, ${S.signed.visitors.length} visitor${S.signed.visitors.length===1?'':'s'} (leaving by 10 PM)`:'';
+  if(k==='C') return S.cover?(S.cover.type==='waiver'?`Peace-of-Mind Cover confirmed (${money(P.waiver)})`:`Security Deposit: card saved (${money(P.deposit)} only if damage)`):''; };
+ui.rejected=()=>{ if(S.status!=='rejected') return ''; const r=REASONS[S.reject]||REASONS.other, can=r.reupload&&!ota();
+  return `<div class="fx-reject"><b>We couldn't approve your verification yet</b><p>${esc(r.guest)}</p>${S.reject==='underage'?'':'<p class="fx-quote">Note from our crew: the photo of the back of your license is cut off at the bottom. Could you retake it?</p>'}${can?'<p class="fx-mute">Re-upload your ID below, then submit again.</p>':''}<button type="button" class="fx-btn fx-ghost" data-fx="call">Call us at ${P.phone}</button>${can?`<button type="button" class="fx-btn" data-fx="resubmit" ${idDone()?'':'disabled'}>Submit for review again</button>`:''}</div>`; };
+ui.reviewRows=()=>{ const cov=S.cover?(S.cover.type==='waiver'?`Peace-of-Mind Cover (${money(P.waiver)})`:`Security Deposit: card saved (${money(P.deposit)})`):'Peace-of-Mind Cover';
+  return `<div class="fx-rows">${[[ota()?`Verified through ${otaName()}`:'ID uploaded',1],['Agreement signed',1],[cov,1],[S.status==='verified'?'Crew review: approved':'Crew review',S.status==='verified']].map(([t,ok])=>`<div class="fx-rowck ${ok?'':'fx-wait'}"><i>${ok?ICON.check:''}</i><span>${t}</span></div>`).join('')}</div>
+  <p class="fx-mute">Our team is reviewing your information. This usually takes less than 2 hours. You'll receive an email when your pass is ready. Questions? ${P.email} · ${P.phone}</p>`; };
+ui.wifi=()=>{ const u=unlock('wifi'); return u.open?`<dl class="fx-kv"><dt>Network</dt><dd>FLOHOM1-Guest <span class="fx-mute">(sample)</span></dd><dt>Password</dt><dd>harbor-lights-sample</dd></dl><p class="fx-mute">Backup: the marina network, listed in your guidebook.</p>`
+  :`<div class="fx-locked"><div><b>WiFi details</b><p class="fx-mute">Unlocks ${u.hours} hours before check-in.</p></div><span class="fx-when">${u.label}</span></div>`; };
+ui.checkin=()=>{ const u=unlock('checkin'), c=unlock('codes'); if(!u.open) return `<div class="fx-locked"><div><b>${STEPS_IN.length} steps to get aboard</b><p class="fx-mute">Unlocks ${u.hours} hours before check-in.</p></div><span class="fx-when">${u.label}</span></div>`;
+  const i=S.stepIdx, st=STEPS_IN[i];
+  const body=st[1]==='codes'?(c.open?`<p>Lockbox code: <b class="fx-data">2468</b> <span class="fx-mute">(sample)</span>. The key opens the main cabin door.</p>`:`<div class="fx-locked"><p class="fx-mute">Your key access code appears ${c.hours} hours before check-in.</p><span class="fx-when">${c.label}</span></div>`):`<p>${st[1]}</p>`;
+  return `<div class="fx-steps">${st[2]?`<div class="fx-media"><img src="img/${st[2]}.webp" alt=""></div>`:''}<span class="fx-sub">Step ${i+1} of ${STEPS_IN.length}</span><h4>${st[0]}</h4>${body}<div class="fx-nav"><button type="button" class="fx-btn fx-btn-sm fx-ghost" data-fx="st-prev" ${i===0?'disabled':''}>${ICON.left}Back</button><span class="fx-dots">${STEPS_IN.map((_,k)=>`<i class="${k===i?'fx-on':''}"></i>`).join('')}</span><button type="button" class="fx-btn fx-btn-sm" data-fx="st-next" ${i===STEPS_IN.length-1?'disabled':''}>Next${ICON.right}</button></div></div>`; };
+ui.checkout=()=>{ const u=unlock('checkout'); return u.open?STEPS_OUT.map(([t,b],i)=>`<div class="fx-co"><span class="fx-sub">Step ${i+1} of ${STEPS_OUT.length}</span><h4>${t}</h4><p class="fx-mute">${b}</p></div>`).join(''):`<div class="fx-locked"><div><b>Check-out steps</b><p class="fx-mute">Appear ${u.hours} hours before check-in.</p></div><span class="fx-when">${u.label}</span></div>`; };
+ui.upsells=()=>{ const v=visibleUps(), hidden=UPS.length-v.length; return `${hidden?`<p class="fx-mute">${hidden} more need 7 days' notice</p>`:''}<div class="fx-ups">${v.map(u=>{ const st=S.ups[u.id]; return `<div class="fx-up"><span class="fx-ic">${ICON.up[u.id]}</span><b>${u.name}</b><span class="fx-price">${u.from}</span>${st?`<span class="fx-status">${st}</span>`:''}<button type="button" class="fx-btn fx-btn-sm" data-fx="up" data-id="${u.id}">${st?'View status':'View'}</button></div>`; }).join('')}</div>`; };
+ui.forecast=()=>`<div class="fx-wx">${[['Fri',68,'sun'],['Sat',64,'cloud'],['Sun',61,'rain'],['Mon',63,'cloud'],['Tue',66,'sun']].map(([d,t,ic])=>`<div><span>${d}</span><b>${t}°</b>${ICON[ic]}</div>`).join('')}</div><p class="fx-mute">Forecast for Baltimore, sample.</p>`;
+const GUIDE=[
+ ['book','House rules',()=>`<ul class="fx-gb-list">${PRINCIPLES.map(([t])=>`<li>${esc(t)}</li>`).join('')}<li>Up to ${P.sleeps} guests overnight, ${P.total} aboard at once (marina limit)</li></ul>`],
+ ['anchor','Marina amenities and showers',()=>`<p>Restrooms and hot showers are in the marina building at the head of the pier; your gate card opens them. Trash and recycling bins are by the pier gate.</p>`],
+ ['sparkle','Fire pit how-to',()=>`<ol class="fx-gb-list"><li>Turn the valve under the table to ON.</li><li>Press and hold the ignition button until the flame catches.</li><li>Turn it fully off when you leave the deck, and by 10 PM for quiet hours.</li></ol>`],
+ ['sun','Local tips: Fells Point, Federal Hill',()=>`<p><b>Fells Point:</b> cobblestone streets, waterfront bars and the water taxi. <b>Federal Hill:</b> the park at the top has the best view of the harbor at sunset.</p>`],
+ ['door','Parking',()=>`<p>Street and garage parking near ${P.address}. Your crew shares the best option for your dates in the check-in steps.</p>`]];
+const gbIcon=t=>/wi-?fi|internet/i.test(t)?'wifi':/check-?in|check-?out|door|keys?|lock|access|entry|parking/i.test(t)?'door':/rules?|safety|emergenc/i.test(t)?'shield':/marina|dock|slip|boat/i.test(t)?'anchor':'book';
+/* One guide list for every design: live from Bridge (with its vetted photos) or the sample, which uses
+   FLOHOM 1's own photos as covers. Designs lay these out their own way; ui.guidebook() is the default. */
+const GUIDE_COVERS=['living-l','ext13-l','fire-lit-l','ext11-l','ext14-l'];
+function guides(){ const L=window.FXLive?FXLive.view():{status:'error'}, live=L.status==='ok'&&L.data&&L.data.groups.length?L.data:null;
+  const line=live?'':L.status==='loading'?`Checking Bridge for ${esc(P.name)}'s real guidebook...`:window.FXLive?FXLive.signinLine(FXLive.n):'';
+  if(live) return {live:true, line, groups:live.groups.map(g=>({key:g.key,label:g.label,guides:g.guides.map((x,i)=>({...x,key:g.key+i,icon:g.key==='v'?'sparkle':gbIcon(x.title)}))}))};
+  return {live:false, line, groups:[{key:'s',label:'Your FLOHOM',guides:GUIDE.map(([ic,t,body],i)=>({key:'s'+i,title:t,icon:ic,cover:`img/${GUIDE_COVERS[i]}.webp`,body:body(),blocks:[],photos:0}))}]}; }
+const gbNote=live=>live?"WiFi and door codes stay locked in this preview. Guests see them on their pass at the usual unlock times.":'WiFi and codes follow the same unlock times as your pass.';
+const gbRow=x=>`<div class="fx-gbi ${S.openGb===x.key?'fx-open':''}"><button type="button" class="${x.cover?'fx-has-cover':''}" data-fx="gb-item" data-i="${x.key}" aria-expanded="${S.openGb===x.key}">${x.cover?`<img class="fx-gb-thumb" src="${esc(x.cover)}" alt="" loading="lazy" referrerpolicy="no-referrer">`:ICON[x.icon]}<span>${esc(x.title)}</span><span class="fx-chev">${ICON.right}</span></button>${S.openGb===x.key?`<div class="fx-gbb">${x.body}</div>`:''}</div>`;
+ui.guidebook=()=>{ const G=guides();
+  const head=`<div class="fx-gb-h">${ICON.book}<div><b>Your Digital Guidebook</b><p class="fx-mute">${esc(P.name)} · ${esc(P.nick)} · ${G.live?'live from Bridge':'sample content'}</p></div></div>`;
+  const line=G.line?`<p class="fx-mute fx-gb-signin">${G.line}</p>`:'';
+  const items=G.groups.map(g=>(G.live?`<p class="fx-sub fx-gb-group">${esc(g.label)}</p>`:'')+g.guides.map(gbRow).join('')).join('');
+  return `<div class="fx-gb" id="fx-guidebook" aria-label="Digital guidebook">${head}${line}${items}<p class="fx-mute fx-gb-note">${gbNote(G.live)}</p></div>`; };
+ui.receipt=()=>`<button type="button" class="fx-link" data-fx="rcpt">${ICON.receipt}<div><b>Receipt and payment details</b><p class="fx-mute">Opens your booking receipt</p></div>${ICON.right}</button>`;
+ui.links=()=>ui.guidebook()+ui.receipt();
+ui.contact=()=>`<dl class="fx-kv"><dt>Phone</dt><dd>${P.phone}</dd><dt>Email</dt><dd>${P.email}</dd></dl>`;
+ui.thread=()=>`<div class="fx-thread">${S.thread.map(m=>`<div class="fx-msg ${m.me?'fx-me':'fx-crew'}">${esc(m.t)}<small>${m.at}</small></div>`).join('')}</div><div class="fx-send"><input class="fx-field" maxlength="2000" placeholder="Question about ${P.nick}?" value="${esc(S.msgDraft)}" data-fx-input="msgDraft" aria-label="Message"><button type="button" class="fx-btn fx-btn-sm" data-fx="send">Send</button></div>`;
+/* Ask FLO — sample only. Replies are canned so the design can be judged; nothing leaves the page. */
+const FLO_ASK=['Can we check in early?','Where should we eat tonight?','How do the fire pit and heat work?'];
+const FLO_SAY=[
+  q=>/early|late|check/i.test(q)?`Early check-in depends on the boat before you. I'll ask the crew and message you here as soon as I know.`:null,
+  q=>/eat|dinner|food|restaurant/i.test(q)?`Your Voyager Guide has the crew's picks near ${P.marina}, with photos and walking distances. Want me to book a private chef instead?`:null,
+  q=>/fire|heat|ac|warm|cold/i.test(q)?'The fire pit and AC how-tos are in your guidebook, step by step with photos. The valve for the fire pit is under the table.':null,
+  ()=>`Good question. In the live version I'd answer from ${P.nick}'s guidebook and the crew's notes. Here it's a sample reply.`];
+function floSend(text){ const q=String(text||'').trim(); if(!q||S.floBusy) return; S.flo.push({me:1,t:q}); S.floDraft=''; S.floBusy=true; emit('flo');
+  setTimeout(()=>{ S.flo.push({me:0,t:FLO_SAY.map(f=>f(q)).find(Boolean)}); S.floBusy=false; emit('flo'); }, reduce?0:900); }
+ui.floNote=()=>`<p class="fx-flo-note">Design preview: sample answers, not connected to FLO yet.</p>`;
+ui.floMsgs=()=>S.flo.map(m=>`<div class="fx-msg ${m.me?'fx-me':'fx-crew'}">${esc(m.t)}</div>`).join('')+(S.floBusy?`<div class="fx-msg fx-crew" aria-label="FLO is typing"><span class="fx-typing"><i></i><i></i><i></i></span></div>`:'');
+ui.floChips=()=>`<div class="fx-flo-chips">${FLO_ASK.map(q=>`<button type="button" data-fx="flo-ask" data-q="${esc(q)}">${esc(q)}</button>`).join('')}</div>`;
+ui.floInput=(ph='Ask FLO anything')=>`<div class="fx-send"><input class="fx-field" maxlength="500" placeholder="${esc(ph)}" value="${esc(S.floDraft)}" data-fx-input="floDraft" aria-label="Ask FLO"><button type="button" class="fx-btn fx-btn-sm" data-fx="flo-send">Ask</button></div>`;
+ui.flo=()=>`<div class="fx-flo"><div class="fx-thread">${ui.floMsgs()}</div>${ui.floChips()}${ui.floInput()}${ui.floNote()}</div>`;
+ui.aboard=()=>{ const p=pass(); return `<div class="fx-aboard"><span class="fx-sub">Overnight guests</span><ul>${p.overnight.map((n,i)=>`<li>${esc(n)}${i===0?' <small>Lead guest</small>':''}</li>`).join('')}${p.unnamed?`<li class="fx-mute">+ ${p.unnamed} more</li>`:''}</ul>${p.visitorNames.length?`<span class="fx-sub">Visitors, until 10 PM</span><ul>${p.visitorNames.map(n=>`<li>${esc(n)}</li>`).join('')}</ul>`:''}</div>`; };
+ui.post=()=>`<div class="fx-post"><div class="fx-card"><h4>How was your stay?</h4><p class="fx-mute">A few words help the next guest find their FLOHOM.</p><a class="fx-btn" href="${P.reviewUrl}" target="_blank" rel="noopener">Leave a review</a></div><div class="fx-card"><h4>Come back anytime</h4><a class="fx-btn" href="${P.bookUrl}" target="_blank" rel="noopener">Book ${P.nick}</a><a class="fx-btn fx-ghost" href="${P.allUrl}" target="_blank" rel="noopener">See all FLOHOMs</a></div>${ui.guidebook()}</div>`;
+ui.demoBtn=(cls='')=>`<button type="button" class="fx-demo-btn ${cls}" data-fx="demo">Demo controls</button>`;
+ui.proto=()=>`<div class="fx-proto">Prototype · sample guest · nothing is uploaded, saved or charged</div>`;
+
+/* ---------- sheets ---------- */
+function sheet(title,html){ const h=$('#fxSheet')||document.body.appendChild(Object.assign(document.createElement('div'),{id:'fxSheet'}));
+  h.innerHTML=`<div class="fx-sheet-wrap" data-fx="sheet-bg"><div class="fx-sheet" role="dialog" aria-label="${esc(title)}"><div class="fx-sheet-h"><h3>${esc(title)}</h3><button type="button" class="fx-x" data-fx="sheet-x" aria-label="Close">${I('<path d="M6 6l12 12M18 6L6 18"/>')}</button></div>${html}</div></div>`; }
+function closeSheet(){ const h=$('#fxSheet'); if(h) h.innerHTML=''; }
+function openUpsell(id){ const u=UPS.find(x=>x.id===id), st=S.ups[id]; let sel=0;
+  sheet(u.name, `<p class="fx-mute">${esc(u.desc)}</p>${st?`<div class="fx-card"><span class="fx-status">${st}</span><p class="fx-mute">${STATUS_INFO[st]}</p></div>`:`<div class="fx-tiers">${u.tiers.map(([n,p],i)=>`<button type="button" class="fx-tier ${i===0?'fx-sel':''}" data-fx="tier" data-t="${i}"><span>${esc(n)}</span><b class="fx-data">$${p}</b></button>`).join('')}</div><textarea class="fx-field" maxlength="300" rows="2" placeholder="${u.bday?"Who's celebrating? Anything we should know?":'Optional note for our crew'}"></textarea><button type="button" class="fx-btn" data-fx="req" data-id="${id}">Request: $${u.tiers[0][1]}</button><p class="fx-mute">You won't be charged until our crew approves.</p>`}`);
+  FX._tier=0; }
+const TIMES=()=>[['2026-10-08T10:00:00-04:00','Thu 8 Oct, 10 AM (8 days before)'],['2026-10-12T10:00:00-04:00','Mon 12 Oct, 10 AM (4 days before)'],['2026-10-15T16:00:00-04:00','Thu 15 Oct, 4 PM (day before)'],['2026-10-16T09:00:00-04:00','Fri 16 Oct, 9 AM (check-in day)'],['2026-10-16T13:30:00-04:00','Fri 16 Oct, 1:30 PM (90 min before)'],['2026-10-17T11:00:00-04:00','Sat 17 Oct (during the stay)'],[new Date(CHECKOUT().getTime()+864e5).toISOString(),'Day after check-out']];
+function openDemo(){ const seg=(name,opts,cur)=>`<div class="fx-seg" data-seg="${name}">${opts.map(([v,l])=>`<button type="button" data-fx="seg" data-seg="${name}" data-v="${v}" class="${String(cur)===String(v)?'fx-on':''}">${l}</button>`).join('')}</div>`;
+  sheet('Demo controls', `<div class="fx-demo"><p class="fx-mute">Prototype only. Guests never see this. It lets you walk every state of the one FLOx link.</p>
+    ${window.FXLive?`<fieldset><legend>FLOHOM</legend><select data-fx-home aria-label="FLOHOM">${Object.entries(FXLive.HOMES).map(([n,nick])=>`<option value="${n}" ${+n===FXLive.n?'selected':''}>FLOHOM ${n} · ${esc(nick)}</option>`).join('')}</select><p class="fx-mute">Changes the guidebook, name, Book and review links. Signed in to Bridge as an owner, the guidebook is the real one. Other pass details stay the FLOHOM 1 sample.</p></fieldset>`:''}
+    <fieldset><legend>Jump to</legend>${seg('stage',[['verify','Verify'],['review','Review'],['rejected','Declined'],['pass','FLOx Pass'],['post','After check-out']],S.status==='rejected'?'rejected':S.stage)}</fieldset>
+    <fieldset><legend>Crew review (admin side)</legend><div class="fx-seg"><button type="button" data-fx="d-approve">Approve</button><select data-fx-reason aria-label="Decline reason">${Object.entries(REASONS).map(([k,r])=>`<option value="${k}">${r.label}</option>`).join('')}</select><button type="button" data-fx="d-decline">Decline</button></div></fieldset>
+    <fieldset><legend>Booking channel</legend>${seg('channel',[['direct','Direct / website'],['airbnb','Airbnb'],['vrbo','VRBO']],S.channel)}<p class="fx-mute">Airbnb and VRBO guests skip the ID photos.</p></fieldset>
+    <fieldset><legend>Stay length</legend>${seg('nights',[[1,'1 night'],[2,'2 nights'],[3,'3 nights'],[4,'4 nights']],S.nights)}<p class="fx-mute">One-night stays get the Security Deposit only.</p></fieldset>
+    <fieldset><legend>Pretend it's (pass unlocks)</legend><select data-fx-time>${TIMES().map(([v,l])=>`<option value="${v}" ${v===S.now?'selected':''}>${l}</option>`).join('')}</select></fieldset>
+    <button type="button" class="fx-btn fx-ghost" data-fx="d-fill">Fill sample answers for steps A to C</button></div>`); }
+
+/* ---------- delegated events ---------- */
+document.addEventListener('click',e=>{ const t=e.target.closest('[data-fx]'); if(!t) return; const a=t.dataset.fx;
+  if(a==='sheet-bg'&&e.target!==t) return;
+  switch(a){
+    case 'pr': { const i=+t.dataset.i; S.openPr[i]=!S.openPr[i]; S.seenPr[i]=true; emit('ui'); break; }
+    case 'charter': S.charterFull=!S.charterFull; emit('ui'); break;
+    case 'ov-': S.ov=Math.max(1,S.ov-1); emit('ui'); break;
+    case 'ov+': S.ov=Math.min(P.sleeps,S.ov+1); emit('ui'); break;
+    case 'add-ov': S.people.push({kind:'overnight',name:'',phone:''}); emit('ui'); break;
+    case 'add-vis': S.people.push({kind:'visitor',name:'',phone:''}); emit('ui'); break;
+    case 'rm': S.people.splice(+t.dataset.i,1); emit('ui'); break;
+    case 'sign': sign(); break;
+    case 'to-pay': S.paying=true; emit('ui'); break;
+    case 'pay-back': S.paying=false; emit('ui'); break;
+    case 'pay': pay(); break;
+    case 'resubmit': S.status='pending'; S.reject=null; go('review','resubmitted'); break;
+    case 'call': sheet('Call us',`<p class="fx-data" style="font-size:22px">${P.phone}</p><p class="fx-mute">Baltimore and Maryland crew line.</p>`); break;
+    case 'st-prev': S.stepIdx=Math.max(0,S.stepIdx-1); emit('ui'); break;
+    case 'st-next': S.stepIdx=Math.min(STEPS_IN.length-1,S.stepIdx+1); emit('ui'); break;
+    case 'up': openUpsell(+t.dataset.id); break;
+    case 'tier': $$('.fx-tier').forEach(x=>x.classList.remove('fx-sel')); t.classList.add('fx-sel'); FX._tier=+t.dataset.t; { const b=$('[data-fx="req"]'); const u=UPS.find(x=>x.id===+b.dataset.id); b.textContent=`Request: $${u.tiers[FX._tier][1]}`; } break;
+    case 'req': S.ups[+t.dataset.id]='Requested'; closeSheet(); emit('upsell'); break;
+    case 'send': { const v=S.msgDraft.trim(); if(!v) break; S.thread.push({me:1,t:v,at:'You · just now'}); S.msgDraft=''; emit('message'); break; }
+    case 'flo-send': floSend(S.floDraft); break;
+    case 'flo-ask': floSend(t.dataset.q); break;
+    case 'gb': { const g=document.getElementById('fx-guidebook'); if(g){ g.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'}); } else sheet('Your Digital Guidebook',ui.guidebook()); break; }
+    case 'gb-item': { const i=t.dataset.i; S.openGb=S.openGb===i?null:i; if($('#fxSheet .fx-gb')){ $('#fxSheet .fx-gb').outerHTML=ui.guidebook(); } else emit('ui'); break; }
+    case 'rcpt': sheet('Receipt and payment details','<p class="fx-mute">Opens your Hostaway booking receipt in a new tab on the live pass.</p>'); break;
+    case 'demo': openDemo(); break;
+    case 'sheet-x': case 'sheet-bg': closeSheet(); break;
+    case 'seg': { const seg=t.dataset.seg, v=t.dataset.v; closeSheet();
+      if(seg==='stage'){ if(v==='rejected'){ fillSamples(); decline('unclear_photo'); return; }
+        if(v==='verify'){ resetVerify(); go('verify','demo'); return; }
+        fillSamples(); S.status=v==='review'?'pending':'verified'; if(v==='post') S.now=new Date(CHECKOUT().getTime()+864e5).toISOString(); else if(new Date(S.now)>CHECKOUT()) S.now='2026-10-08T10:00:00-04:00'; go(v,'demo'); }
+      if(seg==='channel'){ S.channel=v; emit('demo'); }
+      if(seg==='nights'){ S.nights=+v; if(S.cover&&S.nights===1&&S.cover.type==='waiver') S.cover=null; emit('demo'); }
+      break; }
+    case 'd-approve': closeSheet(); if(S.stage!=='review'){ fillSamples(); go('review','demo'); setTimeout(approve,2600); } else approve(); break;
+    case 'd-decline': { const r=$('[data-fx-reason]').value; closeSheet(); fillSamples(); decline(r); break; }
+    case 'd-fill': closeSheet(); fillSamples(); emit('demo'); maybeSubmit(); break;
+  } });
+document.addEventListener('change',e=>{ const t=e.target;
+  if(t.matches('[data-fx-photo]')&&t.files[0]) photo(t.dataset.fxPhoto,t.files[0]);
+  else if(t.matches('[data-fx-check]')) S[t.dataset.fxCheck]=t.checked;
+  else if(t.matches('[data-fx-cover]')){ S.coverChoice=t.value; emit('ui'); }
+  else if(t.matches('[data-fx-home]')){ closeSheet(); FXLive.setHome(t.value); }
+  else if(t.matches('[data-fx-time]')){ S.now=t.value; closeSheet(); if(new Date(S.now)>CHECKOUT()&&S.status==='verified') go('post','demo'); else if(S.stage==='post') go('pass','demo'); else emit('demo'); } });
+document.addEventListener('input',e=>{ const t=e.target;
+  if(t.matches('[data-fx-input]')){ S[t.dataset.fxInput]=t.value; if(t.dataset.fxInput==='signName') $$('[data-fx-sigpreview]').forEach(x=>x.textContent=t.value); }
+  else if(t.matches('[data-fx-person]')){ const p=S.people[+t.dataset.fxPerson]; if(p) p[t.dataset.f]=t.value; } });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet(); if(e.key==='Enter'&&e.target.matches('[data-fx-input="msgDraft"]')) $('[data-fx="send"]')?.click(); if(e.key==='Enter'&&e.target.matches('[data-fx-input="floDraft"]')) floSend(S.floDraft); });
+function bindLive(){}
+if(window.FXLive) FXLive.on(()=>{ applyHome(); S.openGb=null; const g=$('#fxSheet .fx-gb'); if(g) g.outerHTML=ui.guidebook(); emit('ui'); });
+
+window.FX={ P,S,on,emit,go,ui,ICON,esc,$,$$,reduce,pass,unlock,heroFacts,ota,otaName,idDone,allDone,approve,decline,fillSamples,sheet,closeSheet,openDemo,fmtDay,fmtTime,ANCHOR,CHECKOUT,money,PRINCIPLES,STEPS_IN,UPS,visibleUps,guides,gbNote,floSend, approveDelay:1800, get why(){ return last; } };
+})();
+</script>
+<script>
+(function(){
+const {S,P,ui,ICON,esc}=FX; let open=null, lastGb=null;
+const t=d=>FX.fmtTime(d).replace(':00','').replace(' ',' ');
+const KIT=[['kwifi','WiFi'],['kpass','Check-in Pass'],['kflo','Ask FLO'],['kgb','Guidebooks']];
+/* In the pass stage the WiFi, pass, messages and guidebook live in the trip kit; the stay line points there. */
+const jump=(id,text,label)=>`<p class="fx-mute">${text}</p><button type="button" class="jump" data-jump="${id}">${label}</button>`;
+function stops(){ const nowD=new Date(S.now), X=[], pre=S.stage==='verify'||S.stage==='review', u=FX.unlock, p=FX.pass(), kit=S.stage==='pass';
+  const add=(id,at,title,sub,state,body)=>X.push({id,at,title,sub,state,body});
+  add('a',nowD,'ID check',FX.ota()?`Verified through ${FX.otaName()}`:'Front, back and a selfie',FX.idDone()&&S.status!=='rejected'?'done':'now',()=>ui.rejected()+(FX.idDone()&&S.status!=='rejected'?`<p>${ui.summary('A')}</p>`:ui.ids()));
+  add('b',new Date(nowD.getTime()+1),'House agreement','Principles, guests and signature',S.signed?'done':FX.idDone()?'now':'lock',()=>S.signed?`<p>${esc(ui.summary('B'))}</p>`:FX.idDone()?ui.principles()+ui.charter()+ui.guests()+ui.sign():'<p class="fx-mute">Opens after the ID check.</p>');
+  add('c',new Date(nowD.getTime()+2),'Peace-of-Mind Cover','Waiver or refundable deposit',S.cover?'done':S.signed?'now':'lock',()=>S.cover?`<p>${ui.summary('C')}</p>`:S.signed?ui.cover():'<p class="fx-mute">Opens after you sign.</p>');
+  add('r',new Date(nowD.getTime()+3),'Crew review','Usually under 2 hours',S.status==='verified'?'done':S.stage==='review'?'now':'lock',()=>S.stage==='verify'?'<p class="fx-mute">Starts when the three steps above are done.</p>':ui.reviewRows());
+  if(S.stage==='pass') add('x',new Date(nowD.getTime()+4),'Extras','Request any time; some need 7 days',"now",()=>ui.upsells()+jump('kflo','Questions about extras or your stay? FLO answers in your trip kit.','Ask FLO'));
+  const timed=(id,key,title,sub,body)=>{ const x=u(key); add(id,x.at,title,sub,pre?'lock':x.open?'done':'lock',()=>pre?'<p class="fx-mute">Unlocks after your pass is approved.</p>':body()); };
+  timed('co','checkout','Check-out steps appear',`${P.release.checkout} hours before check-in`,ui.checkout);
+  timed('w','wifi','WiFi unlocks',`${P.release.wifi} hours before check-in`,()=>kit?jump('kwifi','Your WiFi lives in your trip kit, part 1 of 4.','Open WiFi'):ui.wifi());
+  timed('i','checkin','Check-in steps unlock',`${P.release.checkin} hours before check-in`,ui.checkin);
+  timed('k','codes','Key code appears',`${P.release.codes} hours before check-in`,()=>`<p class="fx-mute">Shown in check-in step 3.</p>${ui.checkin()}`);
+  add('in',FX.ANCHOR(),`Check-in · ${p.checkIn.time}`,`Slip ${P.slip}, ${P.marina}`,pre?'lock':nowD>=FX.ANCHOR()?'done':'next',()=>kit?jump('kpass','Your check-in pass is in your trip kit, part 2 of 4.','Open my pass')+ui.forecast():`${passDetails()}${ui.forecast()}`);
+  add('out',FX.CHECKOUT(),`Check-out · ${p.checkOut.time}`,'Lock up and leave the key',pre?'lock':nowD>=FX.CHECKOUT()?'done':'next',()=>kit?ui.checkout()+jump('kgb','House rules and local tips are in your trip kit, part 4 of 4.','Open guidebooks'):ui.checkout()+ui.links());
+  if(S.stage==='post') add('post',new Date(FX.CHECKOUT().getTime()+3600e3),'After your stay','Review and book again','now',ui.post);
+  return X.sort((a,b)=>a.at-b.at); }
+/* The design's pass markup (was the body of the check-in stop). */
+function passDetails(){ const p=FX.pass(); return `<dl class="fx-kv"><dt>Lead</dt><dd>${esc(p.leadFull)}</dd><dt>Aboard</dt><dd>${p.guests} overnight · ${p.visitors} visitor${p.visitors===1?'':'s'}</dd><dt>Ref</dt><dd>${p.conf}</dd></dl>${ui.aboard()}`; }
+/* ---------- the trip kit: WiFi · Check-in Pass · Ask FLO · Guidebooks ---------- */
+function kitBody(id){ const p=FX.pass();
+  if(id==='kwifi') return ui.wifi();
+  if(id==='kpass') return `<div class="seg"><div class="shd"><span>FLOx Pass</span><span>Verified for arrival</span></div><div class="legs"><div class="leg"><i></i><div><small>Check-in</small><span>${p.checkIn.day}</span></div><b>${p.checkIn.time}</b></div><div class="leg"><i></i><div><small>Check-out</small><span>${p.checkOut.day}</span></div><b>${p.checkOut.time}</b></div></div><div class="sft"><span>${esc(P.name)} · Slip ${P.slip}</span><span>${p.nights} night${p.nights===1?'':'s'}</span></div></div>${passDetails()}`;
+  if(id==='kflo') return `<div class="kflo"><div class="flohd"><span class="fx-flo-av">FLO</span><div><b>FLO</b><small>Your FLOHOM concierge · any hour</small></div></div><div class="fx-thread">${ui.floMsgs()}</div>${ui.floChips()}${ui.floInput('Ask FLO about your trip...')}${ui.floNote()}</div><span class="fx-sub">Rather talk to the crew?</span>${ui.contact()}${ui.receipt()}`;
+  const G=FX.guides();
+  const row=x=>{ const on=S.openGb===x.key; return `<li class="gbs ${on?'on':''}" data-gbrow="${esc(x.key)}"><button type="button" data-fx="gb-item" data-i="${esc(x.key)}" aria-expanded="${on}">${x.cover?`<img src="${esc(x.cover)}" alt="" loading="lazy" referrerpolicy="no-referrer">`:`<span class="ic">${ICON[x.icon]||ICON.book}</span>`}<span><b>${esc(x.title)}</b><small>${x.photos?`${x.photos} photo${x.photos>1?'s':''} inside`:'Guide'}</small></span>${ICON.right}</button>${on?`<div class="gbopen">${x.cover?`<img class="gbcover" src="${esc(x.cover)}" alt="" loading="lazy" referrerpolicy="no-referrer">`:''}<div class="gbbody">${x.body}</div><button type="button" class="fx-btn fx-ghost" data-fx="gb-item" data-i="${esc(x.key)}">Close guide</button></div>`:''}</li>`; };
+  return `${G.line?`<p class="fx-mute fx-gb-signin">${G.line}</p>`:''}${G.groups.map(g=>`<div class="gbday"><span>${esc(g.label)}</span><small>${g.guides.length} guide${g.guides.length===1?'':'s'}</small></div><ol class="gbline">${g.guides.map(row).join('')}</ol>`).join('')}<p class="fx-mute fx-gb-note">${FX.gbNote(G.live)}</p>`; }
+function renderKit(){ const box=document.getElementById('kit'), on=S.stage==='pass'; box.hidden=!on; document.getElementById('toKit').hidden=!on; if(!on){ box.innerHTML=''; return; }
+  const p=FX.pass(), w=FX.unlock('wifi'), G=FX.guides(), nG=G.groups.reduce((n,g)=>n+g.guides.length,0);
+  const meta={kwifi:[w.open?'Network and password':`Unlocks ${w.hours} hours before check-in`,w.open?'Open':'Locked'],
+    kpass:[`${p.checkIn.day} · ${p.checkIn.time} · Slip ${P.slip}`,'Ready'],
+    kflo:['Your concierge, any hour','Ask'],
+    kgb:[`Everything about ${esc(P.nick)}`,`${nG} guide${nG===1?'':'s'}`]};
+  box.innerHTML=`<div class="khd"><span class="k">Your trip kit · 4 stops</span><h2>Keep these close all stay</h2><nav class="kjump" aria-label="Trip kit">${KIT.map(([id,l],n)=>`<button type="button" data-jump="${id}"><i>${n+1}</i>${l}</button>`).join('')}</nav></div>
+    <div class="kstops">${KIT.map(([id,l],n)=>{ const on=open===id; return `<section class="stop kitstop ${on?'open':''}" id="s-${id}"><span class="when">${n+1} of 4</span><span class="dot num">${n+1}</span><button type="button" data-stop="${id}" aria-expanded="${on}"><span><b>${l}</b><small>${meta[id][0]}</small></span><span class="tag">${meta[id][1]}</span></button><div class="body">${on?kitBody(id):''}</div></section>`; }).join('')}</div>`; }
+function render(){ const pre=S.stage==='verify'||S.stage==='review';
+  document.getElementById('hdk').textContent=`${P.name} · ${P.nick} · ${FX.heroFacts().join(' · ')}`;
+  document.getElementById('hdh').textContent=S.stage==='post'?'Thank you, Jordan.':pre?'Your trip, start to finish.':"You're cleared to board, Jordan.";
+  document.getElementById('hdimg').src=pre?'img/deck-day-l.webp':'img/ext14-l.webp';
+  const X=stops(), nowD=new Date(S.now); let html='', lastDay='', nowPlaced=false, doneN=0;
+  X.forEach(s=>{ const d=FX.fmtDay(s.at); if(!nowPlaced&&s.at>nowD&&s.state!=='now'){ html+=`<div class="nowmark" id="nowmark">NOW · ${FX.fmtDay(nowD)} ${t(nowD)}</div>`; nowPlaced=true; }
+    if(d!==lastDay){ html+=`<div class="day">${d}</div>`; lastDay=d; }
+    if(s.state==='done') doneN++;
+    const isOpen=open===s.id||(open==null&&s.state==='now'&&!X.some(o=>o!==s&&o.state==='now'&&X.indexOf(o)<X.indexOf(s)));
+    html+=`<section class="stop ${s.state} ${isOpen?'open':''}" id="s-${s.id}"><span class="when">${s.state==='now'&&s.at<=new Date(nowD.getTime()+10)?'Now':t(s.at)}</span><span class="dot"></span><button type="button" data-stop="${s.id}" aria-expanded="${isOpen}"><span><b>${s.title}</b><small>${s.sub}</small></span><span class="tag">${{done:'Done',now:'Now',lock:'Locked',next:'Upcoming'}[s.state]}</span></button><div class="body">${isOpen?s.body():''}</div></section>`; });
+  if(!nowPlaced) html+=`<div class="nowmark" id="nowmark">NOW · ${FX.fmtDay(nowD)} ${t(nowD)}</div>`;
+  const line=document.getElementById('line'); line.innerHTML=html; line.style.setProperty('--fill',Math.round(doneN/X.length*100)+'%');
+  renderKit(); }
+const toStop=id=>document.getElementById('s-'+id)?.scrollIntoView({behavior:FX.reduce?'auto':'smooth',block:'start'});
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-stop]'); if(b){ const id=b.dataset.stop, wasOpen=b.parentElement.classList.contains('open'); open=wasOpen?'':id; render(); if(!wasOpen) toStop(id); }
+  const j=e.target.closest('[data-jump]'); if(j){ open=j.dataset.jump; render(); toStop(open); } });
+document.getElementById('toNow').onclick=()=>{ const n=document.querySelector('.stop.now')||document.getElementById('nowmark'); n&&n.scrollIntoView({behavior:FX.reduce?'auto':'smooth',block:'center'}); };
+document.getElementById('toKit').onclick=()=>document.getElementById('kit').scrollIntoView({behavior:FX.reduce?'auto':'smooth',block:'start'});
+document.getElementById('toTop').onclick=()=>window.scrollTo({top:0,behavior:FX.reduce?'auto':'smooth'});
+FX.on(why=>{ const ae=document.activeElement, refocus=why==='flo'&&ae&&ae.matches&&ae.matches('[data-fx-input="floDraft"]');
+  if(['signed','covered','stage','submitted','approved','declined','demo','resubmitted'].includes(why)||(why==='photo'&&FX.idDone())) open=null; render();
+  if(why==='flo'){ const f=document.querySelector('#kit [data-fx-input="floDraft"]'); if(f){ if(refocus) f.focus({preventScroll:true}); f.closest('.fx-send').scrollIntoView({block:'nearest',behavior:FX.reduce?'auto':'smooth'}); } }
+  if(S.openGb!==lastGb){ const k=S.openGb||lastGb; lastGb=S.openGb; const r=k&&document.querySelector(`[data-gbrow="${CSS.escape(k)}"]`); if(r&&why==='ui') r.scrollIntoView({behavior:FX.reduce?'auto':'smooth',block:'start'}); } });
+render();
+})();
+</script></body></html>
