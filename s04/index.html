@@ -29,6 +29,7 @@ p{margin:0}
 
 /* buttons + fields */
 .fx-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;min-height:52px;padding:0 18px;border-radius:var(--r-sm);border:0;background:var(--ink);color:var(--bg);font:600 16px/1 var(--font)}
+a.fx-btn{text-decoration:none}
 .fx-btn[disabled]{opacity:.4;cursor:not-allowed}
 .fx-btn.fx-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
 .fx-btn-sm{display:inline-flex;width:auto;min-height:44px;padding:0 16px;font-size:14px;border-radius:999px;background:var(--accent);color:var(--accent-ink)}
@@ -154,7 +155,7 @@ p{margin:0}
 
 /* sheet */
 .fx-sheet-wrap{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center}
-.fx-sheet{width:min(var(--col),100%);max-height:86svh;overflow:auto;background:#132829;color:#fff;border-radius:22px 22px 0 0;padding:20px 16px calc(24px + env(safe-area-inset-bottom,0px));display:grid;gap:14px;animation:fxup .3s cubic-bezier(.2,.8,.2,1);--ink:#fff;--mute:rgba(255,255,255,.66);--line:rgba(148,194,199,.26);--card:#1b3436;--card2:#1b3436;--accent:#94c2c7;--accent-ink:#0d1c1d;--bg:#132829;--field:#0d1c1d;font-family:'Space Grotesk',sans-serif}
+.fx-sheet{width:min(var(--col),100%);max-height:86svh;overflow:auto;background:var(--bg);color:var(--ink);border-radius:var(--radius) var(--radius) 0 0;padding:20px 16px calc(24px + env(safe-area-inset-bottom,0px));display:grid;gap:14px;animation:fxup .3s cubic-bezier(.2,.8,.2,1);font-family:var(--font);box-shadow:0 -12px 40px rgba(0,0,0,.25);border-top:1px solid var(--line)}
 @keyframes fxup{from{transform:translateY(30%);opacity:0}}
 .fx-sheet-h{display:flex;justify-content:space-between;align-items:center}
 .fx-demo{display:grid;gap:14px}
@@ -163,17 +164,29 @@ p{margin:0}
 .fx-seg{display:flex;flex-wrap:wrap;gap:6px}
 .fx-seg button{min-height:44px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:transparent;font-size:14px}
 .fx-seg button.fx-on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.fx-demo select,.fx-sheet select{min-height:44px;padding:0 10px;border-radius:10px;border:1px solid var(--line);background:#0d1c1d;font-size:15px}
+.fx-demo select,.fx-sheet select{min-height:44px;padding:0 10px;border-radius:var(--r-sm);border:1px solid var(--line);background:var(--field);color:var(--ink);font-size:15px}
 .fx-tiers{display:grid;gap:8px}
 .fx-tier{display:flex;justify-content:space-between;gap:10px;min-height:52px;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--card2);text-align:left}
 .fx-tier.fx-sel{border-color:var(--accent)}
 
 @media (prefers-reduced-motion:reduce){ *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important} }
 
+/* inline digital guidebook (inherits each design's tokens) */
+.fx-gb{display:grid;gap:8px;scroll-margin-top:80px}
+.fx-gb-h{display:flex;gap:12px;align-items:center;padding:4px 0 6px}
+.fx-gb-h>.fx-i{width:26px;height:26px;color:var(--accent)}
+.fx-gb-h b{font-weight:500;font-size:17px}
+.fx-gbi{border-radius:var(--r-sm);background:var(--card2);border:1px solid var(--line);overflow:hidden}
+.fx-gbi>button{display:grid;grid-template-columns:22px 1fr 18px;gap:12px;align-items:center;width:100%;min-height:52px;padding:10px 14px;border:0;background:none;color:var(--ink);text-align:left;font-weight:500}
+.fx-gbi>button>.fx-i:first-child{color:var(--accent)}
+.fx-gbb{padding:0 14px 14px 48px;font-size:15px;line-height:1.55;color:var(--ink);animation:fxgb .25s ease}
+@keyframes fxgb{from{opacity:0;transform:translateY(-4px)}}
+.fx-gb-list{margin:0;padding-left:18px;display:grid;gap:4px}
+.fx-gb-note{font-size:14px}
+
 /* Layout: one long editorial read on white paper. Every step is a dated log entry; a sticky contents strip jumps to any entry. */
 :root{--bg:#fff;--ink:#0d1c1d;--mute:#4b6365;--card:#f6f9f9;--card2:#eef4f4;--line:#cfdfe0;--accent:#3f6a6f;--accent-ink:#fff;--field:#fff;color-scheme:light}
 .fx-btn{background:var(--charcoal);color:#fff}.fx-btn.fx-ghost{color:var(--ink)}
-.fx-sheet .fx-btn{background:#fff;color:#0d1c1d}
 .app{max-width:var(--col);margin:0 auto}
 .mast{padding:14px 18px 0;display:flex;justify-content:space-between;align-items:center}
 .mast img{height:14px;filter:invert(1)}
@@ -228,12 +241,12 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;'
 /* ---------- property facts (FLOHOM 1 record, sample guest) ---------- */
 const P={ name:'FLOHOM 1', nick:'Bay Escape', slip:'C12', marina:'Inner Harbor Marina', address:'400 Key Highway, Baltimore, MD 21230',
   sleeps:4, total:10, waiver:48.15, deposit:500, hull:'on file', phone:'(667) 270-8226', email:'reservations@flohom.com',
-  release:{wifi:8, codes:2, checkin:8, checkout:24}, conf:'FLX-0001-4471', oneNightExempt:false };
+  release:{wifi:8, codes:2, checkin:8, checkout:24}, conf:'FLX-0001-4471', oneNightExempt:false, bookUrl:'https://flohom.com/property/flohom-01', allUrl:'https://flohom.com/listings' };
 const S={ stage:'verify', status:'pending', channel:'direct', nights:2,
   photos:{front:null,back:null,selfie:null}, busy:{}, signed:null, cover:null, reject:null,
   now:'2026-10-08T10:00:00-04:00', ups:{}, ov:2, people:[], signName:'', agree:false, quiet:false,
   coverChoice:'waiver', paying:false, payBusy:false, stepIdx:0, openPr:{}, seenPr:{}, charterFull:false,
-  thread:[{me:0,t:'Hi Jordan! Your FLOx Pass is ready. Anything we can set up before you arrive?',at:'Crew · Thu 8 Oct'}], msgDraft:'' };
+  openGb:null, thread:[{me:0,t:'Hi Jordan! Your FLOx Pass is ready. Anything we can set up before you arrive?',at:'Crew · Thu 8 Oct'}], msgDraft:'' };
 const ANCHOR=()=>new Date('2026-10-16T15:00:00-04:00');               // 3 PM ET on the check-in date
 const CHECKOUT=()=>new Date(new Date('2026-10-16T10:00:00-04:00').getTime()+S.nights*864e5);
 const tz={timeZone:'America/New_York'};
@@ -391,11 +404,19 @@ ui.checkin=()=>{ const u=unlock('checkin'), c=unlock('codes'); if(!u.open) retur
 ui.checkout=()=>{ const u=unlock('checkout'); return u.open?STEPS_OUT.map(([t,b],i)=>`<div class="fx-co"><span class="fx-sub">Step ${i+1} of ${STEPS_OUT.length}</span><h4>${t}</h4><p class="fx-mute">${b}</p></div>`).join(''):`<div class="fx-locked"><div><b>Check-out steps</b><p class="fx-mute">Appear ${u.hours} hours before check-in.</p></div><span class="fx-when">${u.label}</span></div>`; };
 ui.upsells=()=>{ const v=visibleUps(), hidden=UPS.length-v.length; return `${hidden?`<p class="fx-mute">${hidden} more need 7 days' notice</p>`:''}<div class="fx-ups">${v.map(u=>{ const st=S.ups[u.id]; return `<div class="fx-up"><span class="fx-ic">${ICON.up[u.id]}</span><b>${u.name}</b><span class="fx-price">${u.from}</span>${st?`<span class="fx-status">${st}</span>`:''}<button type="button" class="fx-btn fx-btn-sm" data-fx="up" data-id="${u.id}">${st?'View status':'View'}</button></div>`; }).join('')}</div>`; };
 ui.forecast=()=>`<div class="fx-wx">${[['Fri',68,'sun'],['Sat',64,'cloud'],['Sun',61,'rain'],['Mon',63,'cloud'],['Tue',66,'sun']].map(([d,t,ic])=>`<div><span>${d}</span><b>${t}°</b>${ICON[ic]}</div>`).join('')}</div><p class="fx-mute">Forecast for Baltimore, sample.</p>`;
-ui.links=()=>`<button type="button" class="fx-link" data-fx="gb">${ICON.book}<div><b>Your Digital Guidebook</b><p class="fx-mute">Local tips, house rules and more</p></div>${ICON.right}</button><button type="button" class="fx-link" data-fx="rcpt">${ICON.receipt}<div><b>Receipt and payment details</b><p class="fx-mute">Opens your booking receipt</p></div>${ICON.right}</button>`;
+const GUIDE=[
+ ['book','House rules',()=>`<ul class="fx-gb-list">${PRINCIPLES.map(([t])=>`<li>${esc(t)}</li>`).join('')}<li>Up to ${P.sleeps} guests overnight, ${P.total} aboard at once (marina limit)</li></ul>`],
+ ['anchor','Marina amenities and showers',()=>`<p>Restrooms and hot showers are in the marina building at the head of the pier; your gate card opens them. Trash and recycling bins are by the pier gate.</p>`],
+ ['sparkle','Fire pit how-to',()=>`<ol class="fx-gb-list"><li>Turn the valve under the table to ON.</li><li>Press and hold the ignition button until the flame catches.</li><li>Turn it fully off when you leave the deck, and by 10 PM for quiet hours.</li></ol>`],
+ ['sun','Local tips: Fells Point, Federal Hill',()=>`<p><b>Fells Point:</b> cobblestone streets, waterfront bars and the water taxi. <b>Federal Hill:</b> the park at the top has the best view of the harbor at sunset.</p>`],
+ ['door','Parking',()=>`<p>Street and garage parking near ${P.address}. Your crew shares the best option for your dates in the check-in steps.</p>`]];
+ui.guidebook=()=>`<div class="fx-gb" id="fx-guidebook" aria-label="Digital guidebook"><div class="fx-gb-h">${ICON.book}<div><b>Your Digital Guidebook</b><p class="fx-mute">${P.name} · ${P.nick} · sample content</p></div></div>${GUIDE.map(([ic,t,body],i)=>`<div class="fx-gbi ${S.openGb===i?'fx-open':''}"><button type="button" data-fx="gb-item" data-i="${i}" aria-expanded="${S.openGb===i}">${ICON[ic]}<span>${t}</span><span class="fx-chev">${ICON.right}</span></button>${S.openGb===i?`<div class="fx-gbb">${body()}</div>`:''}</div>`).join('')}<p class="fx-mute fx-gb-note">WiFi and codes follow the same unlock times as your pass.</p></div>`;
+ui.receipt=()=>`<button type="button" class="fx-link" data-fx="rcpt">${ICON.receipt}<div><b>Receipt and payment details</b><p class="fx-mute">Opens your booking receipt</p></div>${ICON.right}</button>`;
+ui.links=()=>ui.guidebook()+ui.receipt();
 ui.contact=()=>`<dl class="fx-kv"><dt>Phone</dt><dd>${P.phone}</dd><dt>Email</dt><dd>${P.email}</dd></dl>`;
 ui.thread=()=>`<div class="fx-thread">${S.thread.map(m=>`<div class="fx-msg ${m.me?'fx-me':'fx-crew'}">${esc(m.t)}<small>${m.at}</small></div>`).join('')}</div><div class="fx-send"><input class="fx-field" maxlength="2000" placeholder="Question about ${P.nick}?" value="${esc(S.msgDraft)}" data-fx-input="msgDraft" aria-label="Message"><button type="button" class="fx-btn fx-btn-sm" data-fx="send">Send</button></div>`;
 ui.aboard=()=>{ const p=pass(); return `<div class="fx-aboard"><span class="fx-sub">Overnight guests</span><ul>${p.overnight.map((n,i)=>`<li>${esc(n)}${i===0?' <small>Lead guest</small>':''}</li>`).join('')}${p.unnamed?`<li class="fx-mute">+ ${p.unnamed} more</li>`:''}</ul>${p.visitorNames.length?`<span class="fx-sub">Visitors, until 10 PM</span><ul>${p.visitorNames.map(n=>`<li>${esc(n)}</li>`).join('')}</ul>`:''}</div>`; };
-ui.post=()=>`<div class="fx-post"><div class="fx-card"><h4>How was your stay?</h4><p class="fx-mute">A few words help the next guest find their FLOHOM.</p><button type="button" class="fx-btn">Leave a review</button></div><div class="fx-card"><h4>Come back anytime</h4><button type="button" class="fx-btn">Book ${P.nick}</button><button type="button" class="fx-btn fx-ghost">See all FLOHOMs</button></div><button type="button" class="fx-link" data-fx="gb">${ICON.book}<div><b>View property guidebook</b></div>${ICON.right}</button></div>`;
+ui.post=()=>`<div class="fx-post"><div class="fx-card"><h4>How was your stay?</h4><p class="fx-mute">A few words help the next guest find their FLOHOM.</p><button type="button" class="fx-btn">Leave a review</button></div><div class="fx-card"><h4>Come back anytime</h4><a class="fx-btn" href="${P.bookUrl}" target="_blank" rel="noopener">Book ${P.nick}</a><a class="fx-btn fx-ghost" href="${P.allUrl}" target="_blank" rel="noopener">See all FLOHOMs</a></div>${ui.guidebook()}</div>`;
 ui.demoBtn=(cls='')=>`<button type="button" class="fx-demo-btn ${cls}" data-fx="demo">Demo controls</button>`;
 ui.proto=()=>`<div class="fx-proto">Prototype · sample guest · nothing is uploaded, saved or charged</div>`;
 
@@ -439,7 +460,8 @@ document.addEventListener('click',e=>{ const t=e.target.closest('[data-fx]'); if
     case 'tier': $$('.fx-tier').forEach(x=>x.classList.remove('fx-sel')); t.classList.add('fx-sel'); FX._tier=+t.dataset.t; { const b=$('[data-fx="req"]'); const u=UPS.find(x=>x.id===+b.dataset.id); b.textContent=`Request: $${u.tiers[FX._tier][1]}`; } break;
     case 'req': S.ups[+t.dataset.id]='Requested'; closeSheet(); emit('upsell'); break;
     case 'send': { const v=S.msgDraft.trim(); if(!v) break; S.thread.push({me:1,t:v,at:'You · just now'}); S.msgDraft=''; emit('message'); break; }
-    case 'gb': sheet('Your Digital Guidebook',`<p class="fx-mute">${P.name} · ${P.nick}</p>${['House rules','Marina amenities and showers','Fire pit how-to','Local tips: Fells Point, Federal Hill','Parking'].map(x=>`<div class="fx-link"><div><b>${x}</b></div>${ICON.right}</div>`).join('')}<p class="fx-mute">WiFi and codes in the guidebook follow the same unlock times as your pass.</p>`); break;
+    case 'gb': { const g=document.getElementById('fx-guidebook'); if(g){ g.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'}); } else sheet('Your Digital Guidebook',ui.guidebook()); break; }
+    case 'gb-item': { const i=+t.dataset.i; S.openGb=S.openGb===i?null:i; if($('#fxSheet .fx-gb')){ $('#fxSheet .fx-gb').outerHTML=ui.guidebook(); } else emit('ui'); break; }
     case 'rcpt': sheet('Receipt and payment details','<p class="fx-mute">Opens your Hostaway booking receipt in a new tab on the live pass.</p>'); break;
     case 'demo': openDemo(); break;
     case 'sheet-x': case 'sheet-bg': closeSheet(); break;
