@@ -432,6 +432,75 @@ html.lenis,html.lenis body{height:auto}.lenis.lenis-smooth{scroll-behavior:auto!
 .gbb{padding:0 16px 16px;font-size:15px;color:var(--mute)}
 .gbb ul,.gbb ol{margin:0;padding-left:18px;display:grid;gap:4px}
 a.btn{text-align:center;text-decoration:none;box-sizing:border-box}
+/* ===== the trip kit (2026-10-08): WiFi · Check-in Pass · Ask FLO · Guidebooks, the closing reel of the pass.
+   Chapter numerals in outline, like the film's title cards; guides play as a poster reel + a full-bleed feature. ===== */
+.kit{display:grid;gap:40px;padding-top:30px;border-top:1px solid var(--line);scroll-margin-top:110px}
+.kit-head{display:grid;gap:10px}
+.kit-head h2{font-size:clamp(28px,8vw,36px);line-height:1.05}
+.kit-idx{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px}
+.kit-idx a{display:grid;gap:4px;align-content:center;min-height:52px;padding:8px 10px;border-top:2px solid var(--tide);color:var(--paper);text-decoration:none;font:500 13px/1.15 var(--display)}
+.kit-idx i{font:600 10.5px/1 var(--data);font-style:normal;letter-spacing:.14em;color:var(--tide)}
+.kit-part{gap:14px}
+.kit-t{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:end}
+.kit-t .kn{font:300 64px/.8 var(--display);letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1px var(--tide);opacity:.85}
+.kit-t h3{font-size:24px;line-height:1.1;margin-top:6px}
+.kit .ticket{scroll-margin-top:110px}
+/* Ask FLO */
+.flo{gap:12px;background:linear-gradient(180deg,var(--ink-2),var(--ink))}
+.flo-h{display:flex;gap:12px;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.flo-av{display:inline-grid;place-items:center;flex:none;width:44px;height:44px;border-radius:50%;background:var(--tide);color:var(--ink);font:700 12px/1 var(--data);letter-spacing:.06em;box-shadow:0 0 0 4px rgba(148,194,199,.16)}
+.flo-h b{display:block;font-weight:500}.flo-h small{display:block;font:400 12px/1.3 var(--data);color:var(--tide)}
+.flo-thread{max-height:none;overflow:visible;gap:10px}
+.flo-thread .msg{font-size:15px;line-height:1.45;animation:floin .35s cubic-bezier(.2,.8,.2,1) both}
+@keyframes floin{from{opacity:0;transform:translateY(8px)}}
+.typing{display:inline-flex;gap:4px;padding:3px 0}.typing i{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.5;animation:floty 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}@keyframes floty{50%{opacity:1;transform:translateY(-3px)}}
+.flo-chips{display:flex;flex-wrap:wrap;gap:8px}
+.flo-chips button{min-height:44px;max-width:100%;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(148,194,199,.08);color:var(--paper);font:500 14px/1.2 var(--display);text-align:left}
+.flo-chips button:hover{border-color:var(--tide)}
+#floSend{min-width:64px}#floSend[disabled]{opacity:.5}
+.flo-note{margin:0;padding:9px 11px;border-radius:10px;border:1px dashed var(--line);font:500 12px/1.4 var(--data);letter-spacing:.03em;color:var(--mute)}
+/* Guidebooks: the reel */
+.kitgb{display:grid;gap:12px;grid-auto-rows:max-content}
+.kitgb .gb-group{margin:6px 0 0}
+.reel{display:grid;grid-auto-flow:column;grid-auto-columns:66%;gap:12px;min-height:340px;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:-16px;padding:2px 16px 6px;scrollbar-width:none}
+.reel::-webkit-scrollbar{display:none}
+.poster{position:relative;height:330px;border:0;padding:0;border-radius:18px;overflow:hidden;background:var(--ink-3);scroll-snap-align:start;text-align:left;color:#fff;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.poster:hover img{transform:scale(1.04)}
+.poster::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,28,29,.45) 0,rgba(13,28,29,0) 28%,rgba(13,28,29,0) 45%,rgba(13,28,29,.95) 100%)}
+.poster.nocover{background:radial-gradient(120% 80% at 30% 20%,#24474a,var(--ink-2))}
+.poster.on{box-shadow:0 0 0 2px var(--tide),0 18px 40px rgba(0,0,0,.35)}
+.poster .pn{position:absolute;top:12px;left:14px;z-index:1;font:600 10.5px/1 var(--data);letter-spacing:.16em;color:var(--paper)}
+.poster .pp{position:absolute;top:9px;right:10px;z-index:1;font:600 10.5px/1 var(--data);letter-spacing:.06em;padding:6px 8px;border-radius:999px;background:rgba(13,28,29,.62);color:var(--paper)}
+.poster .pt{position:absolute;left:14px;right:14px;bottom:14px;z-index:1;display:grid;gap:6px}
+.poster .pt b{font-weight:500;font-size:21px;line-height:1.12;letter-spacing:-.01em;text-wrap:balance}
+.poster .pt small{font:600 10.5px/1 var(--data);letter-spacing:.14em;text-transform:uppercase;color:var(--lamp)}
+/* Guidebooks: the open guide, full-bleed */
+.feature{display:grid;gap:16px;margin-inline:-16px;padding-bottom:6px;scroll-margin-top:100px}
+.fhero{position:relative;height:min(64svh,460px);min-height:280px;overflow:hidden;background:var(--ink-3)}
+.fhero.nocover{height:200px;min-height:0;background:radial-gradient(120% 90% at 20% 10%,#24474a,var(--ink))}
+.fhero img{width:100%;height:100%;object-fit:cover;animation:kb 9s cubic-bezier(.2,.6,.2,1) both}
+@keyframes kb{from{transform:scale(1.1)}}
+.fhero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,28,29,.35) 0,rgba(13,28,29,0) 30%,rgba(13,28,29,.97) 100%)}
+.fcopy{position:absolute;left:16px;right:16px;bottom:16px;z-index:1;display:grid;gap:8px}
+.fcopy h2{font-size:clamp(28px,8.4vw,38px);line-height:1.04}
+.fclose{position:absolute;top:12px;right:12px;z-index:2;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(13,28,29,.6);color:#fff;font-size:22px;line-height:1}
+.fbody{padding:0 16px;font-size:16px;line-height:1.6;color:rgba(255,255,255,.86)}
+.fbody p{margin:0 0 12px}.fbody ul,.fbody ol{margin:0 0 12px;padding-left:20px;display:grid;gap:6px}.fbody a{color:var(--tide);overflow-wrap:anywhere}
+.fbody .fx-gb-hd{margin:18px 0 6px;font-size:18px}
+.fbody .fx-gb-fig{margin:18px -16px}.fbody .fx-gb-img{width:100%;height:auto;max-height:72svh;object-fit:cover;border-radius:0}
+.fbody .fx-gb-fig figcaption{padding:8px 16px 0;font:400 12.5px/1.45 var(--data);color:var(--mute)}
+.fbody .fx-gb-place{padding:14px 0}
+.fbody .fx-gb-place.fx-has-img{grid-template-columns:96px 1fr;gap:14px;align-items:start}
+.fbody .fx-gb-pimg{width:96px;height:120px;object-fit:cover;border-radius:12px;background:var(--ink-3)}
+.feature>.btn{margin:0 16px;width:auto}
+/* live guide photos inside the after-check-out accordion too (live-guide.js bodies now carry images) */
+.fx-gb-fig{margin:10px 0}.fx-gb-img{display:block;width:100%;height:auto;max-height:420px;object-fit:cover;border-radius:12px;background:var(--ink-3)}
+.fx-gb-fig figcaption{font:400 12.5px/1.4 var(--data);color:var(--mute);margin-top:6px}
+.fx-gb-place.fx-has-img{grid-template-columns:76px 1fr;gap:12px;align-items:start}.fx-gb-place>div{display:grid;gap:2px;min-width:0}
+.fx-gb-pimg{width:76px;height:76px;object-fit:cover;border-radius:10px;background:var(--ink-3)}
+@media (prefers-reduced-motion:reduce){.fhero img,.flo-thread .msg,.typing i{animation:none}.poster img{transition:none}}
 </style>
 
 <div class="app" id="app">
@@ -583,8 +652,21 @@ a.btn{text-align:center;text-decoration:none;box-sizing:border-box}
     </section>
     <section id="tour" aria-label="Room tour"><div class="stage"><div class="head"><span class="label">The tour</span><h2>Five spaces, one slip.</h2></div><div class="track" id="track"></div><div class="progress"><i id="tourBar"></i></div></div></section>
     <div id="passbody">
-      <div class="sec">
-        <span class="label">Your FLOx Pass</span>
+
+      <div class="sec" id="sec-in"><div class="sec-head"><span class="label">Check-in Instructions</span></div><div class="card" id="inCard"></div></div>
+      <div class="sec" id="sec-out" hidden><div class="sec-head"><span class="label">Check-out Instructions</span></div><div class="card" id="outCard"></div></div>
+
+      <div class="sec" id="sec-ups"><div class="sec-head"><span class="label">Upgrade Your Stay</span><span class="small mute" id="upsNote"></span></div><div class="ups" id="ups"></div></div>
+
+      <div class="sec"><div class="sec-head"><span class="label">Forecast — Baltimore</span><span class="small mute">sample</span></div>
+        <div class="wx"><div>Fri<b>68°</b><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></div><div>Sat<b>64°</b><svg viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.3 3.3 0 0 0 7 18z"/></svg></div><div>Sun<b>61°</b><svg viewBox="0 0 24 24"><path d="M7 15h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.3 3.3 0 0 0 7 15zM8 18l-1 2M12 18l-1 2M16 18l-1 2"/></svg></div><div>Mon<b>63°</b><svg viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.3 3.3 0 0 0 7 18z"/></svg></div><div>Tue<b>66°</b><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></div></div></div>
+
+      <!-- ===== the trip kit: WiFi · Check-in Pass · Ask FLO · Guidebooks (2026-10-08) ===== -->
+      <section class="kit" id="kit" aria-label="Your trip kit">
+        <header class="kit-head"><span class="label">Your trip kit · 4 parts</span><h2>Everything for the stay, in one place.</h2>
+          <nav class="kit-idx" aria-label="Trip kit parts"><a href="#sec-wifi"><i>01</i>WiFi</a><a href="#sec-pass"><i>02</i>Pass</a><a href="#sec-flo"><i>03</i>Ask FLO</a><a href="#sec-gb"><i>04</i>Guides</a></nav></header>
+        <div class="sec kit-part" id="sec-wifi"><div class="kit-t"><span class="kn" aria-hidden="true">01</span><div><span class="label">WiFi · 1 of 4</span><h3>Online the moment you step aboard</h3></div></div><div class="card" id="wifiCard"></div></div>
+        <div class="sec kit-part" id="sec-pass"><div class="kit-t"><span class="kn" aria-hidden="true">02</span><div><span class="label">Check-in Pass · 2 of 4</span><h3>Your FLOx Pass</h3></div></div>
         <article class="ticket" id="ticket" aria-label="Boarding pass for FLOHOM 1">
           <div class="t-photo">
             <img src="img/ext-night-l.webp" alt="">
@@ -602,26 +684,18 @@ a.btn{text-align:center;text-decoration:none;box-sizing:border-box}
             <div class="stubfoot"><span class="chip">✓ Verified for arrival</span><span>CONF · FLX-0001-4471</span></div>
           </div>
         </article>
-      </div>
-
-      <div class="sec" id="sec-wifi"><div class="sec-head"><span class="label">WiFi</span></div><div class="card" id="wifiCard"></div></div>
-      <div class="sec" id="sec-in"><div class="sec-head"><span class="label">Check-in Instructions</span></div><div class="card" id="inCard"></div></div>
-      <div class="sec" id="sec-out" hidden><div class="sec-head"><span class="label">Check-out Instructions</span></div><div class="card" id="outCard"></div></div>
-
-      <div class="sec" id="sec-ups"><div class="sec-head"><span class="label">Upgrade Your Stay</span><span class="small mute" id="upsNote"></span></div><div class="ups" id="ups"></div></div>
-
-      <div class="sec"><div class="sec-head"><span class="label">Forecast — Baltimore</span><span class="small mute">sample</span></div>
-        <div class="wx"><div>Fri<b>68°</b><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></div><div>Sat<b>64°</b><svg viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.3 3.3 0 0 0 7 18z"/></svg></div><div>Sun<b>61°</b><svg viewBox="0 0 24 24"><path d="M7 15h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.3 3.3 0 0 0 7 15zM8 18l-1 2M12 18l-1 2M16 18l-1 2"/></svg></div><div>Mon<b>63°</b><svg viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.3 3.3 0 0 0 7 18z"/></svg></div><div>Tue<b>66°</b><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></div></div></div>
-
-      <div class="sec" id="sec-gb"><span class="label">Your Digital Guidebook</span><div class="gbook" data-gb><details class="gbi"><summary><span>House rules</span><span class="chev">›</span></summary><div class="gbb"><ul><li>Respect the Space</li><li>Marina Quiet Hours: 10 PM to 7 AM</li><li>No Smoking Aboard</li><li>Treat Her Well</li><li>Depart on Time</li><li>Up to 4 guests overnight, 10 aboard at once (marina limit)</li></ul></div></details><details class="gbi"><summary><span>Marina amenities and showers</span><span class="chev">›</span></summary><div class="gbb"><p>Restrooms and hot showers are in the marina building at the head of the pier; your gate card opens them. Trash and recycling bins are by the pier gate.</p></div></details><details class="gbi"><summary><span>Fire pit how-to</span><span class="chev">›</span></summary><div class="gbb"><ol><li>Turn the valve under the table to ON.</li><li>Press and hold the ignition button until the flame catches.</li><li>Turn it fully off when you leave the deck, and by 10 PM for quiet hours.</li></ol></div></details><details class="gbi"><summary><span>Local tips: Fells Point, Federal Hill</span><span class="chev">›</span></summary><div class="gbb"><p><b>Fells Point:</b> cobblestone streets, waterfront bars and the water taxi. <b>Federal Hill:</b> the park at the top has the best view of the harbor at sunset.</p></div></details><details class="gbi"><summary><span>Parking</span><span class="chev">›</span></summary><div class="gbb"><p>Street and garage parking near 400 Key Highway, Baltimore, MD 21230. Your crew shares the best option for your dates in the check-in steps.</p></div></details><p class="small mute">FLOHOM 1 · Bay Escape · sample content. WiFi and codes follow the same unlock times as your pass.</p></div></div>
+        </div>
+        <div class="sec kit-part" id="sec-flo"><div class="kit-t"><span class="kn" aria-hidden="true">03</span><div><span class="label">Ask FLO · 3 of 4</span><h3>Your concierge, any hour</h3></div></div>
+          <div class="card flo"><div class="flo-h"><span class="flo-av" aria-hidden="true">FLO</span><div><b>FLO</b><small>FLOHOM concierge · replies in seconds</small></div></div>
+            <div class="thread flo-thread" id="floThread" aria-live="polite"></div>
+            <div class="flo-chips" id="floChips" aria-label="Suggested questions"></div>
+            <div class="sendrow"><input class="field" id="floIn" maxlength="500" placeholder="Ask FLO anything" aria-label="Ask FLO"><button class="btn-sm" id="floSend" type="button" style="background:var(--tide);color:var(--ink)">Ask</button></div>
+            <p class="flo-note">Design preview: sample answers, not connected to FLO yet.</p></div>
+          <div class="card"><span class="label">Rather talk to the crew?</span><dl class="kv"><dt>Phone</dt><dd>(667) 270-8226</dd><dt>Email</dt><dd>reservations@flohom.com</dd></dl></div>
       <button class="linkrow" type="button" id="rcptBtn"><div><b style="font-weight:500">Receipt &amp; Payment Details</b><p class="small mute">Opens your booking receipt</p></div><span>↗</span></button>
-
-      <div class="sec"><span class="label">Contact</span>
-        <div class="card"><dl class="kv"><dt>Phone</dt><dd>(667) 270-8226</dd><dt>Email</dt><dd>reservations@flohom.com</dd></dl></div></div>
-
-      <div class="sec" id="sec-msg"><span class="label">Message Us</span>
-        <div class="card"><div class="thread" id="thread"></div>
-          <div class="sendrow"><input class="field" id="msgIn" maxlength="2000" placeholder="Question about Bay Escape?"><button class="btn-sm" id="msgSend" style="background:var(--tide);color:var(--ink)">Send Message</button></div></div></div>
+        </div>
+        <div class="sec kit-part" id="sec-gb"><div class="kit-t"><span class="kn" aria-hidden="true">04</span><div><span class="label">Guidebooks · 4 of 4</span><h3 id="gbNick">Everything about Bay Escape</h3></div></div><div id="kitGb" class="kitgb"></div></div>
+      </section>
 
       <div class="foot"><img src="img/wordmark.svg" alt="">POWERED BY FLOHOM</div>
     </div>
@@ -639,11 +713,11 @@ a.btn{text-align:center;text-decoration:none;box-sizing:border-box}
     </div>
   </section>
 
-  <nav class="dock" id="dock" aria-label="Quick access">
+  <nav class="dock" id="dock" aria-label="Your trip kit">
     <a href="#sec-wifi"><svg viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r=".8"/></svg>WiFi</a>
-    <a href="#sec-in"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="15" cy="12" r="1"/></svg>Check-in</a>
-    <a href="#ticket"><svg viewBox="0 0 24 24"><path d="M4 6h16v4a2 2 0 0 0 0 4v4H4v-4a2 2 0 0 0 0-4z"/><path d="M14 6v12" stroke-dasharray="2 2"/></svg>Pass</a>
-    <a href="#sec-msg"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>Message</a>
+    <a href="#sec-pass"><svg viewBox="0 0 24 24"><path d="M4 6h16v4a2 2 0 0 0 0 4v4H4v-4a2 2 0 0 0 0-4z"/><path d="M14 6v12" stroke-dasharray="2 2"/></svg>Pass</a>
+    <a href="#sec-flo"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/></svg>Ask FLO</a>
+    <a href="#sec-gb"><svg viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg>Guides</a>
   </nav>
 
   <div class="curtain" id="curtain" aria-hidden="true"><div><div class="wave" style="height:14px;opacity:.5"></div><span class="label" id="curtainSmall">Next</span><h2 id="curtainText">Review</h2></div></div>
@@ -991,9 +1065,26 @@ $('#expBtn').onclick=()=>openSheet('Enhance Your Stay', `<p class="small mute">C
 /* guidebook is inline now (no pop-up) */
 $('#rcptBtn').onclick=()=>openSheet('Receipt & Payment Details', '<p class="small mute">Opens your Hostaway booking receipt in a new tab on the live pass.</p>');
 $('#aboardBtn').onclick=()=>{ const l=$('#aboardList'); l.classList.toggle('open'); $('#aboardBtn').setAttribute('aria-expanded',l.classList.contains('open')); };
-const THREAD=[{me:0,t:'Hi Jordan! Your FLOx Pass is ready. Anything we can set up before you arrive?',at:'Crew · Thu 8 Oct'}];
-function renderThread(){ $('#thread').innerHTML=THREAD.map(m=>`<div class="msg ${m.me?'me':'crew'}">${esc(m.t)}<small>${m.at}</small></div>`).join(''); }
-$('#msgSend').onclick=()=>{ const v=$('#msgIn').value.trim(); if(!v) return; THREAD.push({me:1,t:v,at:'You · just now'}); $('#msgIn').value=''; renderThread(); };
+/* ---------- Ask FLO (trip kit part 3): a SAMPLE chat, local to this page. Canned replies after a short typing
+   pause; nothing leaves the page and it is not connected to the real FLO yet (the note on the card says so). ---------- */
+const FLO=[{me:0,t:"Hi Jordan, I'm FLO, your FLOHOM concierge. Ask me anything about your stay or the neighborhood."},
+  {me:1,t:'Is there coffee we can walk to in the morning?'},
+  {me:0,t:'Yes, there are a few cafés a short walk along the waterfront. Your guidebook lists the crew’s favorites with photos and distances.'}];
+const FLO_ASK=['Can we check in early?','Where should we eat tonight?','How do the fire pit and heat work?'];
+const FLO_SAY=[
+  q=>/early|late|check/i.test(q)?"Early check-in depends on the boat before you. I'll ask the crew and message you here as soon as I know.":null,
+  q=>/eat|dinner|food|restaurant/i.test(q)?"Your guidebook has the crew's picks near the marina, with photos and walking distances. Want me to book a private chef instead?":null,
+  q=>/fire|heat|ac|warm|cold/i.test(q)?'The fire pit and AC how-tos are in your guidebook, step by step. The valve for the fire pit is under the table.':null,
+  ()=>"Good question. In the live version I'd answer from your FLOHOM's guidebook and the crew's notes. Here it's a sample reply."];
+let floBusy=false;
+function renderFlo(){ $('#floThread').innerHTML=FLO.map(m=>`<div class="msg ${m.me?'me':'crew'}">${esc(m.t)}</div>`).join('')+(floBusy?'<div class="msg crew" aria-label="FLO is typing"><span class="typing"><i></i><i></i><i></i></span></div>':''); $('#floSend').disabled=floBusy; }
+function floSend(text){ const q=String(text||'').trim().slice(0,500); if(!q||floBusy) return; FLO.push({me:1,t:q}); $('#floIn').value=''; floBusy=true; renderFlo();
+  setTimeout(()=>{ FLO.push({me:0,t:FLO_SAY.map(f=>f(q)).find(Boolean)}); floBusy=false; renderFlo(); }, reduce?0:1100); }
+$('#floChips').innerHTML=FLO_ASK.map(q=>`<button type="button" data-q="${esc(q)}">${esc(q)}</button>`).join('');
+$('#floChips').onclick=e=>{ const b=e.target.closest('[data-q]'); if(b) floSend(b.dataset.q); };
+$('#floSend').onclick=()=>floSend($('#floIn').value);
+$('#floIn').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); floSend(e.target.value); } });
+renderFlo();
 
 
 /* ================= Film v2: HD frames, blended, inertia-smoothed ================= */
@@ -1185,6 +1276,34 @@ io.observe($('#ticket')); if(reduce) $('#ticket').classList.add('in');
 /* ================= live guidebook (../live-guide.js) =================
    Signed-in Bridge owners see the REAL guidebook for the chosen FLOHOM; everyone else keeps the sample below + a sign-in line. */
 const GB_SAMPLE=$$('[data-gb]').map(el=>el.innerHTML);
+/* ---------- Guidebooks (trip kit part 4): a reel of poster cards, the open guide plays as a full-bleed feature.
+   Signed out: the sample guides above (static copy from this file) with FLOHOM 1's own photos as covers.
+   Signed in: FXLive's guides; titles and cover URLs are escaped, x.body is already sanitized by live-guide.js. */
+const KIT_COVERS=['living-l','deck-day-l','fire-lit-p','rooftop-blue-l','ext14-l'];
+const KIT_SAMPLE=$$('#v-post [data-gb] details.gbi').map((d,i)=>({key:'s'+i,title:d.querySelector('summary span').textContent,
+  body:d.querySelector('.gbb').innerHTML,cover:KIT_COVERS[i]?`img/${KIT_COVERS[i]}.webp`:null,photos:0}));
+let gbOpen=null, gbSig='';
+function kitGuides(){ const L=window.FXLive?FXLive.view():{status:'none'}, live=L.status==='ok'&&L.data&&L.data.groups.length?L.data:null;
+  if(live) return {live:true,status:'ok',line:'',groups:live.groups.map(g=>({label:g.label,guides:g.guides.map((x,i)=>({key:g.key+i,title:x.title,body:x.body,cover:x.cover||null,photos:x.photos||0}))}))};
+  const line=!window.FXLive?'':L.status==='loading'?`Checking Bridge for FLOHOM ${FXLive.n}'s real guidebook...`:FXLive.signinLine(FXLive.n);
+  return {live:false,status:L.status,line,groups:[{label:'Your FLOHOM',guides:KIT_SAMPLE}]}; }
+const pl=n=>`${n} photo${n>1?'s':''}`;
+function renderKitGb(){ const el=$('#kitGb'); if(!el) return;
+  const G=kitGuides(), all=G.groups.flatMap(g=>g.guides); if(gbOpen&&!all.some(x=>x.key===gbOpen)) gbOpen=null;
+  const n0=window.FXLive?FXLive.n:1, sig=`${n0}:${G.status}:${gbOpen||''}`; if(sig===gbSig) return; gbSig=sig;
+  $('#gbNick').textContent='Everything about '+(window.FXLive?FXLive.home().nick:'Bay Escape');
+  const open=all.find(x=>x.key===gbOpen), pad2=n=>String(n).padStart(2,'0'); let n=0;
+  const img=src=>src?`<img src="${esc(src)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">`:'';
+  const poster=x=>{ n++; const on=x.key===gbOpen; return `<button type="button" class="poster ${on?'on':''} ${x.cover?'':'nocover'}" data-gb-open="${esc(x.key)}" aria-expanded="${on}">${img(x.cover)}<span class="pn">${pad2(n)} / ${pad2(all.length)}</span>${x.photos?`<span class="pp">${pl(x.photos)}</span>`:''}<span class="pt"><b>${esc(x.title)}</b><small>${on?'Reading below':'Read guide'} →</small></span></button>`; };
+  const feature=open?`<article class="feature" id="gbFeature" aria-label="${esc(open.title)}"><div class="fhero ${open.cover?'':'nocover'}">${img(open.cover)}<button type="button" class="fclose" data-gb-open="${esc(open.key)}" aria-label="Close guide">×</button><div class="fcopy"><span class="label">${G.live?'Live from Bridge':'Sample guide'}${open.photos?' · '+pl(open.photos):''}</span><h2>${esc(open.title)}</h2></div></div><div class="fbody">${open.body}</div><button type="button" class="btn ghost" data-gb-open="${esc(open.key)}">Close guide</button></article>`:'';
+  const keep=$$('#kitGb .reel').map(r=>r.scrollLeft);
+  el.innerHTML=`${G.line?`<p class="small mute gb-signin">${G.line}</p>`:''}${G.groups.map(g=>`<span class="label gb-group">${esc(g.label)} · ${g.guides.length}</span><div class="reel">${g.guides.map(poster).join('')}</div>`).join('')}${feature}<p class="small mute">${G.live?'WiFi and door codes stay locked in this preview. Guests see them on their pass at the usual unlock times.':'WiFi and codes follow the same unlock times as your pass.'}</p>`;
+  $$('#kitGb .reel').forEach((r,k)=>{ if(keep[k]) r.scrollLeft=keep[k]; }); }
+/* Lenis already honours scroll-margin-top (.sec 110px, .feature 100px), so no extra offset here; resize() first because
+   opening/closing a guide changes the page height and Lenis would clamp to the old limit. */
+function glideTo(el){ if(!el) return; if(window.__lenis){ __lenis.resize(); __lenis.scrollTo(el,{duration:reduce?0:1.1,force:true}); } else el.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'}); }
+$('#kitGb').addEventListener('click',e=>{ const b=e.target.closest('[data-gb-open]'); if(!b) return; const k=b.dataset.gbOpen, closing=gbOpen===k;
+  gbOpen=closing?null:k; renderKitGb(); if(!closing) glideTo($('#gbFeature')); else if($('#sec-gb').getBoundingClientRect().top<0) glideTo($('#sec-gb')); });
 function renderLiveGb(){
   if(!window.FXLive) return;
   const h=FXLive.home(), rv=$('#postReview'), bk=$('#postBook');
@@ -1204,7 +1323,7 @@ function renderAll(){
   renderLiveGb();
   if(S.stage==='verify') renderVerify();
   if(S.stage==='review') renderReviewBits();
-  if(S.stage==='pass'){ renderPass(); renderThread(); }
+  if(S.stage==='pass'){ renderPass(); renderKitGb(); }
   if(S.stage==='post') $('#postDate').textContent='Checked out '+fmtDay(CHECKOUT());
   $('#dock').classList.toggle('show', false);
 }

@@ -190,6 +190,21 @@ a.fx-btn{text-decoration:none}
 .fx-gb-hd{margin:10px 0 4px}
 .fx-gb-place{display:grid;gap:2px;padding:10px 0;border-top:1px solid var(--line)}.fx-gb-place:first-child{border-top:0}
 .fx-gb-place small{font-size:13px;opacity:.75}.fx-gb-place p{margin:2px 0 0;font-size:14px}.fx-gb-mi{font-size:12.5px;color:var(--accent)}
+/* Guide photos (2026-10-08). Defaults only — each design lays them out its own way on top. */
+.fx-gb-fig{margin:10px 0}.fx-gb-img{display:block;width:100%;height:auto;max-height:420px;object-fit:cover;border-radius:12px;background:var(--card)}
+.fx-gb-fig figcaption{font:400 13px/1.4 var(--data);color:var(--mute);margin-top:6px}
+.fx-gb-place.fx-has-img{grid-template-columns:76px 1fr;gap:12px;align-items:start}
+.fx-gb-pimg{width:76px;height:76px;object-fit:cover;border-radius:10px;background:var(--card)}
+.fx-gb-place>div{display:grid;gap:2px;min-width:0}
+.fx-gbi>button.fx-has-cover{grid-template-columns:44px 1fr 18px}.fx-gbi .fx-gb-thumb{width:44px;height:44px;object-fit:cover;border-radius:8px}
+/* Ask FLO (sample chat, not wired to FLO yet) */
+.fx-flo{display:grid;gap:8px}.fx-flo .fx-thread{max-height:none}
+.fx-flo-av{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font:700 11px/1 var(--data);letter-spacing:.04em;flex:none}
+.fx-flo-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}.fx-flo-chips::-webkit-scrollbar{display:none}
+.fx-flo-chips button{flex:none;min-height:44px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);font:500 14px/1 var(--font)}
+.fx-flo-note{margin:0;padding:8px 10px;border-radius:8px;border:1px dashed var(--line);font:500 12px/1.4 var(--data);letter-spacing:.04em;color:var(--mute)}
+.fx-typing{display:inline-flex;gap:4px}.fx-typing i{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.5;animation:fxty 1s infinite}.fx-typing i:nth-child(2){animation-delay:.15s}.fx-typing i:nth-child(3){animation-delay:.3s}
+@keyframes fxty{50%{opacity:1;transform:translateY(-2px)}}
 
 /* Layout: an app home screen. A status hero with a progress ring, then tiles; every tile opens a full page that slides in with a Back button. Hub and spoke, not a line. */
 :root{--bg:#eef4f4;--ink:#0d1c1d;--mute:#4b6365;--card:#fff;--card2:#eef4f4;--line:#d5e3e4;--accent:#3f6a6f;--accent-ink:#fff;--field:#fff;color-scheme:light}
@@ -229,13 +244,76 @@ a.fx-btn{text-decoration:none}
 .ph b{font-weight:500}
 .pbody{display:grid;gap:14px;padding:16px 16px 60px}
 .pbody h2{font-size:28px;line-height:1.08}
+/* The trip kit (pass stage): WiFi, Check-in Pass, Ask FLO and Guidebooks leave the tile groups and sit together in one
+   charcoal "dock" at the end of the home screen, numbered 1-4. Each still opens its own full page; inside, a 4-tab
+   switcher hops between them, and a guide opens as a nested page with its own Back. */
+.dock{margin-top:22px;padding:16px 12px 12px;border-radius:24px;background:var(--charcoal);color:#fff;display:grid;gap:12px}
+.dock .dh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:0 4px}
+.dock .dh span{font:600 13px/1 var(--data);letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+.dock .dh b{font-weight:500;font-size:20px}
+.dock .grid{grid-template-columns:1fr 1fr}
+.ktile{position:relative;display:grid;align-content:space-between;gap:10px;min-height:136px;padding:14px;border-radius:18px;border:1px solid rgba(148,194,199,.26);background:#132829;color:#fff;text-align:left;overflow:hidden;transition:transform .15s}
+.ktile:active{transform:scale(.97)}
+.ktile .fx-i{width:26px;height:26px;color:var(--teal)}
+.ktile b{position:relative;font-weight:500;font-size:17px}.ktile small{position:relative;font-size:14px;color:rgba(255,255,255,.7)}
+.ktile .no{position:absolute;right:12px;top:12px;font:600 12px/1 var(--data);padding:6px 8px;border-radius:999px;background:rgba(148,194,199,.18);color:var(--teal)}
+.ktile.lock .no{background:#fbecd2;color:#7a4e12}
+.ktile.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ktile.photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,28,29,.2),rgba(13,28,29,.92))}
+.ktile.photo::after{z-index:0}.ktile.photo>.fx-i,.ktile.photo>span:not(.no){position:relative;z-index:1}.ktile .no{z-index:1}
+.ktile.photo .no{background:rgba(13,28,29,.62)}
+.ktile .fx-flo-av{position:relative;width:32px;height:32px;background:var(--teal);color:#0d1c1d}
+.ktabs{position:sticky;top:61px;z-index:2;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:-16px -16px 0;padding:8px 12px;background:var(--bg);border-bottom:1px solid var(--line)}
+.ktabs button{display:grid;justify-items:center;gap:3px;min-height:52px;padding:6px 2px;border-radius:12px;border:0;background:none;color:var(--mute);font:500 12.5px/1.1 var(--font)}
+.ktabs button i{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1.5px solid currentColor;font:600 11px/1 var(--data);font-style:normal}
+.ktabs button[aria-current="page"]{background:#fff;color:var(--ink);box-shadow:0 1px 0 var(--line)}
+.ktabs button[aria-current="page"] i{background:var(--charcoal);border-color:var(--charcoal);color:var(--teal)}
+.keb{font:600 13px/1 var(--data);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.wcard{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start}
+.wcard>.fx-i{width:30px;height:30px;color:var(--accent)}
+.pcard{border-radius:20px;overflow:hidden;background:var(--charcoal);color:#fff}
+.pcard .pt{position:relative;height:120px}.pcard .pt img{width:100%;height:100%;object-fit:cover}
+.pcard .pt span{position:absolute;left:14px;bottom:10px;font:600 12px/1 var(--data);letter-spacing:.14em;text-transform:uppercase;padding:6px 8px;border-radius:999px;background:var(--teal);color:#0d1c1d}
+.pcard .pr{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px}
+.pcard small{display:block;font:600 12px/1.2 var(--data);letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+.pcard .pr b{display:block;font:500 24px/1.05 var(--font);margin-top:6px}.pcard .pr em{display:block;font:400 14px/1.3 var(--data);font-style:normal;color:rgba(255,255,255,.7);margin-top:4px}
+.pcard .pr div+div{text-align:right}
+.chat{background:#fff;border:0;box-shadow:0 1px 0 var(--line)}
+.chat .dm{display:flex;gap:10px;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.chat .dm .fx-flo-av{width:40px;height:40px;font-size:13px;background:var(--charcoal);color:var(--teal)}
+.chat .dm small{display:block;font:400 13px/1.3 var(--data);color:var(--accent)}
+.chat .fx-thread{max-height:none}
+.chat .fx-msg.fx-crew{background:var(--bg)}
+.chat .fx-flo-chips button{min-height:44px;background:#fff}
+.chat .fx-send{margin-top:0;scroll-margin-bottom:24px}
+.chat .fx-send .fx-field{border-radius:999px;padding-inline:16px}.chat .fx-send .fx-btn{border-radius:999px}
+.gbgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gbt{position:relative;display:grid;align-content:end;min-height:170px;padding:12px;border-radius:18px;border:0;overflow:hidden;background:#fff;color:var(--ink);text-align:left;box-shadow:0 1px 0 var(--line);transition:transform .15s}
+.gbt:active{transform:scale(.97)}
+.gbt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.gbt.photo{color:#fff}.gbt.photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,28,29,0) 35%,rgba(13,28,29,.9))}
+.gbt .ic{position:absolute;top:14px;left:14px;color:var(--accent)}.gbt .ic .fx-i{width:28px;height:28px}
+.gbt b{position:relative;z-index:1;font-weight:500;font-size:15px;line-height:1.25}
+.gbt .n{position:absolute;top:10px;right:10px;z-index:1;font:600 11px/1 var(--data);padding:5px 8px;border-radius:999px;background:rgba(13,28,29,.62);color:#fff}
+.gbgrp{display:flex;justify-content:space-between;align-items:baseline;margin-top:4px}
+.guide{display:grid;gap:12px;margin-top:-16px;animation:gin .32s cubic-bezier(.2,.8,.2,1)}@keyframes gin{from{transform:translateX(14%);opacity:0}}
+.guide .gh{position:relative;margin:0 -16px;height:230px;background:var(--charcoal)}
+.guide .gh img{width:100%;height:100%;object-fit:cover}
+.guide .gh::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,28,29,0) 40%,rgba(13,28,29,.85))}
+.guide .gh div{position:absolute;left:16px;right:16px;bottom:14px;z-index:1;color:#fff;display:grid;gap:6px}
+.guide .gh .keb{color:var(--teal)}
+.guide h2{font-size:26px}
+.guide .gbody{font-size:16px;line-height:1.55;overflow-wrap:anywhere}
+.guide .gbody .fx-gb-text p{margin:0 0 10px}.guide .gbody ul,.guide .gbody ol{margin:0 0 10px;padding-left:20px}.guide .gbody a{color:var(--accent)}
+.guide .gbody .fx-gb-fig{margin:14px -16px}.guide .gbody .fx-gb-img{border-radius:0;max-height:64svh}.guide .gbody figcaption{padding:0 16px}
+.guide .gbody .fx-gb-place.fx-has-img{grid-template-columns:88px 1fr}.guide .gbody .fx-gb-pimg{width:88px;height:104px;border-radius:12px}
 </style></head><body>
 <div class="app"><div class="fx-proto"><a href="../">&lsaquo; All 11 designs</a>&nbsp;· prototype · sample guest · nothing is saved</div><style>.fx-proto,.proto{padding-block:0!important}.fx-proto a,.proto a{display:inline-flex;align-items:center;min-height:44px;color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px}</style><main class="home" id="home"></main><div id="panelHost"></div></div>
 <script>/* FLOx live guidebook (2026-10-08): the REAL Digital Guidebook for the FLOHOM being viewed, fetched
    live from Bridge for signed-in Bridge owners. Everyone else keeps the sample guidebook.
    Nothing real is stored in this file or on the public site: it only holds public listing names.
    Bridge route: GET https://app.flohom.com/api/admin/flox-designs/guidebook?property=N (owner-only,
-   CORS to exactly https://designs.flohom.com, Wi-Fi + codes locked even for owners, text only).
+   CORS to exactly https://designs.flohom.com, Wi-Fi + codes locked even for owners, text + vetted photo URLs).
    The HTML is sanitized again here with DOMPurify (pinned + SRI) before it touches the page.
    Shared: build_ten.py inlines it ahead of core.js; the film page loads ../live-guide.js. */
 (function(){
@@ -273,12 +351,29 @@ function ensure(n=st.n){ if(st.status[n]) return; st.status[n]='loading';
     .finally(notify); }
 
 const ALLOWED={ALLOWED_TAGS:['p','br','b','strong','i','em','u','ul','ol','li','a'],ALLOWED_ATTR:['href','rel','target'],ALLOWED_URI_REGEXP:/^https:\/\//i};
-function prepare(j,P){ const block=b=>{
-    if(b&&b.kind==='text'){ const html=P.sanitize(String(b.html||''),ALLOWED); return html.trim()?`<div class="fx-gb-text">${html}</div>`:''; }
-    if(b&&b.kind==='header') return `<p class="fx-gb-hd"><b>${esc(b.text)}</b></p>`;
-    if(b&&b.kind==='place') return `<div class="fx-gb-place"><b>${esc(b.name)}</b>${typeof b.miles==='number'?`<span class="fx-gb-mi">${esc(b.miles)} mi away</span>`:''}${b.address?`<small>${esc(b.address)}</small>`:''}${b.description?`<p>${esc(b.description)}</p>`:''}</div>`;
-    return ''; };
-  const guide=g=>({title:String(g.title||''), body:(g.blocks||[]).map(block).join('')});
+/* Photos (2026-10-08, Pray GO B): Bridge already vets them (https, approved hosts, never from a guide holding a
+   code or Wi-Fi detail). Checked again here: same host list, https only, escaped, lazy, no referrer. The whole guide
+   body then goes through DOMPurify once more with <img src=https> as the only addition to the text whitelist. */
+const IMG_OK=/^https:\/\/(resources-prod-attachmentsbucket-cxcbr2w0gb7i\.s3\.amazonaws\.com|lh3\.googleusercontent\.com|d3ciwvs59ifrt8\.cloudfront\.net|img1\.wsimg\.com|app\.flohom\.com\/seed-images)\//;
+const okImg=s=>typeof s==='string'&&IMG_OK.test(s)&&!/["'<>\s]/.test(s)?s:null;
+const imgTag=(src,alt,cls)=>okImg(src)?`<img class="${cls}" src="${esc(src)}" alt="${esc(alt||'')}" loading="lazy" decoding="async" referrerpolicy="no-referrer">`:'';
+const BODY={ALLOWED_TAGS:[...ALLOWED.ALLOWED_TAGS,'div','small','span','img','figure','figcaption'],
+  ALLOWED_ATTR:['href','rel','target','class','src','alt','loading','decoding','referrerpolicy'],ALLOWED_URI_REGEXP:/^https:\/\//i};
+function prepare(j,P){
+  /* Each block keeps its own shape (designs that lay photos out their own way read g.blocks) and a ready-made HTML form. */
+  const shape=b=>{
+    if(b&&b.kind==='text'){ const html=P.sanitize(String(b.html||''),ALLOWED); return html.trim()?{kind:'text',html}:null; }
+    if(b&&b.kind==='header') return {kind:'header',text:String(b.text||'')};
+    if(b&&b.kind==='place') return {kind:'place',name:String(b.name||''),miles:typeof b.miles==='number'?b.miles:null,address:b.address?String(b.address):null,description:b.description?String(b.description):null,image:okImg(b.image)};
+    if(b&&b.kind==='image'&&okImg(b.src)) return {kind:'image',src:b.src,caption:b.caption?String(b.caption):null};
+    return null; };
+  const html=b=>b.kind==='text'?`<div class="fx-gb-text">${b.html}</div>`
+    :b.kind==='header'?`<p class="fx-gb-hd"><b>${esc(b.text)}</b></p>`
+    :b.kind==='image'?`<figure class="fx-gb-fig">${imgTag(b.src,b.caption,'fx-gb-img')}${b.caption?`<figcaption>${esc(b.caption)}</figcaption>`:''}</figure>`
+    :`<div class="fx-gb-place${b.image?' fx-has-img':''}">${b.image?imgTag(b.image,b.name,'fx-gb-pimg'):''}<div><b>${esc(b.name)}</b>${b.miles!=null?`<span class="fx-gb-mi">${esc(b.miles)} mi away</span>`:''}${b.address?`<small>${esc(b.address)}</small>`:''}${b.description?`<p>${esc(b.description)}</p>`:''}</div></div>`;
+  const guide=g=>{ const blocks=(g.blocks||[]).map(shape).filter(Boolean);
+    return {title:String(g.title||''), cover:okImg(g.cover), blocks, body:P.sanitize(blocks.map(html).join(''),BODY),
+      photos:blocks.reduce((a,b)=>a+(b.kind==='image'||b.image?1:0),0)}; };
   const p=j.property||{};
   return { property:{nickname:p.nickname?String(p.nickname):null, city:p.city?String(p.city):null,
       bookUrl:typeof p.bookUrl==='string'&&/^https:\/\/flohom\.com\//.test(p.bookUrl)?p.bookUrl:null},
@@ -316,7 +411,12 @@ const S={ stage:'verify', status:'pending', channel:'direct', nights:2,
   photos:{front:null,back:null,selfie:null}, busy:{}, signed:null, cover:null, reject:null,
   now:'2026-10-08T10:00:00-04:00', ups:{}, ov:2, people:[], signName:'', agree:false, quiet:false,
   coverChoice:'waiver', paying:false, payBusy:false, stepIdx:0, openPr:{}, seenPr:{}, charterFull:false,
-  openGb:null, thread:[{me:0,t:'Hi Jordan! Your FLOx Pass is ready. Anything we can set up before you arrive?',at:'Crew · Thu 8 Oct'}], msgDraft:'' };
+  openGb:null, thread:[{me:0,t:'Hi Jordan! Your FLOx Pass is ready. Anything we can set up before you arrive?',at:'Crew · Thu 8 Oct'}], msgDraft:'',
+  /* Ask FLO: a SAMPLE conversation. Not connected to the real FLO yet (design preview). */
+  flo:[{me:0,t:"Hi Jordan, I'm FLO, your FLOHOM concierge. Ask me anything about your stay or the neighborhood."},
+       {me:1,t:'Is there coffee we can walk to in the morning?'},
+       {me:0,t:'Yes, there are a few cafés a short walk along the waterfront. Your Voyager Guide lists the crew’s favorites with photos and distances.'}],
+  floDraft:'', floBusy:false };
 const ANCHOR=()=>new Date('2026-10-16T15:00:00-04:00');               // 3 PM ET on the check-in date
 const CHECKOUT=()=>new Date(new Date('2026-10-16T10:00:00-04:00').getTime()+S.nights*864e5);
 const tz={timeZone:'America/New_York'};
@@ -480,19 +580,39 @@ const GUIDE=[
  ['sparkle','Fire pit how-to',()=>`<ol class="fx-gb-list"><li>Turn the valve under the table to ON.</li><li>Press and hold the ignition button until the flame catches.</li><li>Turn it fully off when you leave the deck, and by 10 PM for quiet hours.</li></ol>`],
  ['sun','Local tips: Fells Point, Federal Hill',()=>`<p><b>Fells Point:</b> cobblestone streets, waterfront bars and the water taxi. <b>Federal Hill:</b> the park at the top has the best view of the harbor at sunset.</p>`],
  ['door','Parking',()=>`<p>Street and garage parking near ${P.address}. Your crew shares the best option for your dates in the check-in steps.</p>`]];
-const gbItem=(key,ic,title,body)=>`<div class="fx-gbi ${S.openGb===key?'fx-open':''}"><button type="button" data-fx="gb-item" data-i="${key}" aria-expanded="${S.openGb===key}">${ICON[ic]}<span>${esc(title)}</span><span class="fx-chev">${ICON.right}</span></button>${S.openGb===key?`<div class="fx-gbb">${body()}</div>`:''}</div>`;
 const gbIcon=t=>/wi-?fi|internet/i.test(t)?'wifi':/check-?in|check-?out|door|keys?|lock|access|entry|parking/i.test(t)?'door':/rules?|safety|emergenc/i.test(t)?'shield':/marina|dock|slip|boat/i.test(t)?'anchor':'book';
-ui.guidebook=()=>{ const L=window.FXLive?FXLive.view():{status:'error'}, live=L.status==='ok'&&L.data&&L.data.groups.length?L.data:null;
-  const head=`<div class="fx-gb-h">${ICON.book}<div><b>Your Digital Guidebook</b><p class="fx-mute">${esc(P.name)} · ${esc(P.nick)} · ${live?'live from Bridge':'sample content'}</p></div></div>`;
-  const line=live?'':L.status==='loading'?`<p class="fx-mute fx-gb-signin">Checking Bridge for ${esc(P.name)}'s real guidebook...</p>`:window.FXLive?`<p class="fx-mute fx-gb-signin">${FXLive.signinLine(FXLive.n)}</p>`:'';
-  const items=live?live.groups.map(g=>`<p class="fx-sub fx-gb-group">${esc(g.label)}</p>`+g.guides.map((x,i)=>gbItem(g.key+i,g.key==='v'?'sparkle':gbIcon(x.title),x.title,()=>x.body)).join('')).join('')
-    :GUIDE.map(([ic,t,body],i)=>gbItem('s'+i,ic,t,body)).join('');
-  const note=live?"WiFi and door codes stay locked in this preview. Guests see them on their pass at the usual unlock times.":'WiFi and codes follow the same unlock times as your pass.';
-  return `<div class="fx-gb" id="fx-guidebook" aria-label="Digital guidebook">${head}${line}${items}<p class="fx-mute fx-gb-note">${note}</p></div>`; };
+/* One guide list for every design: live from Bridge (with its vetted photos) or the sample, which uses
+   FLOHOM 1's own photos as covers. Designs lay these out their own way; ui.guidebook() is the default. */
+const GUIDE_COVERS=['living-l','ext13-l','fire-lit-l','ext11-l','ext14-l'];
+function guides(){ const L=window.FXLive?FXLive.view():{status:'error'}, live=L.status==='ok'&&L.data&&L.data.groups.length?L.data:null;
+  const line=live?'':L.status==='loading'?`Checking Bridge for ${esc(P.name)}'s real guidebook...`:window.FXLive?FXLive.signinLine(FXLive.n):'';
+  if(live) return {live:true, line, groups:live.groups.map(g=>({key:g.key,label:g.label,guides:g.guides.map((x,i)=>({...x,key:g.key+i,icon:g.key==='v'?'sparkle':gbIcon(x.title)}))}))};
+  return {live:false, line, groups:[{key:'s',label:'Your FLOHOM',guides:GUIDE.map(([ic,t,body],i)=>({key:'s'+i,title:t,icon:ic,cover:`img/${GUIDE_COVERS[i]}.webp`,body:body(),blocks:[],photos:0}))}]}; }
+const gbNote=live=>live?"WiFi and door codes stay locked in this preview. Guests see them on their pass at the usual unlock times.":'WiFi and codes follow the same unlock times as your pass.';
+const gbRow=x=>`<div class="fx-gbi ${S.openGb===x.key?'fx-open':''}"><button type="button" class="${x.cover?'fx-has-cover':''}" data-fx="gb-item" data-i="${x.key}" aria-expanded="${S.openGb===x.key}">${x.cover?`<img class="fx-gb-thumb" src="${esc(x.cover)}" alt="" loading="lazy" referrerpolicy="no-referrer">`:ICON[x.icon]}<span>${esc(x.title)}</span><span class="fx-chev">${ICON.right}</span></button>${S.openGb===x.key?`<div class="fx-gbb">${x.body}</div>`:''}</div>`;
+ui.guidebook=()=>{ const G=guides();
+  const head=`<div class="fx-gb-h">${ICON.book}<div><b>Your Digital Guidebook</b><p class="fx-mute">${esc(P.name)} · ${esc(P.nick)} · ${G.live?'live from Bridge':'sample content'}</p></div></div>`;
+  const line=G.line?`<p class="fx-mute fx-gb-signin">${G.line}</p>`:'';
+  const items=G.groups.map(g=>(G.live?`<p class="fx-sub fx-gb-group">${esc(g.label)}</p>`:'')+g.guides.map(gbRow).join('')).join('');
+  return `<div class="fx-gb" id="fx-guidebook" aria-label="Digital guidebook">${head}${line}${items}<p class="fx-mute fx-gb-note">${gbNote(G.live)}</p></div>`; };
 ui.receipt=()=>`<button type="button" class="fx-link" data-fx="rcpt">${ICON.receipt}<div><b>Receipt and payment details</b><p class="fx-mute">Opens your booking receipt</p></div>${ICON.right}</button>`;
 ui.links=()=>ui.guidebook()+ui.receipt();
 ui.contact=()=>`<dl class="fx-kv"><dt>Phone</dt><dd>${P.phone}</dd><dt>Email</dt><dd>${P.email}</dd></dl>`;
 ui.thread=()=>`<div class="fx-thread">${S.thread.map(m=>`<div class="fx-msg ${m.me?'fx-me':'fx-crew'}">${esc(m.t)}<small>${m.at}</small></div>`).join('')}</div><div class="fx-send"><input class="fx-field" maxlength="2000" placeholder="Question about ${P.nick}?" value="${esc(S.msgDraft)}" data-fx-input="msgDraft" aria-label="Message"><button type="button" class="fx-btn fx-btn-sm" data-fx="send">Send</button></div>`;
+/* Ask FLO — sample only. Replies are canned so the design can be judged; nothing leaves the page. */
+const FLO_ASK=['Can we check in early?','Where should we eat tonight?','How do the fire pit and heat work?'];
+const FLO_SAY=[
+  q=>/early|late|check/i.test(q)?`Early check-in depends on the boat before you. I'll ask the crew and message you here as soon as I know.`:null,
+  q=>/eat|dinner|food|restaurant/i.test(q)?`Your Voyager Guide has the crew's picks near ${P.marina}, with photos and walking distances. Want me to book a private chef instead?`:null,
+  q=>/fire|heat|ac|warm|cold/i.test(q)?'The fire pit and AC how-tos are in your guidebook, step by step with photos. The valve for the fire pit is under the table.':null,
+  ()=>`Good question. In the live version I'd answer from ${P.nick}'s guidebook and the crew's notes. Here it's a sample reply.`];
+function floSend(text){ const q=String(text||'').trim(); if(!q||S.floBusy) return; S.flo.push({me:1,t:q}); S.floDraft=''; S.floBusy=true; emit('flo');
+  setTimeout(()=>{ S.flo.push({me:0,t:FLO_SAY.map(f=>f(q)).find(Boolean)}); S.floBusy=false; emit('flo'); }, reduce?0:900); }
+ui.floNote=()=>`<p class="fx-flo-note">Design preview: sample answers, not connected to FLO yet.</p>`;
+ui.floMsgs=()=>S.flo.map(m=>`<div class="fx-msg ${m.me?'fx-me':'fx-crew'}">${esc(m.t)}</div>`).join('')+(S.floBusy?`<div class="fx-msg fx-crew" aria-label="FLO is typing"><span class="fx-typing"><i></i><i></i><i></i></span></div>`:'');
+ui.floChips=()=>`<div class="fx-flo-chips">${FLO_ASK.map(q=>`<button type="button" data-fx="flo-ask" data-q="${esc(q)}">${esc(q)}</button>`).join('')}</div>`;
+ui.floInput=(ph='Ask FLO anything')=>`<div class="fx-send"><input class="fx-field" maxlength="500" placeholder="${esc(ph)}" value="${esc(S.floDraft)}" data-fx-input="floDraft" aria-label="Ask FLO"><button type="button" class="fx-btn fx-btn-sm" data-fx="flo-send">Ask</button></div>`;
+ui.flo=()=>`<div class="fx-flo"><div class="fx-thread">${ui.floMsgs()}</div>${ui.floChips()}${ui.floInput()}${ui.floNote()}</div>`;
 ui.aboard=()=>{ const p=pass(); return `<div class="fx-aboard"><span class="fx-sub">Overnight guests</span><ul>${p.overnight.map((n,i)=>`<li>${esc(n)}${i===0?' <small>Lead guest</small>':''}</li>`).join('')}${p.unnamed?`<li class="fx-mute">+ ${p.unnamed} more</li>`:''}</ul>${p.visitorNames.length?`<span class="fx-sub">Visitors, until 10 PM</span><ul>${p.visitorNames.map(n=>`<li>${esc(n)}</li>`).join('')}</ul>`:''}</div>`; };
 ui.post=()=>`<div class="fx-post"><div class="fx-card"><h4>How was your stay?</h4><p class="fx-mute">A few words help the next guest find their FLOHOM.</p><a class="fx-btn" href="${P.reviewUrl}" target="_blank" rel="noopener">Leave a review</a></div><div class="fx-card"><h4>Come back anytime</h4><a class="fx-btn" href="${P.bookUrl}" target="_blank" rel="noopener">Book ${P.nick}</a><a class="fx-btn fx-ghost" href="${P.allUrl}" target="_blank" rel="noopener">See all FLOHOMs</a></div>${ui.guidebook()}</div>`;
 ui.demoBtn=(cls='')=>`<button type="button" class="fx-demo-btn ${cls}" data-fx="demo">Demo controls</button>`;
@@ -539,6 +659,8 @@ document.addEventListener('click',e=>{ const t=e.target.closest('[data-fx]'); if
     case 'tier': $$('.fx-tier').forEach(x=>x.classList.remove('fx-sel')); t.classList.add('fx-sel'); FX._tier=+t.dataset.t; { const b=$('[data-fx="req"]'); const u=UPS.find(x=>x.id===+b.dataset.id); b.textContent=`Request: $${u.tiers[FX._tier][1]}`; } break;
     case 'req': S.ups[+t.dataset.id]='Requested'; closeSheet(); emit('upsell'); break;
     case 'send': { const v=S.msgDraft.trim(); if(!v) break; S.thread.push({me:1,t:v,at:'You · just now'}); S.msgDraft=''; emit('message'); break; }
+    case 'flo-send': floSend(S.floDraft); break;
+    case 'flo-ask': floSend(t.dataset.q); break;
     case 'gb': { const g=document.getElementById('fx-guidebook'); if(g){ g.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'}); } else sheet('Your Digital Guidebook',ui.guidebook()); break; }
     case 'gb-item': { const i=t.dataset.i; S.openGb=S.openGb===i?null:i; if($('#fxSheet .fx-gb')){ $('#fxSheet .fx-gb').outerHTML=ui.guidebook(); } else emit('ui'); break; }
     case 'rcpt': sheet('Receipt and payment details','<p class="fx-mute">Opens your Hostaway booking receipt in a new tab on the live pass.</p>'); break;
@@ -564,33 +686,56 @@ document.addEventListener('change',e=>{ const t=e.target;
 document.addEventListener('input',e=>{ const t=e.target;
   if(t.matches('[data-fx-input]')){ S[t.dataset.fxInput]=t.value; if(t.dataset.fxInput==='signName') $$('[data-fx-sigpreview]').forEach(x=>x.textContent=t.value); }
   else if(t.matches('[data-fx-person]')){ const p=S.people[+t.dataset.fxPerson]; if(p) p[t.dataset.f]=t.value; } });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet(); if(e.key==='Enter'&&e.target.matches('[data-fx-input="msgDraft"]')) $('[data-fx="send"]')?.click(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet(); if(e.key==='Enter'&&e.target.matches('[data-fx-input="msgDraft"]')) $('[data-fx="send"]')?.click(); if(e.key==='Enter'&&e.target.matches('[data-fx-input="floDraft"]')) floSend(S.floDraft); });
 function bindLive(){}
 if(window.FXLive) FXLive.on(()=>{ applyHome(); S.openGb=null; const g=$('#fxSheet .fx-gb'); if(g) g.outerHTML=ui.guidebook(); emit('ui'); });
 
-window.FX={ P,S,on,emit,go,ui,ICON,esc,$,$$,reduce,pass,unlock,heroFacts,ota,otaName,idDone,allDone,approve,decline,fillSamples,sheet,closeSheet,openDemo,fmtDay,fmtTime,ANCHOR,CHECKOUT,money,PRINCIPLES,STEPS_IN,UPS,visibleUps, approveDelay:1800, get why(){ return last; } };
+window.FX={ P,S,on,emit,go,ui,ICON,esc,$,$$,reduce,pass,unlock,heroFacts,ota,otaName,idDone,allDone,approve,decline,fillSamples,sheet,closeSheet,openDemo,fmtDay,fmtTime,ANCHOR,CHECKOUT,money,PRINCIPLES,STEPS_IN,UPS,visibleUps,guides,gbNote,floSend, approveDelay:1800, get why(){ return last; } };
 })();
 </script>
 <script>
 (function(){
-const {S,P,ui,ICON,esc}=FX; let openId=null;
+const {S,P,ui,ICON,esc}=FX; let openId=null, lastKey=null, gbScroll=0;
 const ring=(n,of,label)=>{ const r=40,c=2*Math.PI*r,o=c*(1-n/of); return `<svg class="ring" viewBox="0 0 96 96" aria-label="${label}"><circle class="bgc" cx="48" cy="48" r="${r}"/><circle class="fg" cx="48" cy="48" r="${r}" stroke-dasharray="${c}" stroke-dashoffset="${o}" transform="rotate(-90 48 48)"/><text x="48" y="55" text-anchor="middle">${label}</text></svg>`; };
-function tiles(){ const pre=S.stage==='verify'||S.stage==='review', u=FX.unlock, T=[];
+const KITG='Your trip kit';
+/* The design's pass markup (was the FLOx Pass tile's page). */
+function passDetails(){ const p=FX.pass(); return `<dl class="fx-kv"><dt>Check-in</dt><dd>${p.checkIn.day}, ${p.checkIn.time}</dd><dt>Check-out</dt><dd>${p.checkOut.day}, ${p.checkOut.time}</dd><dt>Lead</dt><dd>${esc(p.leadFull)}</dd><dt>Aboard</dt><dd>${p.guests} overnight · ${p.visitors} visitor${p.visitors===1?'':'s'}</dd><dt>Ref</dt><dd>${p.conf}</dd></dl>${ui.aboard()}`; }
+function tiles(){ const pre=S.stage==='verify'||S.stage==='review', u=FX.unlock, T=[], kit=S.stage==='pass';
   const lock=(k)=>pre?{st:'locked',pill:'After pass'}:(u(k).open?{st:'done',pill:'Open'}:{st:'locked',pill:FX.fmtDay(u(k).at)});
   if(S.stage!=='post'){
     T.push({id:'a',g:'Your three steps',ic:ICON.id,t:'Verify ID',s:FX.ota()?`Via ${FX.otaName()}`:'Front, back, selfie',...(FX.idDone()&&S.status!=='rejected'?{st:'done',pill:'Done'}:{st:'todo',pill:S.status==='rejected'?'Retake':'To do'}),body:()=>ui.rejected()+ui.ids()});
     T.push({id:'b',g:'Your three steps',ic:ICON.book,t:'House agreement',s:'Principles, guests, signature',...(S.signed?{st:'done',pill:'Signed'}:FX.idDone()?{st:'todo',pill:'To do'}:{st:'locked',pill:'Locked'}),body:()=>S.signed?`<p>${esc(ui.summary('B'))}</p>`:FX.idDone()?`<p class="fx-mute">Our FLOHOMs have a few simple principles that keep everyone, and the vessel, in great shape.</p>${ui.principles()}${ui.charter()}${ui.guests()}${ui.sign()}`:'<p class="fx-mute">Verify your ID first.</p>'});
     T.push({id:'c',g:'Your three steps',ic:ICON.shield,t:'Cover',s:'Waiver or deposit',...(S.cover?{st:'done',pill:'Covered'}:S.signed?{st:'todo',pill:'To do'}:{st:'locked',pill:'Locked'}),body:()=>S.cover?`<p>${ui.summary('C')}</p>`:S.signed?ui.cover():'<p class="fx-mute">Sign the agreement first.</p>'});
   }
-  T.push({id:'pass',g:'Your stay',wide:1,ic:ICON.ticket,t:'FLOx Pass',s:pre?'Ready once our crew approves':`${FX.pass().checkIn.day} · ${FX.pass().checkIn.time} · Slip ${P.slip}`,...(pre?{st:'locked',pill:'After review'}:{st:'done',pill:'Ready'}),body:()=>{ const p=FX.pass(); return `<dl class="fx-kv"><dt>Check-in</dt><dd>${p.checkIn.day}, ${p.checkIn.time}</dd><dt>Check-out</dt><dd>${p.checkOut.day}, ${p.checkOut.time}</dd><dt>Lead</dt><dd>${esc(p.leadFull)}</dd><dt>Aboard</dt><dd>${p.guests} overnight · ${p.visitors} visitor${p.visitors===1?'':'s'}</dd><dt>Ref</dt><dd>${p.conf}</dd></dl>${ui.aboard()}`; }});
-  T.push({id:'wifi',g:'Your stay',ic:ICON.wifi,t:'WiFi',s:`${P.release.wifi}h before check-in`,...lock('wifi'),body:ui.wifi});
+  if(!kit){
+    T.push({id:'pass',g:'Your stay',wide:1,ic:ICON.ticket,t:'FLOx Pass',s:pre?'Ready once our crew approves':`${FX.pass().checkIn.day} · ${FX.pass().checkIn.time} · Slip ${P.slip}`,...(pre?{st:'locked',pill:'After review'}:{st:'done',pill:'Ready'}),body:passDetails});
+    T.push({id:'wifi',g:'Your stay',ic:ICON.wifi,t:'WiFi',s:`${P.release.wifi}h before check-in`,...lock('wifi'),body:ui.wifi});
+  }
   T.push({id:'in',g:'Your stay',ic:ICON.door,t:'Check-in',s:'Steps and key code',...lock('checkin'),body:ui.checkin});
   T.push({id:'out',g:'Your stay',ic:ICON.out,t:'Check-out',s:'Before you leave',...lock('checkout'),body:ui.checkout});
   T.push({id:'ups',g:'More',ic:ICON.sparkle,t:'Extras',s:'Requests for the crew',st:pre?'locked':'',pill:pre?'After pass':Object.keys(S.ups).length+' requested',body:()=>pre?'<p class="fx-mute">You can request extras once your pass is approved.</p>':ui.upsells()});
-  T.push({id:'msg',g:'More',ic:ICON.chat,t:'Messages',s:'Write to the crew',st:'',pill:S.thread.length+'',body:()=>ui.thread()+ui.contact()});
-  T.push({id:'gb',g:'More',ic:ICON.book,t:'Guidebook',s:'Rules, tips, receipt',st:'',pill:'Open',body:ui.links});
+  if(!kit){
+    T.push({id:'msg',g:'More',ic:ICON.chat,t:'Messages',s:'Write to the crew',st:'',pill:S.thread.length+'',body:()=>ui.thread()+ui.contact()});
+    T.push({id:'gb',g:'More',ic:ICON.book,t:'Guidebook',s:'Rules, tips, receipt',st:'',pill:'Open',body:ui.links});
+  }
   T.push({id:'wx',g:'More',ic:ICON.sun,t:'Weather',s:'Baltimore, 5 days',st:'',pill:'68°',body:ui.forecast});
+  if(kit) T.push(...kitTiles());
   return T; }
+/* ---------- the trip kit: WiFi · Check-in Pass · Ask FLO · Guidebooks ---------- */
+function kitTiles(){ const p=FX.pass(), w=FX.unlock('wifi'), G=FX.guides(), all=G.groups.flatMap(g=>g.guides), cover=(all.find(x=>x.cover)||{}).cover;
+  return [
+    {id:'wifi',g:KITG,kit:1,tab:'WiFi',ic:ICON.wifi,t:'WiFi',s:w.open?'Network and password':`Unlocks ${FX.fmtDay(w.at)}`,lockd:!w.open,body:()=>`<div class="fx-card wcard">${ICON.wifi}<div>${ui.wifi()}</div></div>`},
+    {id:'pass',g:KITG,kit:2,tab:'Pass',ic:ICON.ticket,photo:'img/ext-night-l.webp',t:'Check-in Pass',s:`${p.checkIn.day} · ${p.checkIn.time}`,body:()=>`<div class="pcard"><div class="pt"><img src="img/ext-night-l.webp" alt="${esc(P.name)} at night"><span>Verified for arrival</span></div><div class="pr"><div><small>${esc(P.name)}</small><b>Slip ${P.slip}</b><em>${P.marina}</em></div><div><small>Nights</small><b>${p.nights}</b><em>${p.checkIn.day} to ${p.checkOut.day}</em></div></div></div><div class="fx-card">${passDetails()}</div>`},
+    {id:'flo',g:KITG,kit:3,tab:'Ask FLO',ic:'<span class="fx-flo-av">FLO</span>',t:'Ask FLO',s:'Your concierge, any hour',body:()=>`<div class="fx-card chat"><div class="dm"><span class="fx-flo-av">FLO</span><div><b>FLO</b><small>FLOHOM concierge · replies in seconds</small></div></div><div class="fx-thread">${ui.floMsgs()}</div>${ui.floChips()}${ui.floInput('Message FLO...')}${ui.floNote()}</div><span class="fx-sub">Rather talk to the crew?</span><div class="fx-card">${ui.contact()}</div>${ui.receipt()}`},
+    {id:'gb',g:KITG,kit:4,tab:'Guides',ic:ICON.book,photo:cover,t:'Guidebooks',s:`${all.length} guide${all.length===1?'':'s'} · ${G.live?'live':'sample'}`,body:gbList}]; }
+function gbList(){ const G=FX.guides();
+  const tile=x=>`<button type="button" class="gbt ${x.cover?'photo':''}" data-fx="gb-item" data-i="${esc(x.key)}">${x.cover?`<img src="${esc(x.cover)}" alt="" loading="lazy" referrerpolicy="no-referrer">`:`<span class="ic">${ICON[x.icon]||ICON.book}</span>`}${x.photos?`<span class="n">${x.photos} photo${x.photos>1?'s':''}</span>`:''}<b>${esc(x.title)}</b></button>`;
+  return `${G.line?`<p class="fx-mute fx-gb-signin">${G.line}</p>`:''}${G.groups.map(g=>`<div class="gbgrp"><span class="fx-sub">${esc(g.label)}</span><span class="fx-mute">${g.guides.length} guide${g.guides.length===1?'':'s'}</span></div><div class="gbgrid">${g.guides.map(tile).join('')}</div>`).join('')}<p class="fx-mute fx-gb-note">${FX.gbNote(G.live)}</p>`; }
+function openGuide(){ return S.openGb&&FX.guides().groups.flatMap(g=>g.guides).find(x=>x.key===S.openGb)||null; }
+function guidePage(g,fresh){ const live=FX.guides().live;
+  return `<div class="guide" style="${fresh?'':'animation:none'}"><div class="gh" style="${g.cover?'':'height:150px'}">${g.cover?`<img src="${esc(g.cover)}" alt="" referrerpolicy="no-referrer">`:''}<div><span class="keb">${live?'Live from Bridge':'Sample guide'}</span><h2>${esc(g.title)}</h2></div></div><div class="gbody">${g.body}</div><button type="button" class="fx-btn fx-ghost" data-fx="gb-item" data-i="${esc(g.key)}">${ICON.left}All guidebooks</button><p class="fx-mute fx-gb-note">${FX.gbNote(live)}</p></div>`; }
+const kitTabs=cur=>`<nav class="ktabs" aria-label="Your trip kit">${kitTiles().map(k=>`<button type="button" data-kit="${k.id}" ${k.id===cur?'aria-current="page"':''}><i>${k.kit}</i>${k.tab}</button>`).join('')}</nav>`;
+const dock=T=>`<section class="dock" aria-label="Your trip kit"><div class="dh"><b>Your trip kit</b><span>4 essentials</span></div><div class="grid">${T.map(t=>`<button type="button" class="ktile ${t.photo?'photo':''} ${t.lockd?'lock':''}" data-open="${t.id}">${t.photo?`<img src="${esc(t.photo)}" alt="" loading="lazy" referrerpolicy="no-referrer">`:''}${t.ic}<span class="no">${t.kit} of 4</span><span><b>${t.t}</b><br><small>${t.s}</small></span></button>`).join('')}</div></section>`;
 function render(){ const pre=S.stage==='verify'||S.stage==='review'; const n=(FX.idDone()&&S.status!=='rejected'?1:0)+(S.signed?1:0)+(S.cover?1:0);
   const hero=S.stage==='post'?`${ring(1,1,'Done')}<div><h2>Thank you, Jordan.</h2><p>Checked out ${FX.fmtDay(FX.CHECKOUT())}.</p></div>${ui.post()}`
     :S.stage==='verify'?`${ring(n,3,n+' of 3')}<div><h2>${n<3?'Finish your check-in':'Submitting...'}</h2><p>Three steps unlock your FLOx Pass for ${P.name} · ${P.nick}.</p></div><button type="button" class="fx-btn" data-open="${!FX.idDone()||S.status==='rejected'?'a':!S.signed?'b':'c'}">${n===0?'Start':'Continue'}${ICON.right}</button>`
@@ -600,19 +745,28 @@ function render(){ const pre=S.stage==='verify'||S.stage==='review'; const n=(FX
   document.getElementById('home').innerHTML=`<div class="hi"><span class="av">JS</span><div><b>${S.stage==='post'?'Welcome home':pre?'Welcome aboard':'Good to go'}, Jordan</b><small>${FX.heroFacts().join(' · ')}</small></div><button type="button" class="fx-demo-btn" data-fx="demo">Demo</button></div>
     <section class="hero"><img src="img/${pre?'deck-day-l':'ext-night-l'}.webp" alt="">${hero}</section>
     ${S.stage==='review'?`<div class="sec">Status</div><div class="fx-card">${ui.reviewRows()}</div>`:''}
-    ${groups.map(g=>`<div class="sec">${g}</div><div class="grid">${T.filter(t=>t.g===g).map(t=>`<button type="button" class="tile ${t.wide?'wide':''} ${t.st||''}" data-open="${t.id}">${t.ic}<span class="pill">${t.pill}</span><span><b>${t.t}</b><br><small>${t.s}</small></span></button>`).join('')}</div>`).join('')}`;
+    ${groups.map(g=>g===KITG?dock(T.filter(t=>t.g===g)):`<div class="sec">${g}</div><div class="grid">${T.filter(t=>t.g===g).map(t=>`<button type="button" class="tile ${t.wide?'wide':''} ${t.st||''}" data-open="${t.id}">${t.ic}<span class="pill">${t.pill}</span><span><b>${t.t}</b><br><small>${t.s}</small></span></button>`).join('')}</div>`).join('')}`;
   renderPanel(); }
-function renderPanel(){ const host=document.getElementById('panelHost'); if(!openId){ host.innerHTML=''; return; } const t=tiles().find(x=>x.id===openId); if(!t){ openId=null; host.innerHTML=''; return; }
-  const was=host.querySelector('.panel'), sc=was?was.scrollTop:0;
-  host.innerHTML=`<section class="panel" role="dialog" aria-label="${t.t}" style="${was?'animation:none':''}"><div class="ph"><button type="button" class="back" data-close>${ICON.left}Home</button><b>${t.t}</b></div><div class="pbody"><h2>${t.t}</h2>${t.body()}</div></section>`;
+function renderPanel(){ const host=document.getElementById('panelHost'); if(!openId){ host.innerHTML=''; lastKey=null; return; } const t=tiles().find(x=>x.id===openId); if(!t){ openId=null; lastKey=null; host.innerHTML=''; return; }
+  const g=t.kit&&t.id==='gb'?openGuide():null, key=openId+':'+(g?g.key:''), was=host.querySelector('.panel'), fresh=key!==lastKey;
+  let sc=was&&!fresh?was.scrollTop:0;
+  if(was&&fresh&&g&&lastKey==='gb:') gbScroll=was.scrollTop; else if(was&&fresh&&!g&&t.id==='gb'&&lastKey&&lastKey.startsWith('gb:')) sc=gbScroll;
+  lastKey=key;
+  const back=g?`<button type="button" class="back" data-fx="gb-item" data-i="${esc(g.key)}">${ICON.left}Guidebooks</button>`:`<button type="button" class="back" data-close>${ICON.left}Home</button>`;
+  const head=g?'':t.kit?`${kitTabs(t.id)}<span class="keb">Your trip kit · ${t.kit} of 4</span><h2>${t.t}</h2>`:`<h2>${t.t}</h2>`;
+  host.innerHTML=`<section class="panel" role="dialog" aria-label="${g?esc(g.title):t.t}" style="${was?'animation:none':''}"><div class="ph">${back}<b>${g?'':t.t}</b></div><div class="pbody">${head}${g?guidePage(g,fresh):t.body()}</div></section>`;
   host.querySelector('.panel').scrollTop=sc; }
 function close(){ const p=document.querySelector('.panel'); if(!p){ openId=null; return; } p.classList.add('out'); setTimeout(()=>{ openId=null; renderPanel(); },FX.reduce?0:280); }
-document.addEventListener('click',e=>{ const o=e.target.closest('[data-open]'); if(o){ openId=o.dataset.open; document.getElementById('panelHost').innerHTML=''; renderPanel(); } if(e.target.closest('[data-close]')) close(); });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&openId&&!document.querySelector('.fx-sheet')) close(); });
-FX.on(why=>{ if(['stage','submitted','approved','declined','demo','resubmitted'].includes(why)) openId=null;
+document.addEventListener('click',e=>{ const o=e.target.closest('[data-open]'); if(o){ openId=o.dataset.open; if(openId==='gb') S.openGb=null; document.getElementById('panelHost').innerHTML=''; renderPanel(); }
+  const k=e.target.closest('[data-kit]'); if(k){ openId=k.dataset.kit; if(openId==='gb') S.openGb=null; renderPanel(); }
+  if(e.target.closest('[data-close]')) close(); });
+document.addEventListener('keydown',e=>{ if(e.key!=='Escape'||!openId||document.querySelector('.fx-sheet')) return; if(openId==='gb'&&S.openGb&&S.stage==='pass'){ S.openGb=null; renderPanel(); } else close(); });
+FX.on(why=>{ const ae=document.activeElement, refocus=why==='flo'&&ae&&ae.matches&&ae.matches('[data-fx-input="floDraft"]');
+  if(['stage','submitted','approved','declined','demo','resubmitted'].includes(why)) openId=null;
   if(why==='photo'&&FX.idDone()&&openId==='a'){ render(); setTimeout(()=>{ openId='b'; document.getElementById('panelHost').innerHTML=''; renderPanel(); },700); return; }
   if(why==='signed'&&openId==='b'){ render(); setTimeout(()=>{ openId='c'; document.getElementById('panelHost').innerHTML=''; renderPanel(); },600); return; }
-  render(); });
+  render();
+  if(why==='flo'){ const f=document.querySelector('.panel [data-fx-input="floDraft"]'); if(f){ if(refocus) f.focus({preventScroll:true}); f.closest('.fx-send').scrollIntoView({block:'nearest',behavior:FX.reduce?'auto':'smooth'}); } } });
 render();
 })();
 </script></body></html>
