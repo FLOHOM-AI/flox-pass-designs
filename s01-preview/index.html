@@ -220,7 +220,7 @@ html,body{height:100%;overflow:hidden}
 .segs button.on i{width:100%}
 .segs button.on.play i{width:var(--p,0%)}
 .stage{position:relative;overflow:hidden}
-.card{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;padding:0 16px 24px;display:grid;gap:14px;align-content:start}
+.card{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;padding:0 16px 24px;display:grid;gap:14px;align-content:start;grid-auto-rows:max-content}
 .card.in-r{animation:inr .45s cubic-bezier(.2,.8,.2,1)}.card.in-l{animation:inl .45s cubic-bezier(.2,.8,.2,1)}
 @keyframes inr{from{transform:translateX(18%);opacity:0}}@keyframes inl{from{transform:translateX(-18%);opacity:0}}
 .visual{padding:0}
@@ -401,7 +401,7 @@ const S={ stage:'verify', status:'pending', channel:'direct', nights:2,
   /* Ask FLO: a SAMPLE conversation. Not connected to the real FLO yet (design preview). */
   flo:[{me:0,t:"Hi Jordan, I'm FLO, your FLOHOM concierge. Ask me anything about your stay or the neighborhood."},
        {me:1,t:'Is there coffee we can walk to in the morning?'},
-       {me:0,t:'Yes, there are a few cafés a short walk along the waterfront. Your Voyager Guide below lists the crew’s favorites with photos and distances.'}],
+       {me:0,t:'Yes, there are a few cafés a short walk along the waterfront. Your Voyager Guide lists the crew’s favorites with photos and distances.'}],
   floDraft:'', floBusy:false };
 const ANCHOR=()=>new Date('2026-10-16T15:00:00-04:00');               // 3 PM ET on the check-in date
 const CHECKOUT=()=>new Date(new Date('2026-10-16T10:00:00-04:00').getTime()+S.nights*864e5);
