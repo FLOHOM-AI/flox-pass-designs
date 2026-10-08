@@ -183,6 +183,13 @@ a.fx-btn{text-decoration:none}
 @keyframes fxgb{from{opacity:0;transform:translateY(-4px)}}
 .fx-gb-list{margin:0;padding-left:18px;display:grid;gap:4px}
 .fx-gb-note{font-size:14px}
+/* live guidebook (real guides from Bridge) */
+.fx-gb-signin{font-size:14px;margin:0}.fx-gb-signin a{color:var(--accent);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.fx-gb-group{margin:10px 0 2px}
+.fx-gbb .fx-gb-text p{margin:0 0 8px}.fx-gbb .fx-gb-text ul,.fx-gbb .fx-gb-text ol{margin:0 0 8px;padding-left:18px}.fx-gbb a{color:var(--accent);overflow-wrap:anywhere}
+.fx-gb-hd{margin:10px 0 4px}
+.fx-gb-place{display:grid;gap:2px;padding:10px 0;border-top:1px solid var(--line)}.fx-gb-place:first-child{border-top:0}
+.fx-gb-place small{font-size:13px;opacity:.75}.fx-gb-place p{margin:2px 0 0;font-size:14px}.fx-gb-mi{font-size:12.5px;color:var(--accent)}
 
 /* Layout: a ticket printer. Each finished step prints one more strip of your ticket; the to-do steps sit below as tear-off coupons.
    After approval the whole pass prints, then the stay sections follow as receipt cards. Every printed line is tappable. */
@@ -224,7 +231,72 @@ a.fx-btn{text-decoration:none}
  <div class="paper" id="paper" aria-label="Your ticket so far"></div>
  <main class="coupons" id="coupons"></main>
 </div>
-<script>/* FLOx shared core (2026-10-08): every rule of the live FLOx Pass, render-agnostic.
+<script>/* FLOx live guidebook (2026-10-08): the REAL Digital Guidebook for the FLOHOM being viewed, fetched
+   live from Bridge for signed-in Bridge owners. Everyone else keeps the sample guidebook.
+   Nothing real is stored in this file or on the public site: it only holds public listing names.
+   Bridge route: GET https://app.flohom.com/api/admin/flox-designs/guidebook?property=N (owner-only,
+   CORS to exactly https://designs.flohom.com, Wi-Fi + codes locked even for owners, text only).
+   The HTML is sanitized again here with DOMPurify (pinned + SRI) before it touches the page.
+   Shared: build_ten.py inlines it ahead of core.js; the film page loads ../live-guide.js. */
+(function(){
+'use strict';
+const API='https://app.flohom.com/api/admin/flox-designs/guidebook?property=';
+const SIGNIN='https://app.flohom.com/admin/login';
+const PURIFY={src:'https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.4.16/purify.min.js',
+  sri:'sha512-flQmhkXNRQ3iUfvtdCobtpMjCb6kE+zLnTiAulAQJ3WykVfy84JvCMOo6vhwWXHTXjR25h9Zj+LyGFRWKjRoag=='};
+/* Public listing names (flohom.com), so the picker works signed out too. Bridge's answer wins when signed in. */
+const HOMES={1:'Bay Escape',2:'Modern Charm',3:'Bung-a-flo',4:'FLOTOMAC',5:'Amanzi',6:'Closing Tide',7:'Harbor Hideaway',8:'Victoria Mae',
+  9:'Baldamore Oasis',10:'Rudee Retreat',11:'Rudee Awakening',12:'Azirae So-Lay',13:'Port Noir',14:'Soteria',15:'Palmera',16:"Isaac's Way",17:'Selah Sailor'};
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+
+function startN(){ let n=1; try{ n=parseInt(new URLSearchParams(location.search).get('flohom')||'1',10); }catch(e){} return HOMES[n]?n:1; }
+const st={n:startN(), status:{}, data:{}};
+const subs=[]; const notify=()=>subs.forEach(f=>{ try{ f(st.n); }catch(e){ console.error(e); } });
+
+/* Facts the designs show for the chosen FLOHOM. Live values when Bridge answered, public names otherwise. */
+function home(n=st.n){ const d=st.data[n]&&st.data[n].property; const nick=(d&&d.nickname)||HOMES[n];
+  return { number:n, name:`FLOHOM ${n}`, nick, bookUrl:(d&&d.bookUrl)||`https://flohom.com/property/flohom-${pad(n)}`,
+    reviewUrl:`https://flohom.link/FLOHOM-${n}-Review`, city:(d&&d.city)||null }; }
+
+let purifyP=null;
+function purify(){ if(window.DOMPurify) return Promise.resolve(window.DOMPurify);
+  return purifyP||(purifyP=new Promise((ok,no)=>{ const s=document.createElement('script'); s.src=PURIFY.src; s.integrity=PURIFY.sri; s.crossOrigin='anonymous';
+    s.referrerPolicy='no-referrer'; s.onload=()=>window.DOMPurify?ok(window.DOMPurify):no(new Error('DOMPurify missing')); s.onerror=()=>{ purifyP=null; no(new Error('DOMPurify blocked')); }; document.head.appendChild(s); })); }
+
+/* Ask Bridge once per FLOHOM. 200 → real guides; 401 / 403 / network / CORS block → sample stays. */
+function ensure(n=st.n){ if(st.status[n]) return; st.status[n]='loading';
+  Promise.all([purify(), fetch(API+n,{credentials:'include',cache:'no-store',headers:{Accept:'application/json'}})])
+    .then(async([P,r])=>{ if(!r.ok){ st.status[n]=r.status===401||r.status===403?'signedout':'error'; return; }
+      const j=await r.json(); st.data[n]=prepare(j,P); st.status[n]='ok'; })
+    .catch(()=>{ st.status[n]='error'; })
+    .finally(notify); }
+
+const ALLOWED={ALLOWED_TAGS:['p','br','b','strong','i','em','u','ul','ol','li','a'],ALLOWED_ATTR:['href','rel','target'],ALLOWED_URI_REGEXP:/^https:\/\//i};
+function prepare(j,P){ const block=b=>{
+    if(b&&b.kind==='text'){ const html=P.sanitize(String(b.html||''),ALLOWED); return html.trim()?`<div class="fx-gb-text">${html}</div>`:''; }
+    if(b&&b.kind==='header') return `<p class="fx-gb-hd"><b>${esc(b.text)}</b></p>`;
+    if(b&&b.kind==='place') return `<div class="fx-gb-place"><b>${esc(b.name)}</b>${typeof b.miles==='number'?`<span class="fx-gb-mi">${esc(b.miles)} mi away</span>`:''}${b.address?`<small>${esc(b.address)}</small>`:''}${b.description?`<p>${esc(b.description)}</p>`:''}</div>`;
+    return ''; };
+  const guide=g=>({title:String(g.title||''), body:(g.blocks||[]).map(block).join('')});
+  const p=j.property||{};
+  return { property:{nickname:p.nickname?String(p.nickname):null, city:p.city?String(p.city):null,
+      bookUrl:typeof p.bookUrl==='string'&&/^https:\/\/flohom\.com\//.test(p.bookUrl)?p.bookUrl:null},
+    groups:[{key:'o',label:'Your FLOHOM',guides:(j.operational||[]).map(guide)},
+            {key:'v',label:`${p.city?String(p.city)+' ':''}Voyager Guide`,guides:(j.voyager||[]).map(guide)}].filter(g=>g.guides.length) }; }
+
+function setHome(n){ n=parseInt(n,10); if(!HOMES[n]||n===st.n) return; st.n=n;
+  try{ const u=new URL(location.href); u.searchParams.set('flohom',n); history.replaceState(null,'',u); }catch(e){}
+  notify(); }
+
+/* One state for the designs: 'loading' | 'ok' | 'signedout' | 'error'. */
+function view(n=st.n){ ensure(n); return { status:st.status[n], data:st.data[n]||null }; }
+const signinLine=n=>`Sign in to Bridge to see FLOHOM ${n}'s real guidebook. <a href="${SIGNIN}" target="_blank" rel="noopener">Sign in</a>`;
+
+window.FXLive={ get n(){ return st.n; }, HOMES, home, view, setHome, signinLine, esc, on:f=>subs.push(f) };
+})();
+
+/* FLOx shared core (2026-10-08): every rule of the live FLOx Pass, render-agnostic.
    Designs call FX.on(render), read FX.S / FX.pass() / FX.unlock(), and drop FX.ui.* blocks into their own layout.
    Clicks/inputs are handled here by delegation on [data-fx*] attributes, so every design behaves identically. */
 (function(){
@@ -237,6 +309,9 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;'
 const P={ name:'FLOHOM 1', nick:'Bay Escape', slip:'C12', marina:'Inner Harbor Marina', address:'400 Key Highway, Baltimore, MD 21230',
   sleeps:4, total:10, waiver:48.15, deposit:500, hull:'on file', phone:'(667) 270-8226', email:'reservations@flohom.com',
   release:{wifi:8, codes:2, checkin:8, checkout:24}, conf:'FLX-0001-4471', oneNightExempt:false, bookUrl:'https://flohom.com/property/flohom-01', reviewUrl:'https://flohom.link/FLOHOM-1-Review', allUrl:'https://flohom.com/listings' };
+/* FLOHOM picker + live guidebook (live-guide.js): name, nickname, Book and review links follow the chosen FLOHOM. */
+function applyHome(){ if(!window.FXLive) return; const h=FXLive.home(); P.name=h.name; P.nick=h.nick; P.bookUrl=h.bookUrl; P.reviewUrl=h.reviewUrl; }
+applyHome();
 const S={ stage:'verify', status:'pending', channel:'direct', nights:2,
   photos:{front:null,back:null,selfie:null}, busy:{}, signed:null, cover:null, reject:null,
   now:'2026-10-08T10:00:00-04:00', ups:{}, ov:2, people:[], signName:'', agree:false, quiet:false,
@@ -405,7 +480,15 @@ const GUIDE=[
  ['sparkle','Fire pit how-to',()=>`<ol class="fx-gb-list"><li>Turn the valve under the table to ON.</li><li>Press and hold the ignition button until the flame catches.</li><li>Turn it fully off when you leave the deck, and by 10 PM for quiet hours.</li></ol>`],
  ['sun','Local tips: Fells Point, Federal Hill',()=>`<p><b>Fells Point:</b> cobblestone streets, waterfront bars and the water taxi. <b>Federal Hill:</b> the park at the top has the best view of the harbor at sunset.</p>`],
  ['door','Parking',()=>`<p>Street and garage parking near ${P.address}. Your crew shares the best option for your dates in the check-in steps.</p>`]];
-ui.guidebook=()=>`<div class="fx-gb" id="fx-guidebook" aria-label="Digital guidebook"><div class="fx-gb-h">${ICON.book}<div><b>Your Digital Guidebook</b><p class="fx-mute">${P.name} · ${P.nick} · sample content</p></div></div>${GUIDE.map(([ic,t,body],i)=>`<div class="fx-gbi ${S.openGb===i?'fx-open':''}"><button type="button" data-fx="gb-item" data-i="${i}" aria-expanded="${S.openGb===i}">${ICON[ic]}<span>${t}</span><span class="fx-chev">${ICON.right}</span></button>${S.openGb===i?`<div class="fx-gbb">${body()}</div>`:''}</div>`).join('')}<p class="fx-mute fx-gb-note">WiFi and codes follow the same unlock times as your pass.</p></div>`;
+const gbItem=(key,ic,title,body)=>`<div class="fx-gbi ${S.openGb===key?'fx-open':''}"><button type="button" data-fx="gb-item" data-i="${key}" aria-expanded="${S.openGb===key}">${ICON[ic]}<span>${esc(title)}</span><span class="fx-chev">${ICON.right}</span></button>${S.openGb===key?`<div class="fx-gbb">${body()}</div>`:''}</div>`;
+const gbIcon=t=>/wi-?fi|internet/i.test(t)?'wifi':/check-?in|check-?out|door|keys?|lock|access|entry|parking/i.test(t)?'door':/rules?|safety|emergenc/i.test(t)?'shield':/marina|dock|slip|boat/i.test(t)?'anchor':'book';
+ui.guidebook=()=>{ const L=window.FXLive?FXLive.view():{status:'error'}, live=L.status==='ok'&&L.data&&L.data.groups.length?L.data:null;
+  const head=`<div class="fx-gb-h">${ICON.book}<div><b>Your Digital Guidebook</b><p class="fx-mute">${esc(P.name)} · ${esc(P.nick)} · ${live?'live from Bridge':'sample content'}</p></div></div>`;
+  const line=live?'':L.status==='loading'?`<p class="fx-mute fx-gb-signin">Checking Bridge for ${esc(P.name)}'s real guidebook...</p>`:window.FXLive?`<p class="fx-mute fx-gb-signin">${FXLive.signinLine(FXLive.n)}</p>`:'';
+  const items=live?live.groups.map(g=>`<p class="fx-sub fx-gb-group">${esc(g.label)}</p>`+g.guides.map((x,i)=>gbItem(g.key+i,g.key==='v'?'sparkle':gbIcon(x.title),x.title,()=>x.body)).join('')).join('')
+    :GUIDE.map(([ic,t,body],i)=>gbItem('s'+i,ic,t,body)).join('');
+  const note=live?"WiFi and door codes stay locked in this preview. Guests see them on their pass at the usual unlock times.":'WiFi and codes follow the same unlock times as your pass.';
+  return `<div class="fx-gb" id="fx-guidebook" aria-label="Digital guidebook">${head}${line}${items}<p class="fx-mute fx-gb-note">${note}</p></div>`; };
 ui.receipt=()=>`<button type="button" class="fx-link" data-fx="rcpt">${ICON.receipt}<div><b>Receipt and payment details</b><p class="fx-mute">Opens your booking receipt</p></div>${ICON.right}</button>`;
 ui.links=()=>ui.guidebook()+ui.receipt();
 ui.contact=()=>`<dl class="fx-kv"><dt>Phone</dt><dd>${P.phone}</dd><dt>Email</dt><dd>${P.email}</dd></dl>`;
@@ -425,6 +508,7 @@ function openUpsell(id){ const u=UPS.find(x=>x.id===id), st=S.ups[id]; let sel=0
 const TIMES=()=>[['2026-10-08T10:00:00-04:00','Thu 8 Oct, 10 AM (8 days before)'],['2026-10-12T10:00:00-04:00','Mon 12 Oct, 10 AM (4 days before)'],['2026-10-15T16:00:00-04:00','Thu 15 Oct, 4 PM (day before)'],['2026-10-16T09:00:00-04:00','Fri 16 Oct, 9 AM (check-in day)'],['2026-10-16T13:30:00-04:00','Fri 16 Oct, 1:30 PM (90 min before)'],['2026-10-17T11:00:00-04:00','Sat 17 Oct (during the stay)'],[new Date(CHECKOUT().getTime()+864e5).toISOString(),'Day after check-out']];
 function openDemo(){ const seg=(name,opts,cur)=>`<div class="fx-seg" data-seg="${name}">${opts.map(([v,l])=>`<button type="button" data-fx="seg" data-seg="${name}" data-v="${v}" class="${String(cur)===String(v)?'fx-on':''}">${l}</button>`).join('')}</div>`;
   sheet('Demo controls', `<div class="fx-demo"><p class="fx-mute">Prototype only. Guests never see this. It lets you walk every state of the one FLOx link.</p>
+    ${window.FXLive?`<fieldset><legend>FLOHOM</legend><select data-fx-home aria-label="FLOHOM">${Object.entries(FXLive.HOMES).map(([n,nick])=>`<option value="${n}" ${+n===FXLive.n?'selected':''}>FLOHOM ${n} · ${esc(nick)}</option>`).join('')}</select><p class="fx-mute">Changes the guidebook, name, Book and review links. Signed in to Bridge as an owner, the guidebook is the real one. Other pass details stay the FLOHOM 1 sample.</p></fieldset>`:''}
     <fieldset><legend>Jump to</legend>${seg('stage',[['verify','Verify'],['review','Review'],['rejected','Declined'],['pass','FLOx Pass'],['post','After check-out']],S.status==='rejected'?'rejected':S.stage)}</fieldset>
     <fieldset><legend>Crew review (admin side)</legend><div class="fx-seg"><button type="button" data-fx="d-approve">Approve</button><select data-fx-reason aria-label="Decline reason">${Object.entries(REASONS).map(([k,r])=>`<option value="${k}">${r.label}</option>`).join('')}</select><button type="button" data-fx="d-decline">Decline</button></div></fieldset>
     <fieldset><legend>Booking channel</legend>${seg('channel',[['direct','Direct / website'],['airbnb','Airbnb'],['vrbo','VRBO']],S.channel)}<p class="fx-mute">Airbnb and VRBO guests skip the ID photos.</p></fieldset>
@@ -456,7 +540,7 @@ document.addEventListener('click',e=>{ const t=e.target.closest('[data-fx]'); if
     case 'req': S.ups[+t.dataset.id]='Requested'; closeSheet(); emit('upsell'); break;
     case 'send': { const v=S.msgDraft.trim(); if(!v) break; S.thread.push({me:1,t:v,at:'You · just now'}); S.msgDraft=''; emit('message'); break; }
     case 'gb': { const g=document.getElementById('fx-guidebook'); if(g){ g.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'}); } else sheet('Your Digital Guidebook',ui.guidebook()); break; }
-    case 'gb-item': { const i=+t.dataset.i; S.openGb=S.openGb===i?null:i; if($('#fxSheet .fx-gb')){ $('#fxSheet .fx-gb').outerHTML=ui.guidebook(); } else emit('ui'); break; }
+    case 'gb-item': { const i=t.dataset.i; S.openGb=S.openGb===i?null:i; if($('#fxSheet .fx-gb')){ $('#fxSheet .fx-gb').outerHTML=ui.guidebook(); } else emit('ui'); break; }
     case 'rcpt': sheet('Receipt and payment details','<p class="fx-mute">Opens your Hostaway booking receipt in a new tab on the live pass.</p>'); break;
     case 'demo': openDemo(); break;
     case 'sheet-x': case 'sheet-bg': closeSheet(); break;
@@ -475,12 +559,14 @@ document.addEventListener('change',e=>{ const t=e.target;
   if(t.matches('[data-fx-photo]')&&t.files[0]) photo(t.dataset.fxPhoto,t.files[0]);
   else if(t.matches('[data-fx-check]')) S[t.dataset.fxCheck]=t.checked;
   else if(t.matches('[data-fx-cover]')){ S.coverChoice=t.value; emit('ui'); }
+  else if(t.matches('[data-fx-home]')){ closeSheet(); FXLive.setHome(t.value); }
   else if(t.matches('[data-fx-time]')){ S.now=t.value; closeSheet(); if(new Date(S.now)>CHECKOUT()&&S.status==='verified') go('post','demo'); else if(S.stage==='post') go('pass','demo'); else emit('demo'); } });
 document.addEventListener('input',e=>{ const t=e.target;
   if(t.matches('[data-fx-input]')){ S[t.dataset.fxInput]=t.value; if(t.dataset.fxInput==='signName') $$('[data-fx-sigpreview]').forEach(x=>x.textContent=t.value); }
   else if(t.matches('[data-fx-person]')){ const p=S.people[+t.dataset.fxPerson]; if(p) p[t.dataset.f]=t.value; } });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet(); if(e.key==='Enter'&&e.target.matches('[data-fx-input="msgDraft"]')) $('[data-fx="send"]')?.click(); });
 function bindLive(){}
+if(window.FXLive) FXLive.on(()=>{ applyHome(); S.openGb=null; const g=$('#fxSheet .fx-gb'); if(g) g.outerHTML=ui.guidebook(); emit('ui'); });
 
 window.FX={ P,S,on,emit,go,ui,ICON,esc,$,$$,reduce,pass,unlock,heroFacts,ota,otaName,idDone,allDone,approve,decline,fillSamples,sheet,closeSheet,openDemo,fmtDay,fmtTime,ANCHOR,CHECKOUT,money,PRINCIPLES,STEPS_IN,UPS,visibleUps, approveDelay:1800, get why(){ return last; } };
 })();

@@ -423,6 +423,12 @@ html.lenis,html.lenis body{height:auto}.lenis.lenis-smooth{scroll-behavior:auto!
 .gbi summary::-webkit-details-marker{display:none}
 .gbi .chev{color:var(--tide);font-size:22px;transition:transform .25s}
 .gbi[open] .chev{transform:rotate(90deg)}
+/* live guidebook (real guides from Bridge, ../live-guide.js) */
+.gb-signin{margin:0 0 8px}.gb-signin a{color:var(--tide);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.gb-group{display:block;margin:12px 0 6px}
+.gbb .fx-gb-text p{margin:0 0 8px}.gbb ul,.gbb ol{padding-left:18px}.gbb a{color:var(--tide);overflow-wrap:anywhere}.fx-gb-hd{margin:10px 0 4px}
+.fx-gb-place{display:grid;gap:2px;padding:10px 0;border-top:1px solid rgba(148,194,199,.14)}.fx-gb-place:first-child{border-top:0}
+.fx-gb-place small{opacity:.75}.fx-gb-place p{margin:2px 0 0}.fx-gb-mi{font-size:12.5px;color:var(--tide)}
 .gbb{padding:0 16px 16px;font-size:15px;color:var(--mute)}
 .gbb ul,.gbb ol{margin:0;padding-left:18px;display:grid;gap:4px}
 a.btn{text-align:center;text-decoration:none;box-sizing:border-box}
@@ -607,7 +613,7 @@ a.btn{text-align:center;text-decoration:none;box-sizing:border-box}
       <div class="sec"><div class="sec-head"><span class="label">Forecast — Baltimore</span><span class="small mute">sample</span></div>
         <div class="wx"><div>Fri<b>68°</b><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></div><div>Sat<b>64°</b><svg viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.3 3.3 0 0 0 7 18z"/></svg></div><div>Sun<b>61°</b><svg viewBox="0 0 24 24"><path d="M7 15h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.3 3.3 0 0 0 7 15zM8 18l-1 2M12 18l-1 2M16 18l-1 2"/></svg></div><div>Mon<b>63°</b><svg viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.3 3.3 0 0 0 7 18z"/></svg></div><div>Tue<b>66°</b><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></div></div></div>
 
-      <div class="sec" id="sec-gb"><span class="label">Your Digital Guidebook</span><div class="gbook"><details class="gbi"><summary><span>House rules</span><span class="chev">›</span></summary><div class="gbb"><ul><li>Respect the Space</li><li>Marina Quiet Hours: 10 PM to 7 AM</li><li>No Smoking Aboard</li><li>Treat Her Well</li><li>Depart on Time</li><li>Up to 4 guests overnight, 10 aboard at once (marina limit)</li></ul></div></details><details class="gbi"><summary><span>Marina amenities and showers</span><span class="chev">›</span></summary><div class="gbb"><p>Restrooms and hot showers are in the marina building at the head of the pier; your gate card opens them. Trash and recycling bins are by the pier gate.</p></div></details><details class="gbi"><summary><span>Fire pit how-to</span><span class="chev">›</span></summary><div class="gbb"><ol><li>Turn the valve under the table to ON.</li><li>Press and hold the ignition button until the flame catches.</li><li>Turn it fully off when you leave the deck, and by 10 PM for quiet hours.</li></ol></div></details><details class="gbi"><summary><span>Local tips: Fells Point, Federal Hill</span><span class="chev">›</span></summary><div class="gbb"><p><b>Fells Point:</b> cobblestone streets, waterfront bars and the water taxi. <b>Federal Hill:</b> the park at the top has the best view of the harbor at sunset.</p></div></details><details class="gbi"><summary><span>Parking</span><span class="chev">›</span></summary><div class="gbb"><p>Street and garage parking near 400 Key Highway, Baltimore, MD 21230. Your crew shares the best option for your dates in the check-in steps.</p></div></details><p class="small mute">FLOHOM 1 · Bay Escape · sample content. WiFi and codes follow the same unlock times as your pass.</p></div></div>
+      <div class="sec" id="sec-gb"><span class="label">Your Digital Guidebook</span><div class="gbook" data-gb><details class="gbi"><summary><span>House rules</span><span class="chev">›</span></summary><div class="gbb"><ul><li>Respect the Space</li><li>Marina Quiet Hours: 10 PM to 7 AM</li><li>No Smoking Aboard</li><li>Treat Her Well</li><li>Depart on Time</li><li>Up to 4 guests overnight, 10 aboard at once (marina limit)</li></ul></div></details><details class="gbi"><summary><span>Marina amenities and showers</span><span class="chev">›</span></summary><div class="gbb"><p>Restrooms and hot showers are in the marina building at the head of the pier; your gate card opens them. Trash and recycling bins are by the pier gate.</p></div></details><details class="gbi"><summary><span>Fire pit how-to</span><span class="chev">›</span></summary><div class="gbb"><ol><li>Turn the valve under the table to ON.</li><li>Press and hold the ignition button until the flame catches.</li><li>Turn it fully off when you leave the deck, and by 10 PM for quiet hours.</li></ol></div></details><details class="gbi"><summary><span>Local tips: Fells Point, Federal Hill</span><span class="chev">›</span></summary><div class="gbb"><p><b>Fells Point:</b> cobblestone streets, waterfront bars and the water taxi. <b>Federal Hill:</b> the park at the top has the best view of the harbor at sunset.</p></div></details><details class="gbi"><summary><span>Parking</span><span class="chev">›</span></summary><div class="gbb"><p>Street and garage parking near 400 Key Highway, Baltimore, MD 21230. Your crew shares the best option for your dates in the check-in steps.</p></div></details><p class="small mute">FLOHOM 1 · Bay Escape · sample content. WiFi and codes follow the same unlock times as your pass.</p></div></div>
       <button class="linkrow" type="button" id="rcptBtn"><div><b style="font-weight:500">Receipt &amp; Payment Details</b><p class="small mute">Opens your booking receipt</p></div><span>↗</span></button>
 
       <div class="sec"><span class="label">Contact</span>
@@ -626,9 +632,9 @@ a.btn{text-align:center;text-decoration:none;box-sizing:border-box}
     <div class="vhero"><img src="img/ext14-p.webp" alt="FLOHOM 1"><div class="shade"></div>
       <div class="copy"><span class="label" id="postDate">Checked out Sun 18 Oct</span><h1>Thank you, Jordan!</h1></div></div>
     <div class="post">
-      <div class="card"><h3>How was your stay?</h3><p class="small mute">A few words help the next guest find their FLOHOM.</p><a class="btn" href="https://flohom.link/FLOHOM-1-Review" target="_blank" rel="noopener">Leave a Review</a></div>
-      <div class="card"><h3>Come Back Anytime</h3><a class="btn" href="https://flohom.com/property/flohom-01" target="_blank" rel="noopener">Book Bay Escape</a><a class="btn ghost" href="https://flohom.com/listings" target="_blank" rel="noopener">See all FLOHOMs</a></div>
-      <div class="sec"><span class="label">Your Digital Guidebook</span><div class="gbook"><details class="gbi"><summary><span>House rules</span><span class="chev">›</span></summary><div class="gbb"><ul><li>Respect the Space</li><li>Marina Quiet Hours: 10 PM to 7 AM</li><li>No Smoking Aboard</li><li>Treat Her Well</li><li>Depart on Time</li><li>Up to 4 guests overnight, 10 aboard at once (marina limit)</li></ul></div></details><details class="gbi"><summary><span>Marina amenities and showers</span><span class="chev">›</span></summary><div class="gbb"><p>Restrooms and hot showers are in the marina building at the head of the pier; your gate card opens them. Trash and recycling bins are by the pier gate.</p></div></details><details class="gbi"><summary><span>Fire pit how-to</span><span class="chev">›</span></summary><div class="gbb"><ol><li>Turn the valve under the table to ON.</li><li>Press and hold the ignition button until the flame catches.</li><li>Turn it fully off when you leave the deck, and by 10 PM for quiet hours.</li></ol></div></details><details class="gbi"><summary><span>Local tips: Fells Point, Federal Hill</span><span class="chev">›</span></summary><div class="gbb"><p><b>Fells Point:</b> cobblestone streets, waterfront bars and the water taxi. <b>Federal Hill:</b> the park at the top has the best view of the harbor at sunset.</p></div></details><details class="gbi"><summary><span>Parking</span><span class="chev">›</span></summary><div class="gbb"><p>Street and garage parking near 400 Key Highway, Baltimore, MD 21230. Your crew shares the best option for your dates in the check-in steps.</p></div></details><p class="small mute">FLOHOM 1 · Bay Escape · sample content. WiFi and codes follow the same unlock times as your pass.</p></div></div>
+      <div class="card"><h3>How was your stay?</h3><p class="small mute">A few words help the next guest find their FLOHOM.</p><a class="btn" id="postReview" href="https://flohom.link/FLOHOM-1-Review" target="_blank" rel="noopener">Leave a Review</a></div>
+      <div class="card"><h3>Come Back Anytime</h3><a class="btn" id="postBook" href="https://flohom.com/property/flohom-01" target="_blank" rel="noopener">Book Bay Escape</a><a class="btn ghost" href="https://flohom.com/listings" target="_blank" rel="noopener">See all FLOHOMs</a></div>
+      <div class="sec"><span class="label">Your Digital Guidebook</span><div class="gbook" data-gb><details class="gbi"><summary><span>House rules</span><span class="chev">›</span></summary><div class="gbb"><ul><li>Respect the Space</li><li>Marina Quiet Hours: 10 PM to 7 AM</li><li>No Smoking Aboard</li><li>Treat Her Well</li><li>Depart on Time</li><li>Up to 4 guests overnight, 10 aboard at once (marina limit)</li></ul></div></details><details class="gbi"><summary><span>Marina amenities and showers</span><span class="chev">›</span></summary><div class="gbb"><p>Restrooms and hot showers are in the marina building at the head of the pier; your gate card opens them. Trash and recycling bins are by the pier gate.</p></div></details><details class="gbi"><summary><span>Fire pit how-to</span><span class="chev">›</span></summary><div class="gbb"><ol><li>Turn the valve under the table to ON.</li><li>Press and hold the ignition button until the flame catches.</li><li>Turn it fully off when you leave the deck, and by 10 PM for quiet hours.</li></ol></div></details><details class="gbi"><summary><span>Local tips: Fells Point, Federal Hill</span><span class="chev">›</span></summary><div class="gbb"><p><b>Fells Point:</b> cobblestone streets, waterfront bars and the water taxi. <b>Federal Hill:</b> the park at the top has the best view of the harbor at sunset.</p></div></details><details class="gbi"><summary><span>Parking</span><span class="chev">›</span></summary><div class="gbb"><p>Street and garage parking near 400 Key Highway, Baltimore, MD 21230. Your crew shares the best option for your dates in the check-in steps.</p></div></details><p class="small mute">FLOHOM 1 · Bay Escape · sample content. WiFi and codes follow the same unlock times as your pass.</p></div></div>
       <div class="foot"><img src="img/wordmark.svg" alt="">POWERED BY FLOHOM</div>
     </div>
   </section>
@@ -645,6 +651,7 @@ a.btn{text-align:center;text-decoration:none;box-sizing:border-box}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script src="../live-guide.js"></script>
 <script>
 (function(){
 'use strict';
@@ -1175,9 +1182,26 @@ if(!reduce) setTimeout(()=>SRC.forEach(s=>s.prep&&s.prep()), 800);
 const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting) $('#ticket').classList.add('in'); }),{threshold:.2});
 io.observe($('#ticket')); if(reduce) $('#ticket').classList.add('in');
 
+/* ================= live guidebook (../live-guide.js) =================
+   Signed-in Bridge owners see the REAL guidebook for the chosen FLOHOM; everyone else keeps the sample below + a sign-in line. */
+const GB_SAMPLE=$$('[data-gb]').map(el=>el.innerHTML);
+function renderLiveGb(){
+  if(!window.FXLive) return;
+  const h=FXLive.home(), rv=$('#postReview'), bk=$('#postBook');
+  if(rv) rv.href=h.reviewUrl; if(bk){ bk.href=h.bookUrl; bk.textContent='Book '+h.nick; }
+  if(S.stage!=='pass'&&S.stage!=='post') return;
+  const L=FXLive.view(), live=L.status==='ok'&&L.data&&L.data.groups.length?L.data:null, key=`${FXLive.n}:${live?'ok':L.status}`;
+  $$('[data-gb]').forEach((el,k)=>{ if(el.dataset.gbKey===key) return; el.dataset.gbKey=key;
+    if(!live){ const line=L.status==='loading'?`Checking Bridge for FLOHOM ${FXLive.n}'s real guidebook...`:FXLive.signinLine(FXLive.n);
+      el.innerHTML=`<p class="small mute gb-signin">${line}</p>`+GB_SAMPLE[k]; return; }
+    el.innerHTML=`<p class="small mute gb-signin">FLOHOM ${FXLive.n} · ${esc(h.nick)} · live from Bridge. WiFi and door codes stay locked in this preview.</p>`+live.groups.map(g=>`<span class="label gb-group">${esc(g.label)}</span>`+g.guides.map(x=>`<details class="gbi"><summary><span>${esc(x.title)}</span><span class="chev">›</span></summary><div class="gbb">${x.body}</div></details>`).join('')).join(''); });
+}
+if(window.FXLive) FXLive.on(()=>renderAll());
+
 /* ================= render + demo controls ================= */
 function renderAll(){
   renderRoute();
+  renderLiveGb();
   if(S.stage==='verify') renderVerify();
   if(S.stage==='review') renderReviewBits();
   if(S.stage==='pass'){ renderPass(); renderThread(); }
@@ -1189,6 +1213,7 @@ function openDemo(){
   const seg=(name,opts,cur)=>`<div class="seg" data-seg="${name}">${opts.map(([v,l])=>`<button type="button" data-v="${v}" class="${String(cur)===String(v)?'on':''}">${l}</button>`).join('')}</div>`;
   openSheet('Demo controls', `<div class="demo">
     <p class="hint">Prototype only — guests never see this. It lets you walk every state of the one FLOx link.</p>
+    ${window.FXLive?`<fieldset><legend>FLOHOM</legend><select id="dHome" aria-label="FLOHOM">${Object.entries(FXLive.HOMES).map(([n,nick])=>`<option value="${n}" ${+n===FXLive.n?'selected':''}>FLOHOM ${n} · ${esc(nick)}</option>`).join('')}</select><p class="hint">Changes the guidebook, Book and review links. Signed in to Bridge as an owner, the guidebook is the real one. The film and other pass details stay FLOHOM 1.</p></fieldset>`:''}
     <fieldset><legend>Jump to</legend>${seg('stage',[['verify','Verify'],['review','Review'],['rejected','Declined'],['pass','FLOx Pass'],['post','After check-out']], S.status==='rejected'?'rejected':S.stage)}</fieldset>
     <fieldset><legend>Crew review (admin side)</legend><div class="seg"><button type="button" id="dApprove">Approve</button><select id="dReason" aria-label="Decline reason">${Object.entries(REASONS).map(([k,r])=>`<option value="${k}">${r.label}</option>`).join('')}</select><button type="button" id="dDecline">Decline</button></div></fieldset>
     <fieldset><legend>Booking channel</legend>${seg('channel',[['direct','Direct / website'],['airbnb','Airbnb'],['vrbo','VRBO']],S.channel)}<p class="hint">Airbnb and VRBO guests skip the ID photos.</p></fieldset>
@@ -1208,6 +1233,7 @@ function openDemo(){
   $('#dApprove').onclick=()=>{ $('#sheetHost').innerHTML=''; if(S.stage!=='review'){ fillSamples(); go('review','Demo','Review'); setTimeout(approve,3800); } else approve(); };
   $('#dDecline').onclick=()=>{ const r=$('#dReason').value; $('#sheetHost').innerHTML=''; fillSamples(); decline(r); };
   $('#dTime').onchange=e=>{ S.now=e.target.value; $('#sheetHost').innerHTML=''; if(new Date(S.now)>CHECKOUT() && S.status==='verified') go('post','After check-out','Memories'); else if(S.stage==='post'){ go('pass','Demo','FLOx Pass'); } else renderAll(); };
+  if($('#dHome')) $('#dHome').onchange=e=>{ $('#sheetHost').innerHTML=''; FXLive.setHome(e.target.value); };
   $('#dFill').onclick=()=>{ $('#sheetHost').innerHTML=''; fillSamples(); renderAll(); };
 }
 function fillSamples(){
