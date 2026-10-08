@@ -238,7 +238,7 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;'
 /* ---------- property facts (FLOHOM 1 record, sample guest) ---------- */
 const P={ name:'FLOHOM 1', nick:'Bay Escape', slip:'C12', marina:'Inner Harbor Marina', address:'400 Key Highway, Baltimore, MD 21230',
   sleeps:4, total:10, waiver:48.15, deposit:500, hull:'on file', phone:'(667) 270-8226', email:'reservations@flohom.com',
-  release:{wifi:8, codes:2, checkin:8, checkout:24}, conf:'FLX-0001-4471', oneNightExempt:false, bookUrl:'https://flohom.com/property/flohom-01', allUrl:'https://flohom.com/listings' };
+  release:{wifi:8, codes:2, checkin:8, checkout:24}, conf:'FLX-0001-4471', oneNightExempt:false, bookUrl:'https://flohom.com/property/flohom-01', reviewUrl:'https://flohom.link/FLOHOM-1-Review', allUrl:'https://flohom.com/listings' };
 const S={ stage:'verify', status:'pending', channel:'direct', nights:2,
   photos:{front:null,back:null,selfie:null}, busy:{}, signed:null, cover:null, reject:null,
   now:'2026-10-08T10:00:00-04:00', ups:{}, ov:2, people:[], signName:'', agree:false, quiet:false,
@@ -413,7 +413,7 @@ ui.links=()=>ui.guidebook()+ui.receipt();
 ui.contact=()=>`<dl class="fx-kv"><dt>Phone</dt><dd>${P.phone}</dd><dt>Email</dt><dd>${P.email}</dd></dl>`;
 ui.thread=()=>`<div class="fx-thread">${S.thread.map(m=>`<div class="fx-msg ${m.me?'fx-me':'fx-crew'}">${esc(m.t)}<small>${m.at}</small></div>`).join('')}</div><div class="fx-send"><input class="fx-field" maxlength="2000" placeholder="Question about ${P.nick}?" value="${esc(S.msgDraft)}" data-fx-input="msgDraft" aria-label="Message"><button type="button" class="fx-btn fx-btn-sm" data-fx="send">Send</button></div>`;
 ui.aboard=()=>{ const p=pass(); return `<div class="fx-aboard"><span class="fx-sub">Overnight guests</span><ul>${p.overnight.map((n,i)=>`<li>${esc(n)}${i===0?' <small>Lead guest</small>':''}</li>`).join('')}${p.unnamed?`<li class="fx-mute">+ ${p.unnamed} more</li>`:''}</ul>${p.visitorNames.length?`<span class="fx-sub">Visitors, until 10 PM</span><ul>${p.visitorNames.map(n=>`<li>${esc(n)}</li>`).join('')}</ul>`:''}</div>`; };
-ui.post=()=>`<div class="fx-post"><div class="fx-card"><h4>How was your stay?</h4><p class="fx-mute">A few words help the next guest find their FLOHOM.</p><button type="button" class="fx-btn">Leave a review</button></div><div class="fx-card"><h4>Come back anytime</h4><a class="fx-btn" href="${P.bookUrl}" target="_blank" rel="noopener">Book ${P.nick}</a><a class="fx-btn fx-ghost" href="${P.allUrl}" target="_blank" rel="noopener">See all FLOHOMs</a></div>${ui.guidebook()}</div>`;
+ui.post=()=>`<div class="fx-post"><div class="fx-card"><h4>How was your stay?</h4><p class="fx-mute">A few words help the next guest find their FLOHOM.</p><a class="fx-btn" href="${P.reviewUrl}" target="_blank" rel="noopener">Leave a review</a></div><div class="fx-card"><h4>Come back anytime</h4><a class="fx-btn" href="${P.bookUrl}" target="_blank" rel="noopener">Book ${P.nick}</a><a class="fx-btn fx-ghost" href="${P.allUrl}" target="_blank" rel="noopener">See all FLOHOMs</a></div>${ui.guidebook()}</div>`;
 ui.demoBtn=(cls='')=>`<button type="button" class="fx-demo-btn ${cls}" data-fx="demo">Demo controls</button>`;
 ui.proto=()=>`<div class="fx-proto">Prototype · sample guest · nothing is uploaded, saved or charged</div>`;
 
