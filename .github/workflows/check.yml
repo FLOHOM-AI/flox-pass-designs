@@ -1,0 +1,12 @@
+name: check-site
+on: workflow_dispatch
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Time every page from a US GitHub runner
+        run: |
+          B=https://flohom-ai.github.io/flox-pass-designs
+          for p in "" film/ s01/ s02/ s03/ s04/ s05/ s06/ s07/ s08/ s09/ s10/ thumbs/s01-a.jpg film/seq/sky/000.jpg s01/seq/sky/000.jpg film/img/ext-night-p.webp; do
+            curl -s -o /dev/null -w "%{http_code} connect=%{time_connect}s total=%{time_total}s size=%{size_download}  /$p\n" --max-time 30 "$B/$p"
+          done
